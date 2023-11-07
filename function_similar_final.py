@@ -24,17 +24,9 @@ def get_similar_sentences(api_key, data_path, input_sentence, engine='text-embed
 
     query_2d = input_fin.reshape(1, -1)
 
-    data['similarity'] = data['embedding'].apply(lambda x: cosine_similarity(x.reshape(1, -1), query_2d)[0][0])
+    data_sample['similarity'] = data_sample['embedding'].apply(lambda x: cosine_similarity(x.reshape(1, -1), query_2d)[0][0])
     
-    top_similar_sentence = data.sort_values("similarity", ascending=False).head(3)['facts']
-
+    top_similar_sentence = data_sample.sort_values("similarity", ascending=False).head(3)[["casename", "facts", "ruling"]]
+    
     # 유사한 문장 찾기
     return top_similar_sentence
-
-# 사용 예시
-api_key = "sk-aZvJg3cjNo2AbDwTEGf1T3BlbkFJzixDEKBWPLKCaiWNYRdUL"
-data_path = "C:/Users/gjaischool/Desktop/My_coding/final_projects/Judi-AI/Judi-AI/total_embedding_done.csv"
-input_sentence = "피고인은 피해자 B(여, 26세)의 직장 상사이다. 1. 피고인은 2018. 6. 24. 00:00경 강원 태백시 C에 있는 ‘D' 노래방 앞 노상에서 갑자기 피해자의 허리를 감싸안고, 피해자의 얼굴에 피고인의 얼굴을 들이대며 입술을 내밀어 키스를 하려고 하는 등 강제로 피해자를 추행하였다."
-
-similar_sentences = get_similar_sentences(api_key, data_path, input_sentence)
-print(similar_sentences)
