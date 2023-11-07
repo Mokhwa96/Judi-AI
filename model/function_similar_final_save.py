@@ -34,9 +34,9 @@ def get_similar_sentences(api_key, data_path, input_sentence, engine='text-embed
     return top_similar_sentence
 
 # 사용 예시
-api_key = "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"
+api_key = "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"
 data_path = "C:/Users/gjaischool/Desktop/My_coding/final_projects/Judi-AI/total_embedding_done.csv"
-input_sentence = "피고인은 피해자 A(님, 남, 나이를 명시해주시면 좋을 것 같아요)과 알고 있는 사이가 아니였다. 피고인은 2020. (어제 날짜를 작성해주세요 ex. 9.15) 24:00경 광주 동구 '달밤'이라는 술집에서 피해자와 마주쳤다. 피고인은 소주를 피해자에게 쏟는 사고를 냈고, 피해자에게 제대로 된 사과를 요구하자 갑자기 화를 내며 피해자를 폭행하였다. 피해자는 폭행으로 인하여 오른팔을 골절하였다는 진단을 받았다. 이에 따라 피고인은 폭력행위를 행하였다."
+input_sentence = "피해자 A(여성, 22세)는 2021년 9월 17일 약 23시경, 서울시 내에 위치한 한 번화가 지하철역 인근에서 집으로 귀가하던 중 미상의 가해자에게 무작위 폭행을 당하였다. 가해자는 후드 티와 마스크를 착용하였으며, 이로 인해 그의 정확한 신원을 확인할 수 없었다. 키가 크고 마른 체형의 30대로 추정되는 남성 가해자는 A에게 접근하여 욕설을 하며 얼굴을 주먹으로 강타하였다. 이로 인해 A는 오른쪽 눈 및 얼굴에 심각한 부상을 입었으며, 병원 진단 결과 외상 후 스트레스 장애(PTSD)의 초기 증상을 보이고 있음이 확인되었다. 이 사건으로 인해 A는 심리적인 고통과 함께 신체적인 상해를 입었고, 경찰에 신고한 후 심리 상담을 받고 있는 중이다. 본 사건의 범죄 사실은 A의 의료 기록과 상담 기록, 그리고 목격자의 증언을 통해 입증될 수 있다. 현재까지 가해자는 검거되지 않았으며, 경찰은 CCTV 확인 및 목격자 조사를 통해 가해자의 신원 파악 및 검거를 위한 수사를 지속하고 있다."
 
 similar_sentences = get_similar_sentences(api_key, data_path, input_sentence)
 print(similar_sentences)
