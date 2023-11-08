@@ -3,12 +3,13 @@
 코드는 통합 실행 코드와 각 함수 모듈로 이루어져 있습니다.
 2023-11-07
 1. 통합 실행 코드 : Model_test
-2. 코드 진행 순서 : ChatGPT_Transform -> extract_user -> function_similar_final
+2. 코드 진행 순서 : ChatGPT_Transform -> function_similar_final ->result_export
 3. 함수 모듈 : 
-	ChatGPT_test			: 사용자와 대화 후 대화 내용을 return해주는 함수 모듈
-	ChatGPT_transform		: 사용자와 대화 후 대화 내용을 return해주는 함수 모듈 + 마지막에 판례문 형식으로 정리해주는 프롬프트 추가함
-	function_similar_final		: 유사도를 측정하여, 내림차순으로 10개(설정가능)를 Dataframe으로 return해주는 함수 모듈
-	function_similar_final_save	: 유사도를 측정하여, 내림차순으로 10개(설정가능)를 .cvs파일로 생성해주는 함수 모듈
+	ChatGPT_test			: 사용자와 대화 후 대화 내용을 return해주는 함수 코드
+	ChatGPT_transform		: 사용자와 대화 후 대화 내용을 return해주는 함수 코드 + 마지막에 판례문 형식으로 정리해주는 프롬프트 추가함
+	function_similar_final		: 유사도를 측정하여, 내림차순으로 10개(설정가능)를 Dataframe으로 return해주는 함수 코드
+	function_similar_final_save	: 유사도를 측정하여, 내림차순으로 10개(설정가능)를 .cvs파일로 생성해주는 함수 코드
 	extract_user 			: 대화 내용을 받아와서 유저가 한 말만 return해주는 함수 모듈
-	extract_last_paragraph		: 대화 내용을 받아와서 마지막 답변 중'정리하자면,' 이후의 말만 받아오는 모듈
+	extract_last_paragraph		: 대화 내용을 받아와서 마지막 답변 중'정리하자면,' 이후의 말만 받아오는 코드
 	embedding_full			: 판례문을 받아와서 "facts"를 가져와서 임베딩을 시켜서 .csv파일로 저장해주는 코드
+	result_export			: 통계 그래프를 생성해 주는 함수 코드

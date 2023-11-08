@@ -10,7 +10,7 @@ os.chdir("C:/Users/gjaischool/Desktop/My_coding/final_projects/Judi-AI/")
 
 
 # api_key 설정
-openai.api_key = "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"
+openai.api_key = "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"
 max_words = []
 start = 0
 end = 1000
