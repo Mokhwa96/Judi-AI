@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'; //음성 입력용
 import { BrowserRouter as Router, Route, Routes, Link, useNavigate} from 'react-router-dom';
 import './css/reset.css';
 import './css/bottom.css';
 import './css/top.css';
 import './css/center copy.css';
 import './css/styles.css';
+import './css/judi_chat.css';
 import MyComponent from './script';
 
 
@@ -135,47 +137,82 @@ function Home() {
   );
 }
 
+// 솔빈 작업 구역
+// 대화 저장을 위한 구역
+function downloadToFile(content, filename, contentType) {
+  const a = document.createElement('a');
+  const file = new Blob([content], { type: contentType });
+  
+  a.href= URL.createObjectURL(file);
+  a.download = filename;
+  a.click();
+
+  URL.revokeObjectURL(a.href);
+};
+
+// 주디의 대화를 위한 구역
 function TryJudiAI() {
-  function toggleChatbox() {
-    var chatbox = document.getElementById("chatbox");
-    chatbox.classList.toggle("active");
-    if(chatbox.classList.contains("active")){
-      chatbox.classList.remove("hidden"); // 숨김 해제
-    }else{
-      setTimeout(function(){ chatbox.classList.add("hidden"); }, 500); // 애니메이션 후 숨김
-    }
-  }
-  function submitResponse() {
-    var input = document.getElementById("userInput");
-    var userText = input.value.trim();
-  
-    if(userText !== "") {
-      // 사용자의 응답을 화면에 표시
-      var userBubble = document.createElement("div");
-      userBubble.textContent = userText;
-      userBubble.classList.add("bubble", "user");
-      document.getElementById("chatbox").appendChild(userBubble);
-  
-      // 말풍선 스크롤을 맨 아래로
-      var chatbox = document.getElementById("chatbox");
-      chatbox.scrollTop = chatbox.scrollHeight;
-  
-      input.value = ""; // 입력 필드 초기화
-  
-      // 여기에 변호사의 답변 로직을 구현하실 수 있습니다.
-      // 예를 들면, setTimeout과 함께 미리 정의된 답변을 사용하거나,
-      // 더 복잡한 로직으로 서버에 요청을 보내고 응답을 받을 수도 있습니다.
-    }
-  }
-  // 초기 질문 로딩
-  useEffect(() => {
-    const lawyerBubble = document.createElement("div");
-    lawyerBubble.textContent = "안녕하세요, 어떤 도움이 필요하신가요?";
-    lawyerBubble.classList.add("bubble", "lawyer");
-    document.getElementById("chatbox").appendChild(lawyerBubble);
-  }, []);
-  // React 코드는 JSX 형식으로 작성되며, HTML과 유사하게 보입니다.
+  const [isChatboxActive, setIsChatboxActive] = useState(false);
+  const [messages, setMessages] = useState([]);
+  const [userInput, setUserInput] = useState('');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // 초기 변호사 메시지 설정
+    setMessages([
+      { text: "안녕하세요, 어떤 도움이 필요하신가요?", sender: 'lawyer' }
+    ]);
+  }, []);
+  // 채팅 박스 생성 부분
+  const toggleChatbox = () => {
+    setIsChatboxActive(!isChatboxActive);
+  };
+
+  // 채팅의 응답을 제출하는 부분
+  const submitResponse = () => {
+    if (userInput.trim() !== "") {
+      // 메시지 상태에 새로운 사용자 메시지 추가
+      setMessages([...messages, { text: userInput, sender: 'user' }]);
+      setUserInput("");     
+      // TODO: Add logic for lawyer's response 변호사의 답변 로직을 추가하는 부분
+    }
+  };
+
+  // input 값 변경 처리
+  const handleInputChange = (e) => {
+    setUserInput(e.target.value);
+  };
+
+  // 메시지 배열을 기반으로 UI 렌더링
+  const renderMessages = messages.map((message, index) =>
+    <div key={index} className={`bubble ${message.sender}`}>
+      {message.text}
+    </div>
+  );
+
+  //저장 버튼을 누르면 저장되는 부분을 위한 수정.
+  const saveChatHistory = () => {
+    const messagesAsString = messages.map(m => `${m.sender}: ${m.text}`).join('\n');
+    downloadToFile(messagesAsString, 'chat_history.txt', 'text/plain');
+  };
+
+  // 음성 인식을 위한 state와 함수들
+  const { transcript, listening, resetTranscript, browserSupportsSpeechRecognition } = useSpeechRecognition();
+
+  if (!browserSupportsSpeechRecognition) {
+    return <span>Browser doesn't support speech recognition.</span>;
+  }
+
+  // 음성 인식을 시작하는 함수
+  const startListening = () => SpeechRecognition.startListening({ continuous: true });
+  // 음성 인식을 중지하는 함수
+  const stopListening = () => {
+    SpeechRecognition.stopListening();
+    setUserInput(transcript); // 음성 인식 결과를 userInput에 설정
+  };
+
+
+  // 리턴 영역
   return (
     <div>
       {/* Top */}
@@ -196,32 +233,69 @@ function TryJudiAI() {
 
       {/* Chat Simulator */}
       <div className="chat-container">
-        <div className="lawyer-image-container" onClick={toggleChatbox}>
+        // 주디 이미지
+        <div className="lawyer-image-container">
           <img
             className="lawyer-image"
-            src="/images/Judi_desk.png" // 이미지 경로를 업데이트하세요
+            src="/images/Judi_desk.png"
             alt="변호사"
           />
           <div className="bubble lawyer-bubble hidden">
             안녕하세요, 어떤 도움이 필요하신가요?
           </div>
         </div>
-
-        <div id="chatbox" className="hidden">
-          <input type="text" id="userInput" placeholder="여기에 답변을 입력하세요..." />
+        
+        // 챗 박스 관련 구역
+        <div id="chatbox" className={`chatbox ${isChatboxActive ? 'active' : 'hidden'}`}>
+          {renderMessages}
+          <input 
+            type="text" 
+            value={userInput}
+            onChange={handleInputChange}
+            placeholder="여기에 답변을 입력하세요..." 
+          />
           <button onClick={submitResponse}>전송</button>
+          <button onClick={saveChatHistory}>저장</button>
         </div>
 
-        <div id="open-chatbox-button">
+        {/* 음성 인식 컨트롤 버튼을 chatbox 위로 위치시킴 */}
+        <div className="dictaphone-controls">
+          <button onClick={startListening} disabled={listening}>녹음 시작</button>
+          <button onClick={stopListening} disabled={!listening}>녹음 중지</button>
+          <button onClick={resetTranscript}>리셋</button>
+        </div>
+
+        {/* 이 부분을 chatbox 바로 아래에 위치시킬 수 있음 */}
+        {listening && <div className="transcript">Transcript: {transcript}</div>}
+
+        
+        {/* chat 아이콘을 눌렀을 때  chatbox가 열리는 영역 */}
+        <div id="open-chatbox-button" onClick={toggleChatbox}>
           <img
-            src="/images/chat_icon.png" // 이미지 경로를 업데이트하세요
+            src="/images/chat_icon.png"
             alt="Chat Icon"
+            style={{ cursor: 'pointer' }} // Makes it clear that the image is clickable
           />
         </div>
+
       </div>
+
+      // 챗 박스 밖으로 이미지 추가해보기
+      <div className = "question-container">
+        <div className="question-form-container">
+            <img
+              src="/images/question_form.png"
+              alt="질문 양식"
+            />
+        </div>
+
+      </div>
+
+      
     </div>
   );
 }
+
 
 
 function App() {
