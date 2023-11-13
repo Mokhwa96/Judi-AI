@@ -157,6 +157,28 @@ function TryJudiAI() {
   const [userInput, setUserInput] = useState('');
   const navigate = useNavigate();
 
+  // 현호 작업구역
+  // 검색 test
+  const [searchResult, setSearchResult] = useState(['dd']);
+
+  // 검색을 실행하고 결과를 업데이트하는 함수
+  const performSearch = async (query) => {
+    try {
+      const response = await fetch('/api/search');
+      const data = await response.json();
+      setSearchResult(data.results);
+      console.log(data)
+      console.log(query)
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // 검색 로직을 실행하는 핸들러
+  const handleSearch = (query) => {
+    performSearch(query);
+  }
+
   useEffect(() => {
     // 초기 변호사 메시지 설정
     setMessages([
@@ -244,7 +266,7 @@ function TryJudiAI() {
             안녕하세요, 어떤 도움이 필요하신가요?
           </div>
         </div>
-        
+
         // 챗 박스 관련 구역
         <div id="chatbox" className={`chatbox ${isChatboxActive ? 'active' : 'hidden'}`}>
           {renderMessages}
@@ -278,6 +300,10 @@ function TryJudiAI() {
           />
         </div>
 
+      </div>
+
+      <div>
+        <a>안녕</a>
       </div>
 
       // 챗 박스 밖으로 이미지 추가해보기
