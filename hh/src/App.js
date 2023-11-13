@@ -159,7 +159,7 @@ function TryJudiAI() {
 
   // 현호 작업구역
   // 검색 test
-  const [searchResult, setSearchResult] = useState(['dd']);
+  const [searchResult, setSearchResult] = useState(['눌러보세요']);
 
   // 검색을 실행하고 결과를 업데이트하는 함수
   const performSearch = async (query) => {
@@ -167,7 +167,9 @@ function TryJudiAI() {
       const response = await fetch('/api/search');
       const data = await response.json();
       setSearchResult(data.results);
+      console.log('데이터는')
       console.log(data)
+      console.log('쿼리는')
       console.log(query)
     } catch (error) {
       console.error(error);
@@ -303,7 +305,9 @@ function TryJudiAI() {
       </div>
 
       <div>
-        <a>안녕</a>
+        <button onClick={() => handleSearch()}>
+          {searchResult}
+        </button>
       </div>
 
       // 챗 박스 밖으로 이미지 추가해보기
