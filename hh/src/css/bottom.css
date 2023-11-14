@@ -30,6 +30,7 @@
   }
   
 
+  
 .container,
 .container-fluid,
 .container-sm,
@@ -88,8 +89,8 @@ padding-bottom: 1rem !important;
 }
 
 .col-lg-3 {
-    flex: 0 0 30%;
-    max-width: 30%;
+    flex: 0 0 25%;
+    
     position: relative;
     width: 100%;
    /* padding-right: 15px;
@@ -106,6 +107,7 @@ padding-bottom: 1rem !important;
 .mb-5 {
   margin-bottom: 3rem !important;
   margin-right: 3rem;
+  line-height: 1.3;
 }
 
   
