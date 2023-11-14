@@ -156,47 +156,13 @@ function TryJudiAI() {
   const [messages, setMessages] = useState([]);
   const [userInput, setUserInput] = useState('');
   const navigate = useNavigate();
-  // 변호사 메시지 표시 여부를 위한 새로운 state - setTimeout 관련
-  const [showLawyerMessage, setShowLawyerMessage] = useState(true);
 
   useEffect(() => {
     // 초기 변호사 메시지 설정
     setMessages([
       { text: "안녕하세요, 어떤 도움이 필요하신가요?", sender: 'lawyer' }
     ]);
-    
-    // 3초 후에 변호사 메시지를 숨기는 로직  - setTimeout 관련 (사라지는 시간 조절)
-    const timer = setTimeout(() => {
-      setShowLawyerMessage(false);
-    }, 2000);
-    // 컴포넌트가 언마운트될 때 타이머 클리어  - setTimeout 관련
-    return () => clearTimeout(timer);
-
   }, []);
-
-  // 변호사 메시지만 렌더링하는 함수
-  const renderLawyerMessages = () => {
-    return messages
-      .filter(message => message.sender === 'lawyer' && showLawyerMessage)
-      .map((message, index) => (
-        <div key={index} className="bubble lawyer-bubble">
-          {message.text}
-        </div>
-      ));
-  };
-
-  // 사용자 메시지만 렌더링하는 함수
-  const renderUserMessages = () => {
-    return messages
-      .filter(message => message.sender === 'user')
-      .map((message, index) => (
-        <div key={index} className="bubble user">
-          {message.text}
-        </div>
-      ));
-  };
-
-
   // 채팅 박스 생성 부분
   const toggleChatbox = () => {
     setIsChatboxActive(!isChatboxActive);
@@ -206,7 +172,6 @@ function TryJudiAI() {
   const submitResponse = () => {
     if (userInput.trim() !== "") {
       // 메시지 상태에 새로운 사용자 메시지 추가
-      // 서버로 값 전송 내용 추가 요망 + 받은 답변도 띄워준다,
       setMessages([...messages, { text: userInput, sender: 'user' }]);
       setUserInput("");     
       // TODO: Add logic for lawyer's response 변호사의 답변 로직을 추가하는 부분
@@ -275,17 +240,13 @@ function TryJudiAI() {
             src="/images/Judi_desk.png"
             alt="변호사"
           />
-        {/* // 변호사의 말 띄울 구역 */}
-        {renderLawyerMessages()}
-        {/* <div className="bubble lawyer-bubble hidden">
-            여기에 변호사가 말하게 하려는 내용을 추가
-            안녕하세요 이건 샘플 문장 입니다.
-        </div> */}
+          <div className="bubble lawyer-bubble hidden">
+            안녕하세요, 어떤 도움이 필요하신가요?
+          </div>
         </div>
         
         // 챗 박스 관련 구역
         <div id="chatbox" className={`chatbox ${isChatboxActive ? 'active' : 'hidden'}`}>
-          {renderUserMessages()}
           {renderMessages}
           <input 
             type="text" 
@@ -318,7 +279,19 @@ function TryJudiAI() {
         </div>
 
       </div>
-     
+
+      {/* // 챗 박스 밖으로 이미지 추가해보기
+      <div className = "question-container">
+        <div className="question-form-container">
+            <img
+              src="/images/question_form.png"
+              alt="질문 양식"
+            />
+        </div>
+
+      </div> */}
+
+      
     </div>
   );
 }

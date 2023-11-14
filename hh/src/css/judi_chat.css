@@ -9,7 +9,7 @@
   position: relative; /* Context for absolute positioning */
 }
 
-/* 챗박스 구역입니다 id 로 선언된 애들은 #표기를 한다 */
+/* 챗박스 구역입니다. */
 #chatbox {
   position: fixed; /* Fixed position */
   bottom: 0; /* Align to the bottom */
@@ -103,3 +103,5 @@
   z-index: 1010; /* Above the chatbox */
   cursor: pointer; /* Indicate that it's clickable */
 }
+
+
