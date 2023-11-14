@@ -3,6 +3,9 @@ from sklearn.metrics.pairwise import cosine_similarity
 import pandas as pd
 import numpy as np
 import json
+import sys
+import time
+import asyncio
 
 messages = [{"role":"system", "content":"너는 법률 문제에 대해 상담을 진행해주는 변호사야. 지금 나는 너에게 법률 문제에 대해 상담을 받으러 왔고, 내가 처한 상황을 설명할거야. 너는 내가 하는 말에 공감해주면서 사실관계 파악을 위해 부족한 정보가 있다면 하나씩 친절하게 물어볼 수 있어. 사실관계 파악을 위한 충분한 정보가 모였다면, 마지막에는 파악된 정보를 요약해서 알려줘"},]
 
@@ -47,16 +50,39 @@ def get_similar_sentences(api_key, data_path, input_sentence, engine='text-embed
     # 유사한 문장 찾기
     return top_similar_sentence
 
-def model(api_key, data_path):
-  message = chatbot(api_key)
-  similar_sentences = get_similar_sentences(api_key, data_path, message)
+def model(api_key, data_path, result_text):
+  # message = chatbot(api_key, input_text)
+  similar_sentences = get_similar_sentences(api_key, data_path, result_text)
   sentences = [line for line in similar_sentences['ruling']]
   results = {"results":sentences}
   return json.dumps(results, ensure_ascii=False)
 
 
 if __name__ == "__main__":
-  api_key = 'api_key'
+  api_key = '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'
   data_path = "C:/Users/gh576/JudiAI/hh/total_embedding_done.csv"
-  results = model(api_key, data_path)
+  result_text = ''
+  while True:
+     # 클라이언트에서 요청을 받음
+     time.sleep(1)
+     try:
+        line = sys.stdin.readline()
+        request = json.loads(line)['chat']
+        if request=='break':
+           result_text = chatbot(api_key, request)
+           break
+
+        # 요청 처리 및 결과 저장
+        result_text = chatbot(api_key, request)
+
+        # 결과를 클라이언트로 전송
+        sys.stdout.write(json.dumps(result_text) + '\n')
+        sys.stdout.flush()
+     except Exception as e:
+        # 오류 처리
+        error_message = {'error':str(e)}
+        sys.stderr.write(json.dumps(error_message) + '\n')
+        sys.stderr.flush()
+
+  results = model(api_key, data_path, result_text)
   print(results)

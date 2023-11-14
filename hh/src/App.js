@@ -205,27 +205,30 @@ function TryJudiAI() {
 
   // 현호 작업구역
   // 검색 test
-  const [searchResult, setSearchResult] = useState(['눌러보세요']);
+  const [chatData, setchatData] = useState([]);
 
-  // 검색을 실행하고 결과를 업데이트하는 함수
-  const performSearch = async (query) => {
+  // 서버로 데이터를 전송하고 받는 함수
+  const chatbotChat = async (userinput) => {
+    const chatdata = {'chat': userinput};
     try {
-      const response = await fetch('/api/search');
+      const response = await fetch('/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(chatdata),
+      });
       const data = await response.json();
-      setSearchResult(data.results);
-      console.log('데이터는')
-      console.log(data)
-      console.log('쿼리는')
-      console.log(query)
+      setchatData(data.results);
+      console.log('응답은');
+      console.log(data);
+      console.log('입력문은');
+      console.log(userinput);
     } catch (error) {
       console.error(error);
     }
   };
 
-  // 검색 로직을 실행하는 핸들러
-  const handleSearch = (query) => {
-    performSearch(query);
-  }
   // 변호사 메시지 표시 여부를 위한 새로운 state - setTimeout 관련
   const [showLawyerMessage, setShowLawyerMessage] = useState(true);
 
@@ -278,6 +281,8 @@ function TryJudiAI() {
       // 메시지 상태에 새로운 사용자 메시지 추가
       // 서버로 값 전송 내용 추가 요망 + 받은 답변도 띄워준다,
       setMessages([...messages, { text: userInput, sender: 'user' }]);
+      chatbotChat(userInput)
+      setMessages([{ text: chatData, sender: 'lawyer'}]);
       setUserInput("");     
       // TODO: Add logic for lawyer's response 변호사의 답변 로직을 추가하는 부분
     }
@@ -361,7 +366,7 @@ function TryJudiAI() {
             type="text" 
             value={userInput}
             onChange={handleInputChange}
-            placeholder="여기에 답변을 입력하세요..." 
+            placeholder="여기에 답변을 입력하세요..."
           />
           <button onClick={submitResponse}>전송</button>
           <button onClick={saveChatHistory}>저장</button>
@@ -387,12 +392,6 @@ function TryJudiAI() {
           />
         </div>
 
-      </div>
-
-      <div>
-        <button onClick={() => handleSearch()}>
-          {searchResult}
-        </button>
       </div>
 
     </div>
