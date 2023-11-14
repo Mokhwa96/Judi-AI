@@ -156,6 +156,30 @@ function TryJudiAI() {
   const [messages, setMessages] = useState([]);
   const [userInput, setUserInput] = useState('');
   const navigate = useNavigate();
+
+  // 현호 작업구역
+  // 검색 test
+  const [searchResult, setSearchResult] = useState(['눌러보세요']);
+
+  // 검색을 실행하고 결과를 업데이트하는 함수
+  const performSearch = async (query) => {
+    try {
+      const response = await fetch('/api/search');
+      const data = await response.json();
+      setSearchResult(data.results);
+      console.log('데이터는')
+      console.log(data)
+      console.log('쿼리는')
+      console.log(query)
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // 검색 로직을 실행하는 핸들러
+  const handleSearch = (query) => {
+    performSearch(query);
+  }
   // 변호사 메시지 표시 여부를 위한 새로운 state - setTimeout 관련
   const [showLawyerMessage, setShowLawyerMessage] = useState(true);
 
@@ -282,7 +306,7 @@ function TryJudiAI() {
             안녕하세요 이건 샘플 문장 입니다.
         </div> */}
         </div>
-        
+
         // 챗 박스 관련 구역
         <div id="chatbox" className={`chatbox ${isChatboxActive ? 'active' : 'hidden'}`}>
           {renderUserMessages()}
@@ -318,7 +342,13 @@ function TryJudiAI() {
         </div>
 
       </div>
-     
+
+      <div>
+        <button onClick={() => handleSearch()}>
+          {searchResult}
+        </button>
+      </div>
+
     </div>
   );
 }
