@@ -1,76 +1,234 @@
 :root {
-    --palettes-color1:#0D1321;
-    --palettes-color2:#1D2D44;
-    --palettes-color3:#3E5C76;
-    --palettes-color4:#F0EBD8;
-    --primary-color:#748CAB;
-    --text-color: rgb(255, 255, 255);
-    --button-background-color: white;
-    --point-color:#0D1321;
+  --palettes-color1:#0D1321;
+  --palettes-color2:#1D2D44;
+  --palettes-color3:#3E5C76;
+  --palettes-color4:#F0EBD8;
+  --primary-color:#748CAB;
+  --text-color: rgb(255, 255, 255);
+  --button-background-color: white;
+  --point-color:#0D1321;
+}
+
+.center {
+  height: 155em;
+  position: relative;
+  text-align: center;
+
+}
+.center-background{
+  background-color: var(--palettes-color1);
+  position: relative;
+
+}
+
+  .center p {
+      margin: 1em 0; /* 각 문장 위아래에 10px 여백을 추가합니다 */
+      font-weight: bold;
+      font-size:2.5em;
+      color: var(--text-color);
+      
   }
 
-.center{
-    background-color: var(--primary-color);
-    height: 50em;
-    max-width: 100%; /* 최대 확대 크기 */
-    overflow: hidden; /* 가로 스크롤 제거 */
-    position: relative;
+  .Try_JudiAI {
+      border: none;
+      border-radius: 4px;
+      background-color: var(--button-background-color);
+      display: flex;
+      align-items: center; /* 세로 가운데 정렬 */
+      color: var(--primary-color);
+      padding: 15px 32px !important;
+      text-decoration: none; /* 밑줄 제거 
+      justify-content: center; /* 가로 가운데 정렬 */
+      cursor: pointer;
+      font-size:2em;
+      box-shadow: 1px 1px 5px rgba(41, 41, 41, 0.5); /* 그림자 추가 */
+
+  }
+
+.faArrowCircleDown {
+  /* 아이콘의 위치를 조정합니다. */
+  position: absolute;
+  top: 90%; /* 원하는 위치로 조절하세요. */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
 }
-  
-    .center p {
-        margin: 1em 0; /* 각 문장 위아래에 10px 여백을 추가합니다 */
-        font-weight: bold;
-        font-size:3em;
-        color: var(--text-color);
-        
-    }
-
-    .Try_JudiAI {
-        border: none;
-        border-radius: 4px;
-        background-color: var(--button-background-color);
-        display: flex;
-        align-items: center; /* 세로 가운데 정렬 */
-        color: var(--palettes-color1);
-        padding: 15px 32px;
-        text-decoration: none; /* 밑줄 제거 
-        justify-content: center; /* 가로 가운데 정렬 */
-        cursor: pointer;
-        font-size:2em;
-        box-shadow: 1px 1px 5px rgba(41, 41, 41, 0.5); /* 그림자 추가 */
-
-    }
 .center .content-left {
-  float: left;
-
-  height: 100%;
-  
-  padding-left: 10em;
-  padding-top:5em;
+  position: absolute;
+  white-space: nowrap; /* 텍스트 줄 바꿈 방지 */
+	top: 50%;
+	left: 50%;
+	transform: translate( -50%, -50% );
+  background-color: black;
+  background: rgba(0, 0, 0, 0.637);
+  padding-left: 70px;
+  padding-right: 70px;
+  padding-bottom: 40px;
   box-sizing: border-box; /* 내부 패딩을 너비에 포함시킵니다. */
-  
 }
 
-.center .content-right {
-    float: right;
-    width: auto;
-    
-    z-index: 0;
-  }
-  
-  .center .content-right img {
-    max-width: 100%;
-    height: 100%; /* 이미지 크기를 유지하면서 너비를 100%로 설정합니다. */
-    
-    top: 0;
-    right: 0;
-  }
-  
-.introducing p{
-    font-size:1em;
-    color: var(--point-color);
+
+
+/* our project */
+.our_project, .contact_us {
+  height: 65em;
+  width: 100%; /* 전체 너비를 사용하도록 수정 */
+  max-width: 1200px; /* 최대 너비 설정 */
+  margin: 0 auto; /* 가운데 정렬을 위한 margin 설정 */
+  text-align: left;
+}
+.contact_us {
+  height: 50em;
+}
+.dashed-line{
+  margin-top: 70px;
+  border-top: 3px solid; /* 실선 스타일 적용 */
+  width: 100%;
+}
+.our_project h1, .contact_us h1 {
+  font-weight: bold;
+  font-size: 3em;
+  text-align: left;
+  margin-top: 0.5em;
+  margin-bottom: 1em;
 }
 
-  
+/* our project - 채팅 */
+.judiexplain{
+  background-color: rgb(31, 34, 34);
+  width: 400px;
+  height: 850px;
+  border-radius: 25px;
+  overflow: hidden;
+  margin-left: 5em;
+  position: absolute;
+  z-index: 2;
+}
+.judi_white{
+  background-color: white;
+  width: 350px;
+  height: 350px;
+  margin: 0 auto;
+  margin-top:50px;
+  display: block;
+}
+.judiexplain img{
+  width: 300px;
+  margin: 0 auto;
+  /* margin-top:50px; */
+  padding-top: 25px;
+  display: block;
+}
 
-  
+.chat_info{
+  margin-top:50px;
+  margin-left: 20px;
+}
+.chatbubble{
+  color:#000000;
+  font-size: 1em;
+  padding :10px;
+  border-radius: 15px;
+  background-color: white;
+}
+
+.chat_info2{
+  margin-top:50px;
+  margin-right: 20px;
+  text-align: right;
+}
+.chatbubble2{
+  color:#000000;
+  font-size: 1em;
+  padding :10px;
+  border-radius: 15px;
+  background-color: rgb(255, 240, 193);
+}
+
+.chat_info3{
+  margin-top:50px;
+  margin-left: 20px;
+  margin-right: 20px;
+  border-radius: 15px;
+  background-color: white;
+  padding :10px;
+}
+.chatbubble3{
+  color:#000000;
+  font-size: 1em;
+  line-height: 1.5;
+  border-radius: 15px;
+}
+
+.chat_send{
+  background-color: white;
+  padding :15px;
+  margin-top:90px;
+  margin-left: 20px;
+  margin-right: 20px;
+  padding-right: 10px;
+  text-align: right;
+}
+
+.send_button{
+  background-color: var(--primary-color);
+  color: white;
+  font-weight: bold;
+  font-size:14px;
+  padding :10px;
+  border-radius:10px;
+}
+
+/* our project - 설명*/
+.introducing-back {
+  position: absolute;
+  width: 43em;
+  height: 48em;
+  top: 65em; /* 원하는 위치로 조정하세요 */
+  margin-left: 400px;
+  padding: 30px;
+  padding-left: 120px;
+  border-radius: 15px;
+  background-color: #F7F7F5;
+  box-shadow: 10px 10px 30px rgba(156, 156, 156, 0.5); /* 그림자 추가 */
+  box-sizing: border-box; /* 내부 패딩을 너비에 포함시킵니다. */
+}
+
+.introducing-back p{
+  font-size:1.5em;
+  line-height: 1.5;
+  color: var(--point-color);
+}
+
+
+/* Contact us */
+.contact_us_back{
+  background-color: var(--palettes-color4);
+  width: 40em;
+  height: 29em;
+  margin:0 auto;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  flex-direction:column;
+}
+.contact_us_back input{
+  background-color: rgba(255, 255, 255, 0.658);
+  width: 40em;
+  height: 3em;
+  margin: 10px;
+  border:none;
+}
+.input_message input{
+  height: 20em;
+}
+
+.contact_us_back button{
+  border-radius: 10px;
+  background-color: #F7F7F5;
+  color: #1D2D44;
+  padding: 5px 15px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 1px 1px 1px rgba(156, 156, 156, 0.5);
+}
