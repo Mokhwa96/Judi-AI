@@ -244,8 +244,10 @@ function TryJudiAI() {
 
   // 메시지 배열을 기반으로 UI 렌더링
   const renderMessages = messages.map((message, index) =>
-    <div key={index} className={`bubble ${message.sender}`}>
-      {message.text}
+    <div key={index} className={`message-container ${message.sender}-container`}>
+      <div className={`bubble ${message.sender}`}>
+        {message.text}
+      </div>
     </div>
   );
 
@@ -263,7 +265,11 @@ function TryJudiAI() {
   }
 
   // 음성 인식을 시작하는 함수
-  const startListening = () => SpeechRecognition.startListening({ continuous: true });
+  const startListening = () => {
+    resetTranscript(); // 음성 인식 텍스트 초기화
+    setUserInput(''); // 입력 필드 초기화
+    SpeechRecognition.startListening({ continuous: true });
+  };
   // 음성 인식을 중지하는 함수
   const stopListening = () => {
     SpeechRecognition.stopListening();
@@ -284,64 +290,99 @@ function TryJudiAI() {
           <ul>
             <li><Link to="/">HOME</Link></li>
             <li><Link to="/try-judiai">Try JudiAI</Link></li>
-            <li><a href="#a">Our Clients</a></li>
+            <li><a href="#a">Our Project</a></li>
             <li><a href="#b">Contact us</a></li>
           </ul>
         </div>
       </div>
 
       {/* Chat Simulator */}
-      <div className="chat-container">
-        // 주디 이미지
-        <div className="lawyer-image-container">
-          <img
-            className="lawyer-image"
-            src="/images/Judi_desk.png"
-            alt="변호사"
-          />
+      <div className={`chat-container ${isChatboxActive ? 'expanded' : ''}`}>
+        {/* 주디 이미지 */}  
+        <img
+          className="lawyer-image"
+          src="/images/Judi_desk.png"
+          alt="변호사"
+        />
         {/* // 변호사의 말 띄울 구역 */}
         {renderLawyerMessages()}
         {/* <div className="bubble lawyer-bubble hidden">
             여기에 변호사가 말하게 하려는 내용을 추가
             안녕하세요 이건 샘플 문장 입니다.
         </div> */}
-        </div>
 
-        // 챗 박스 관련 구역
+        {/* // 챗 박스 관련 구역 */}
         <div id="chatbox" className={`chatbox ${isChatboxActive ? 'active' : 'hidden'}`}>
-          {renderUserMessages()}
-          {renderMessages}
-          <input 
-            type="text" 
-            value={userInput}
-            onChange={handleInputChange}
-            placeholder="여기에 답변을 입력하세요..." 
-          />
-          <button onClick={submitResponse}>전송</button>
-          <button onClick={saveChatHistory}>저장</button>
+          {/* 채팅 메시지를 표시하는 부분 */}
+          <div className="chat-messages">
+            {renderMessages}
+          </div>
+
+          {/* 입력창 및 버튼 관련 구역 */}
+          <div className="chat-input-area">
+            <input 
+              type="text" 
+              value={userInput}
+              onChange={handleInputChange}
+              placeholder="여기에 답변을 입력하세요..."
+              onKeyDown={(event) => {
+                if (event.key === 'Enter') {
+                  submitResponse();
+                }
+              }} 
+            />
+
+            {/* 음성 인식 & 전송 저장 버튼 */}
+            <div className="voice-control-buttons">
+              {listening ? (
+                <img
+                src="/images/stop_icon.png"
+                alt="녹음 중지"
+                onClick={stopListening}
+                style={{ width: '30px', height: '30px' }}
+                />
+                ) : (
+                <img
+                  src="/images/record_icon.png"
+                  alt="녹음 시작"
+                  onClick={startListening}
+                  style={{ width: '30px', height: '30px' }}
+                />
+              )}
+              <img
+                src="/images/reset_icon.png"
+                alt="리셋"
+                onClick={resetTranscript}
+                className="voice-control-button"
+              />
+              <img
+                src="/images/save_icon.png"
+                alt="저장"
+                onClick={saveChatHistory}
+                className="voice-control-button"
+              />
+              <img
+                src="/images/send_icon.png"
+                alt="전송"
+                onClick={submitResponse}
+                className="voice-control-button"
+              />
+              </div>        
+          </div>
         </div>
-
-        {/* 음성 인식 컨트롤 버튼을 chatbox 위로 위치시킴 */}
-        <div className="dictaphone-controls">
-          <button onClick={startListening} disabled={listening}>녹음 시작</button>
-          <button onClick={stopListening} disabled={!listening}>녹음 중지</button>
-          <button onClick={resetTranscript}>리셋</button>
-        </div>
-
-        {/* 이 부분을 chatbox 바로 아래에 위치시킬 수 있음 */}
-        {listening && <div className="transcript">Transcript: {transcript}</div>}
-
-        
+                
         {/* chat 아이콘을 눌렀을 때  chatbox가 열리는 영역 */}
         <div id="open-chatbox-button" onClick={toggleChatbox}>
           <img
             src="/images/chat_icon.png"
             alt="Chat Icon"
-            style={{ cursor: 'pointer' }} // Makes it clear that the image is clickable
+            style={{ cursor: 'pointer' }}
           />
         </div>
-
       </div>
+
+      {/* 음성 인식 텍스트 표시 */}
+      {listening && <div className="transcript">상담 내용 확인: {transcript}</div>}
 
       <div>
         <button onClick={() => handleSearch()}>
