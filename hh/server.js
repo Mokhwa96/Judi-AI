@@ -27,13 +27,14 @@ app.post('/chat', (req, res) => {
     const buffers = [];
 
     // 클라이언트 요청 전송
-    pythonProcess.stdin.write(JSON.stringify(clientRequest) + '\n');
+    pythonProcess.stdin.write(JSON.stringify(clientRequest));
     pythonProcess.stdin.end();
 
     // 파이썬 프로세스의 표준 출력에서 데이터를 읽어옴
     pythonProcess.stdout.on('data', (data) => {
-        buffers.push(data);
+        console.log('반환된 데이터는');
         console.log(data);
+        buffers.push(data);
         try {
             // Buffer.concat()을 사용하여 모든 버퍼를 하나로 합침
             const concatenatedBuffer = Buffer.concat(buffers);
@@ -44,6 +45,8 @@ app.post('/chat', (req, res) => {
             // JSON 문자열을 파싱하여 JavaScript 객체로 변환
             const resultData = JSON.parse(decodedResult);
 
+            console.log('res :');
+            console.log(resultData);
             res.json(resultData);
         } catch (error) {
             // JSON 파싱에 실패한 경우

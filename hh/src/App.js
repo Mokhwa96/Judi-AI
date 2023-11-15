@@ -224,6 +224,7 @@ function TryJudiAI() {
       console.log(data);
       console.log('입력문은');
       console.log(userinput);
+      return data;
     } catch (error) {
       console.error(error);
     }
@@ -281,8 +282,6 @@ function TryJudiAI() {
       // 메시지 상태에 새로운 사용자 메시지 추가
       // 서버로 값 전송 내용 추가 요망 + 받은 답변도 띄워준다,
       setMessages([...messages, { text: userInput, sender: 'user' }]);
-      chatbotChat(userInput)
-      setMessages([{ text: chatData, sender: 'lawyer'}]);
       setUserInput("");     
       // TODO: Add logic for lawyer's response 변호사의 답변 로직을 추가하는 부분
     }
