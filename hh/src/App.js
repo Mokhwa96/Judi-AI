@@ -5,7 +5,7 @@ import './css/reset.css';
 import './css/bottom.css';
 import './css/top.css';
 import './css/center.css';
-import './css/styles.css';
+// import './css/styles.css';
 import './css/judi_chat.css';
 import UserForm from "./components/UserForm";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -199,13 +199,12 @@ function downloadToFile(content, filename, contentType) {
 // 주디의 대화를 위한 구역
 function TryJudiAI() {
   const [isChatboxActive, setIsChatboxActive] = useState(false);
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([{ text: "안녕하세요, 어떤 도움이 필요하신가요?", sender: 'lawyer' }]);
   const [userInput, setUserInput] = useState('');
   const navigate = useNavigate();
 
   // 현호 작업구역
   // 검색 test
-  const [chatData, setchatData] = useState([]);
 
   // 서버로 데이터를 전송하고 받는 함수
   const chatbotChat = async (userinput) => {
@@ -219,12 +218,15 @@ function TryJudiAI() {
         body: JSON.stringify(chatdata),
       });
       const data = await response.json();
-      setchatData(data.results);
+
+      console.log(messages);
+      console.log('진짜진짜 최종');
+      setMessages(prevMessages => [...prevMessages, { text: data, sender:'lawyer' }]);
+      console.log(messages);
       console.log('응답은');
       console.log(data);
       console.log('입력문은');
       console.log(userinput);
-      return data;
     } catch (error) {
       console.error(error);
     }
@@ -233,20 +235,20 @@ function TryJudiAI() {
   // 변호사 메시지 표시 여부를 위한 새로운 state - setTimeout 관련
   const [showLawyerMessage, setShowLawyerMessage] = useState(true);
 
-  useEffect(() => {
-    // 초기 변호사 메시지 설정
-    setMessages([
-      { text: "안녕하세요, 어떤 도움이 필요하신가요?", sender: 'lawyer' }
-    ]);
+  // useEffect(() => {
+  //   // 초기 변호사 메시지 설정
+  //   setMessages([
+  //     { text: "안녕하세요, 어떤 도움이 필요하신가요?", sender: 'lawyer' }
+  //   ]);
     
-    // 3초 후에 변호사 메시지를 숨기는 로직  - setTimeout 관련 (사라지는 시간 조절)
-    const timer = setTimeout(() => {
-      setShowLawyerMessage(false);
-    }, 2000);
-    // 컴포넌트가 언마운트될 때 타이머 클리어  - setTimeout 관련
-    return () => clearTimeout(timer);
+  //   // 3초 후에 변호사 메시지를 숨기는 로직  - setTimeout 관련 (사라지는 시간 조절)
+  //   // const timer = setTimeout(() => {
+  //   //   setShowLawyerMessage(false);
+  //   // }, 2000);
+  //   // // 컴포넌트가 언마운트될 때 타이머 클리어  - setTimeout 관련
+  //   // return () => clearTimeout(timer);
 
-  }, []);
+  // }, []);
 
   // 변호사 메시지만 렌더링하는 함수
   const renderLawyerMessages = () => {
@@ -281,8 +283,11 @@ function TryJudiAI() {
     if (userInput.trim() !== "") {
       // 메시지 상태에 새로운 사용자 메시지 추가
       // 서버로 값 전송 내용 추가 요망 + 받은 답변도 띄워준다,
-      setMessages([...messages, { text: userInput, sender: 'user' }]);
-      setUserInput("");     
+      setMessages(prevMessages => [...prevMessages, { text: userInput, sender:'user' }]);
+      chatbotChat(userInput)
+      // const return_data = chatbotChat(userInput)
+      // setMessages([...messages, { text: return_data, sender:'lawyer' }]);
+      // setUserInput("");
       // TODO: Add logic for lawyer's response 변호사의 답변 로직을 추가하는 부분
     }
   };
@@ -355,7 +360,7 @@ function TryJudiAI() {
           alt="변호사"
         />
         {/* // 변호사의 말 띄울 구역 */}
-        {renderLawyerMessages()}
+        {/* {renderLawyerMessages()} */}
         {/* <div className="bubble lawyer-bubble hidden">
             여기에 변호사가 말하게 하려는 내용을 추가
             안녕하세요 이건 샘플 문장 입니다.

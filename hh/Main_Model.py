@@ -4,8 +4,6 @@ import pandas as pd
 import numpy as np
 import json
 import sys
-import time
-import asyncio
 
 def chatbot(api_key, input_text):
     client = OpenAI(api_key=api_key,)    
@@ -61,7 +59,7 @@ def model(api_key, data_path, result_text):
 
 
 if __name__ == "__main__":
-  api_key = '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'
+  api_key = 'api_key'
   data_path = "C:/Users/gh576/JudiAI/hh/total_embedding_done.csv"
 
   try:
@@ -80,5 +78,5 @@ if __name__ == "__main__":
    sys.stderr.write(json.dumps(error_message))
    sys.stderr.flush()
 
-  results = model(api_key, data_path, result_text)
-  print(results)
+#   results = model(api_key, data_path, result_text)
+#   print(results)
