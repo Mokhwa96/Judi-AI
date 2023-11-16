@@ -1,64 +1,27 @@
-from openai import OpenAI
-from sklearn.metrics.pairwise import cosine_similarity
-import pandas as pd
+import matplotlib.pyplot as plt
+import re
+import matplotlib.font_manager as fm
 import numpy as np
-import json
 
-def chatbot(api_key):
-    client = OpenAI(api_key=api_key,)
-    
-    messages = [{"role":"system", "content":"너는 법률 문제에 대해 상담을 진행해주는 변호사야. 지금 나는 너에게 법률 문제에 대해 상담을 받으러 왔고, 내가 처한 상황을 설명할거야. 너는 내가 하는 말에 공감해주면서 사실관계 파악을 위해 부족한 정보가 있다면 하나씩 친절하게 물어볼 수 있어. 사실관계 파악을 위한 충분한 정보가 모였다면, 마지막에는 파악된 정보를 요약해서 알려줘"},]
-    # while True:
-    #     question = input('질문 : ')
-    #     if question=='break':
-    #         last_content = messages[-1]["content"]
-    #         chat = openai.ChatCompletion.create(model="gpt-4", messages=[{"role":"user" , "content": last_content + "\n위 글을\n" + "피해자 B과 피고인 A은 과거 연인 사이였다. 피고인은 위 2021. 3. 7. 03:00경에서 같은 날 04:30경 사이 광주 서구 C, 3층에 있는 D주점 내 불상의 방에서 피해자 B이 자신을 폭행하였다는 이유로 피해자의 머리채를 잡아 바닥에 밀쳐놓고 피해자의 얼굴과 머리, 팔, 어깨 등을 손으로 수회 때리거나 발로 밟아 폭행하고, 다른 방으로 도망한 피해자를 찾아가 또다시 주먹으로 피해자의 얼굴을 2회 때리고 7~8회 가량 침을 뱉고 생수를 머리에 붓는 등 폭행하였다. 이로써 피고인은 피해자를 폭행하여 우측 후이개, 하악, 협부의 부종과 잠깐의 의식소실 및 후두부 타박으로 인한 압통 등 약 2주간의 치료를 필요로 하는 상해를 가하였다." + "\n와 같은 형식으로 바꿔줘"}])
-    #         last_paragraph = chat.choices[0].message.content
-    #         print(last_paragraph)
-    #         break
-    #     messages.append({"role":"user", "content":question})
-    #     chat = openai.ChatCompletion.create(model="gpt-4", messages=messages)
-    #     reply = chat.choices[0].message.content
-    #     messages.append({"role":"assistant", "content":reply})
-    #     print(f'answer : {reply}\n')
-    messages.append({"role":"user", "content":"A가 B를 집으로 불러 욕설과 함께 발로 차는 등 폭행을 가하였으며, A가 C를 폭행하는 장면을 B에게 지켜보도록 시켰으며, 보지 않을 경우 C를 더 폭행하였습니다. 또한, C에게 B를 폭행하라고 지시하였으나, C가 이행하지 않자 C를 폭행하였습니다. 집에 보내달라는 B를 막고 밀치며 밖으로 나가지 못하게 하며 추가 폭행하였습니다. (A의 집에는 1시간 반~ 2시간 있었으며, 시간 내내 폭행이 이루어진 것은 아닙니다. ) 폭행 장면이 담긴 영상 자료는 없으나, 폭행하는 소리(뺨을 때리는 소리, 그만 하라고 하는 소리, 집에 보내달라 등)가 들리는 음성 녹음과 2주 상해진단서를 가지고 있습니다. 영상자료는 없습니다. 또한 폭행 장면을 멀리서 지켜본 증인이 있습니다. (집 아래까지 같이 동행 후 밖에서 지켜봄) 이 경우 고소가 가능한지, 어떤 죄로 고소할 수 있는지 답변 부탁드립니다. 또한 고소가 가능하다면 준비해야할 자료가 어떤 것이 있을까요"})
-    chat = client.chat.completions.create(model='gpt-4', messages=messages)
-    reply = chat.choices[0].message.content
-    return reply
+#판결 결과 출력물 예시
 
-def get_similar_sentences(api_key, data_path, input_sentence, engine='text-embedding-ada-002'):
-    # API 키 설정
-    client = OpenAI(api_key=api_key,)
-
-    # 데이터 불러오기
-    data = pd.read_csv(data_path)
-
-    # 샘플만 사용하고 복사본을 만듭니다.
-    data_sample = data.copy()
-
-    # 'embedding' 열의 문자열을 NumPy 배열로 변환
-    data_sample['embedding'] = data_sample['embedding'].apply(lambda x: np.array(eval(x)))
-
-    # 유사도 계산
-    input_sentence_embed = client.embeddings.create(input = input_sentence, model=engine).data[0].embedding
-
-    input_fin = np.array(input_sentence_embed)  # 임베딩을 NumPy 배열로 변환
-
-    query_2d = input_fin.reshape(1, -1)
-
-    data_sample['similarity'] = data_sample['embedding'].apply(lambda x: cosine_similarity(x.reshape(1, -1), query_2d)[0][0])
-    
-    top_similar_sentence = data_sample.sort_values("similarity", ascending=False).head(20)[["casename", "facts", "ruling"]]
-    
-    # 유사한 문장 찾기
-    return top_similar_sentence
-
+sentences = ["피고인을 징역 1년 2월에 처한다. 다만, 이 판결 확정일로부터 3년간 위 형의 집행을 유예한다. 피고인에 대하여 240시간의 사회봉사를 명한다.",
+             "피고인을 벌금 3,000,000원에 처한다. 피고인이 위 벌금을 납입하지 아니하는 경우 100,000원을 1일로 환산한 기간 피고인을 노역장에 유치한다. 위 벌금에 상당한 금액의 가납을 명한다.",
+             '피고인을 벌금 1,000,000원에 처한다. 피고인이 위 벌금을 납입하지 아니하는 경우 100,000원을 1일로 환산한 기간 피고인을 노역장에 유치한다. 위 벌금에 상당한 금액의 가납을 명한다. 소송비용 중 증인 여비는 피고인이 부담한다.',
+             "피고인을 벌금 300,000원에 처한다. 피고인이 위 벌금을 납입하지 아니하는 경우 100,000원을 1일로 환산한 기간 피고인을 노역장에 유치한다. 피고인에게 위 벌금에 상당한 금액의 가납을 명한다.",
+             "피고인을 징역 6월에 처한다. 다만, 이 판결 확정일로부터 2년간 위 형의 집행을 유예한다. 피고인에게 80시간의 사회봉사를 명한다.",
+             "피고인을 벌금 3,000,000원에 처한다. 피고인이 위 벌금을 납입하지 아니하는 경우 10만 원을 1일로 환산한 기간 피고인을 노역장에 유치한다. 위 벌금에 상당한 금액의 가납을 명한다.",
+             "피고인을 벌금 50만 원에 처한다. 다만, 이 판결 확정일로부터 1년간 위 형의 집행을 유예한다. 위 집행유예 선고가 실효 또는 취소되고 피고인이 위 벌금을 납입하지 아니하는 경우 10만 원을 1일로 환산한 기간 피고인을 노역장에 유치한다.",
+             '피고인을 벌금 200만 원에 처한다. 피고인이 위 벌금을 납입하지 아니하는 경우 10만 원을 1일로 환산한 기간 피고인을 노역장에 유치한다. 위 벌금 상당액의 가납을 명한다.',
+             "피고인을 벌금 500,000원에 처한다. 다만, 이 판결 확정일로부터 1년간 위 형의 집행을 유예한다. 위 집행유예 선고가 실효 또는 취소되고 피고인이 위 벌금을 납입하지 아니하는 경우 100,000원을 1일로 환산한 기간 피고인을 노역장에 유치한다.",
+             '피고인을 벌금 700만 원에 처한다. 피고인이 위 벌금을 납입하지 아니하는 경우 10만 원을 1일로 환산한 기간 피고인을 노역장에 유치한다. 피고인에게 40시간의 성폭력치료 프로그램의 이수를 명한다. 피고인에게 아동·청소년 관련기관 등과 장애인복지시설에 3년간 취업제한을 명한다. 위 벌금에 상당한 금액의 가납을 명한다.',
+             "피고인을 벌금 4,000,000원에 처한다. 피고인이 위 벌금을 납입하지 않는 경우 100,000원을 1일로 환산한 기간 피고인을 노역장에 유치한다. 피고인에게 80시간의 성폭력치료 프로그램 이수를 명한다. 피고인에게 아동·청소년 관련기관 등과 장애인복지시설에 각 3년간 취업제한을 명한다. 위 벌금에 상당한 금액의 가납을 명한다.",
+             '피고인을 벌금 200만 원에 처한다. 피고인이 위 벌금을 납입하지 아니할 경우 10만 원을 1일로 환산한 기간 피고인을 노역장에 유치한다. 피고인에 대하여 40시간의 성폭력 치료프로그램 이수를 명한다. 위 벌금에 상당한 금액의 가납을 명한다.',
+             "피고인을 벌금 5,000,000원에 처한다. 피고인이 위 벌금을 납입하지 아니하는 경우 100,000원을 1일로 환산한 기간 피고인을 노역장에 유치한다. 피고인에게 위 벌금에 상당한 금액의 가납을 명한다. 피고인에게 40시간의 성폭력 치료프로그램의 이수를 명한다. 피고인에 대한 정보를 2년간 정보통신망을 이용하여 공개한다. 피고인에 대하여 아동·청소년 관련기관 등 및 장애인복지시설에 3년간 취업제한을 명한다.",
+             "피고인을 벌금 300만 원에 처한다. 피고인이 위 벌금을 납입하지 아니하는 경우 10만 원을 1일로 환산한 기간 피고인을 노역장에 유치한다. 위 벌금에 상당한 금액의 가납을 명한다.",
+             '피고인을 금고 8월에 처한다. 다만, 이 판결 확정일부터 2년간 위 형의 집행을 유예한다. 피고인에 대하여 40시간의 준법운전강의 수강을 명한다.']
 
 def result(sentences):
-
-    import matplotlib.pyplot as plt
-    import re
-    import matplotlib.font_manager as fm
 
     # 로컬실행 그래프 한글폰트설정
 
@@ -254,7 +217,8 @@ def result(sentences):
             sizes.append(others)
 
         plt.subplot(3, (pltcount+2)//3, count)
-        plt.bar(labels, sizes, color='red')  # 바 차트 생성
+        colors = plt.cm.viridis(np.linspace(0, 1, len(sizes)))  # 막대 개수에 따라 색깔 생성
+        plt.bar(labels, sizes, color=colors)  # 바 차트 생성
 
         # 총 데이터 개수를 x축 라벨에 표시
         xlabel = f'{category_name} - {total}건'
@@ -300,18 +264,7 @@ def result(sentences):
 
     return fig1,fig2
 
-def model(api_key, data_path):
-  import matplotlib.pyplot as plt
-  message = chatbot(api_key)
-  similar_sentences = get_similar_sentences(api_key, data_path, message)
-  sentences = [line for line in similar_sentences['ruling']]
-  results = {"results":sentences}
-  fig1, fig2 = result(sentences)
-  plt.show()
-  return json.dumps(results, ensure_ascii=False)
 
-if __name__ == "__main__":
-  api_key = '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'
-  data_path = "C:/Users/gjaischool/JudyAI/Judi-AI/hh/total_embedding_done.csv"
-  results = model(api_key, data_path)
-  print(results)
+# 함수 실행
+fig1, fig2 = result(sentences)
+plt.show()

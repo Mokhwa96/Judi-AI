@@ -8,9 +8,9 @@ const iconv = require('iconv-lite');
 
 app.use(bodyParser.json());
 
-app.use(express.static(path.join('C:/Users/gh576/JudiAI/hh/', 'build')));
+app.use(express.static(path.join('C:/Users/gjaischool/JudyAI/Judi-AI/hh/', 'build')));
 app.get('/', (req, res) => {
-    res.sendFile(path.join('C:/Users/gh576/JudiAI/hh/', 'build', 'index.html'));
+    res.sendFile(path.join('C:/Users/gjaischool/JudyAI/Judi-AI/hh/', 'build', 'index.html'));
 });
 
 app.get('/api/search', (req, res) => {
