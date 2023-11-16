@@ -10,6 +10,7 @@ import './css/judi_chat.css';
 import UserForm from "./components/UserForm";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowCircleDown } from '@fortawesome/free-solid-svg-icons';
+import { Howl } from 'howler';
 
 function Home() {
   const navigate = useNavigate(); // useNavigate 훅을 사용하여 navigate 함수를 가져옵니다
@@ -201,6 +202,7 @@ function TryJudiAI() {
   const [isChatboxActive, setIsChatboxActive] = useState(false);
   const [messages, setMessages] = useState([{ text: "안녕하세요, 어떤 도움이 필요하신가요?", sender: 'lawyer' }]);
   const [userInput, setUserInput] = useState('');
+  const [answerState, setAnswerState] = useState(false);
   const navigate = useNavigate();
 
   // 현호 작업구역
@@ -227,10 +229,28 @@ function TryJudiAI() {
       console.log(data);
       console.log('입력문은');
       console.log(userinput);
+      setAnswerState(!answerState);
+
+      // const speech = new SpeechSynthesisUtterance(data);
+      // window.speechSynthesis.speak(speech);
     } catch (error) {
       console.error(error);
     }
   };
+
+  // messages에 새로운 답변이 추가될 때마다 음성 파일 재생
+  useEffect(() => {
+    const sound = new Howl({
+      src: ['/answer.mp3'],
+      autoplay: true,
+      loop: false,
+    });
+
+    sound.play();
+    return () => {
+      sound.unload();
+    };
+  }, [answerState]);
 
   // 변호사 메시지 표시 여부를 위한 새로운 state - setTimeout 관련
   const [showLawyerMessage, setShowLawyerMessage] = useState(true);
@@ -302,6 +322,9 @@ function TryJudiAI() {
     <div key={index} className={`message-container ${message.sender}-container`}>
       <div className={`bubble ${message.sender}`}>
         {message.text}
+        {/* <audio controls autoplay>
+          <source src='/answer.mp3' type='audio/mp3' />
+        </audio> */}
       </div>
     </div>
   );
