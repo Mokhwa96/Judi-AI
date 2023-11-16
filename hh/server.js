@@ -8,9 +8,9 @@ const iconv = require('iconv-lite');
 
 app.use(bodyParser.json());
 
-app.use(express.static(path.join('C:/Users/gjaischool/JudyAI/Judi-AI/hh/', 'build')));
+app.use(express.static(path.join('C:/Users/gjaischool/Judi-AI/hh/', 'build')));
 app.get('/', (req, res) => {
-    res.sendFile(path.join('C:/Users/gjaischool/JudyAI/Judi-AI/hh/', 'build', 'index.html'));
+    res.sendFile(path.join('C:/Users/gjaischool/Judi-AI/hh/', 'build', 'index.html'));
 });
 
 app.post('/chat', (req, res) => {
@@ -22,7 +22,7 @@ app.post('/chat', (req, res) => {
     console.log(JSON.stringify(clientRequest));
 
     // 파이썬 프로그램 실행
-    const pythonProcess = spawn('C:/Users/gh576/anaconda3/python', ['Main_Model.py']);
+    const pythonProcess = spawn('C:/Users/gjaischool/anaconda3/python', ['Main_Model.py']);
 
     const buffers = [];
 

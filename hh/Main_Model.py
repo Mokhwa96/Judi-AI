@@ -297,9 +297,9 @@ def result(sentences):
 
     return fig1,fig2
 
-def model(api_key, data_path):
+def model(api_key, data_path, message):
   import matplotlib.pyplot as plt
-  message = chatbot(api_key)
+  message = message
   similar_sentences = get_similar_sentences(api_key, data_path, message)
   sentences = [line for line in similar_sentences['ruling']]
   results = {"results":sentences}
@@ -308,8 +308,8 @@ def model(api_key, data_path):
   return json.dumps(results, ensure_ascii=False)
 
 if __name__ == "__main__":
-  api_key = 'api_key'
-  data_path = "C:/Users/gh576/JudiAI/hh/total_embedding_done.csv"
+  api_key = 'apikey'
+  data_path = "C:/Users/gjaischool/Judi-AI/hh/total_embedding_done.csv"
 
   try:
    line = sys.stdin.readline()
@@ -317,6 +317,7 @@ if __name__ == "__main__":
 
    # 요청 처리 및 결과 저장
    result_text = chatbot(api_key, request)
+   result_model = model(api_key, data_path, result_text)
 
    # 결과를 클라이언트로 전송
    sys.stdout.write(json.dumps(result_text))
