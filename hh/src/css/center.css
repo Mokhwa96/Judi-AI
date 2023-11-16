@@ -8,7 +8,59 @@
   --button-background-color: white;
   --point-color:#0D1321;
 }
+/* 폰트 start*/
+/* 에스코어 드림 */
+@font-face {
+  font-family: 'S-CoreDream-3Light';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+/* 학교안심 우주 */
+@font-face {
+  font-family: 'HakgyoansimWoojuR';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2307-2@1.0/HakgyoansimWoojuR.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+/* 스위트 */
+@font-face {
+  font-family: 'SUITE-Regular';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-2@1.0/SUITE-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+/* 조선일보명조체 */
+@font-face {
+  font-family: 'Chosunilbo_myungjo';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/Chosunilbo_myungjo.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
 
+/* 카페24 당당해*/
+@font-face {
+  font-family: 'Cafe24Dangdanghae';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.2/Cafe24Dangdanghae.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* 여기어때 잘난체 고딕 */
+@font-face {
+  font-family: 'JalnanGothic';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_231029@1.1/JalnanGothic.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+/* Gmarket Sans */
+@font-face {
+  font-family: 'GmarketSansMedium';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+/* 폰트 end */
 .center {
   height: 155em;
   position: relative;
@@ -29,21 +81,21 @@
       
   }
 
-  .Try_JudiAI {
-      border: none;
-      border-radius: 4px;
-      background-color: var(--button-background-color);
-      display: flex;
-      align-items: center; /* 세로 가운데 정렬 */
-      color: var(--primary-color);
-      padding: 15px 32px !important;
-      text-decoration: none; /* 밑줄 제거 
-      justify-content: center; /* 가로 가운데 정렬 */
-      cursor: pointer;
-      font-size:2em;
-      box-shadow: 1px 1px 5px rgba(41, 41, 41, 0.5); /* 그림자 추가 */
+.Try_JudiAI {
+  margin:0 auto;
+  border: none;
+  border-radius: 30px;
+  background-color: var(--button-background-color);
+  display: flex;
+  align-items: center; /* 세로 가운데 정렬 */
+  color: var(--palettes-color2);
+  padding: 15px 32px !important;
+  text-decoration: none; /* 밑줄 제거 */
+  cursor: pointer;
+  font-size:2em;
+  box-shadow: 1px 1px 5px rgba(41, 41, 41, 0.5); /* 그림자 추가 */
 
-  }
+}
 
 .faArrowCircleDown {
   /* 아이콘의 위치를 조정합니다. */
@@ -56,10 +108,10 @@
 .center .content-left {
   position: absolute;
   white-space: nowrap; /* 텍스트 줄 바꿈 방지 */
+  font-family: 'GmarketSansMedium';
 	top: 50%;
 	left: 50%;
 	transform: translate( -50%, -50% );
-  background-color: black;
   background: rgba(0, 0, 0, 0.637);
   padding-left: 70px;
   padding-right: 70px;
@@ -180,11 +232,13 @@
 }
 
 /* our project - 설명*/
+
 .introducing-back {
+  font-family: 'S-CoreDream-3Light', sans-serif;
   position: absolute;
   width: 43em;
   height: 48em;
-  top: 65em; /* 원하는 위치로 조정하세요 */
+  top: 65em;
   margin-left: 400px;
   padding: 30px;
   padding-left: 120px;
