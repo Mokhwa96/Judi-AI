@@ -223,48 +223,6 @@ function TryJudiAI() {
     };
   }, [answerState]);
 
-  // messages에 새로운 답변이 추가될 때마다 음성 파일 재생
-  useEffect(() => {
-    const sound = new Howl({
-      src: ['/answer.mp3'],
-      autoplay: true,
-      loop: false,
-    });
-
-    sound.play();
-    return () => {
-      sound.unload();
-    };
-  }, [answerState]);
-
-  // messages에 새로운 답변이 추가될 때마다 음성 파일 재생
-  useEffect(() => {
-    const sound = new Howl({
-      src: ['/answer.mp3'],
-      autoplay: true,
-      loop: false,
-    });
-
-    sound.play();
-    return () => {
-      sound.unload();
-    };
-  }, [answerState]);
-
-  // messages에 새로운 답변이 추가될 때마다 음성 파일 재생
-  useEffect(() => {
-    const sound = new Howl({
-      src: ['/answer.mp3'],
-      autoplay: true,
-      loop: false,
-    });
-
-    sound.play();
-    return () => {
-      sound.unload();
-    };
-  }, [answerState]);
-
   // 솔빈: 변호사 이미지 위에 말풍선 추가하는 구역입니다.
   // 변호사 메시지 표시 여부를 위한 새로운 state - setTimeout 관련
   // const [showLawyerMessage, setShowLawyerMessage] = useState(true);
