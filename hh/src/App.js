@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'; //음성 입력용
 import { BrowserRouter as Router, Route, Routes, Link, useNavigate} from 'react-router-dom';
 import './css/reset.css';
@@ -8,29 +8,20 @@ import './css/center.css';
 // import './css/styles.css';
 import './css/judi_chat.css';
 import UserForm from "./components/UserForm";
+import Navigation from './components/Navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowCircleDown } from '@fortawesome/free-solid-svg-icons';
+import { Howl } from 'howler';
+import Graph1 from './graph1'
 
 function Home() {
   const navigate = useNavigate(); // useNavigate 훅을 사용하여 navigate 함수를 가져옵니다
-  // 토글 메뉴
-  const [isDropdownVisible, setDropdownVisible] = useState(false);
-  const toggleDropdown = () => {
-    setDropdownVisible(!isDropdownVisible);
-    console.log("isDropdownVisible 상태값:", isDropdownVisible);
+  // 스크롤 기능
+  const project_ref = useRef(null)  // Our Project로 스크롤
+  const contact_ref = useRef(null)  // Contact us로 스크롤
+  const handleClick = () => {
+    project_ref.current?.scrollIntoView({behavior: 'smooth'})
   };
-
-  // 화면 너비 상태
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-
-  // 화면 크기가 작을 때 드롭다운 메뉴를 표시
-  const showDropdown = windowWidth <= 768;
-
-  // 브라우저 창 크기가 변경될 때 화면 너비 상태 업데이트
-  window.addEventListener('resize', () => {
-    setWindowWidth(window.innerWidth);
-  });
-
 
   return (
   <div className='home'>
@@ -40,27 +31,8 @@ function Home() {
       <div className="logo" onClick={() => navigate('/')}>
         <p>JudiAI</p>
       </div>
-      <div className={`navigation_bar ${showDropdown ? 'dropdown' : ''}`}>
-
-        <ul className={isDropdownVisible ? 'show' : ''}>
-          <li><Link to="/">HOME</Link></li>
-          <li><Link to="/try-judiai">Try JudiAI</Link></li>
-          <li><a href="#a">Our Project</a></li>
-          <li><a href="#b">Contact us</a></li>
-        </ul>
-        {/* 화면이 좁하질 때 토글 메뉴 생김 */}
-        <div className="menu-toggle-background">
-          <button className="menu-toggle" onClick={toggleDropdown}><i className="fa fa-bars"></i></button>
-          {isDropdownVisible && (
-            <ul className="menu-toggle-active">
-              <a><Link to="/">HOME</Link></a>
-              <a><Link to="/try-judiai">Try JudiAI</Link></a>
-              <a href="#a">Our Project</a>
-              <a href="#b">Contact us</a>
-            </ul>
-          )}
-        </div>
-      </div>
+      {/* 상단 메뉴 */}
+      <Navigation project_ref={project_ref} contact_ref={contact_ref} />
     </div>
 
     {/* Center */}
@@ -72,20 +44,19 @@ function Home() {
           <p>당신의 법률 문제</p>
           <p>JudiAI와 함께</p>
           <p>해결하세요</p>
-          
           <button className="Try_JudiAI" onClick={() => navigate('/try-judiai')}>
             Try JudiAI
           </button>
         </span>
         {/* 아래 화살표 아이콘 */}
-        <FontAwesomeIcon className='faArrowCircleDown' icon={faArrowCircleDown} style={{color:"#ffffff", }} size='3x' />
+        <FontAwesomeIcon className='faArrowCircleDown' onClick={handleClick} icon={faArrowCircleDown} style={{color:"#ffffff", }} size='3x' />
       </div>
 
       {/* Our Project Start -- */}
-      <div className='our_project'>
+      <div className='our_project' ref={project_ref}>
         <div className="dashed-line"></div>
         <h1>Our Project</h1>
-        {/* Our Project 채팅 */}
+        {/* 채팅 */}
         <div className="judiexplain">
           <div className="judi_white">
             <img src={process.env.PUBLIC_URL +"./images/Judi_desk.png"} alt="주디 이미지" />
@@ -109,7 +80,7 @@ function Home() {
             <span className="send_button">전송</span>
           </div>
         </div>
-        {/* Our Project 설명 */}
+        {/* 설명 */}
         <div className="introducing-back">
           <p>JudiAI와 함께 여러분의 다양한 법률 문제를 탐색하세요.</p>
           <br></br>
@@ -125,7 +96,7 @@ function Home() {
 
 
       {/* Contact us Start -- */}
-      <div className='contact_us'>
+      <div className='contact_us' ref={contact_ref}>
         <div className="dashed-line"></div>
         <h1>Contact us</h1>
         {/* 이메일, 제목, 메세지 입력창 */}
@@ -201,7 +172,9 @@ function TryJudiAI() {
   const [isChatboxActive, setIsChatboxActive] = useState(false);
   const [messages, setMessages] = useState([{ text: "안녕하세요, 어떤 도움이 필요하신가요?", sender: 'lawyer' }]);
   const [userInput, setUserInput] = useState('');
+  const [answerState, setAnswerState] = useState(false);
   const navigate = useNavigate();
+  const messagesEndRef = useRef(null); // 새로운 ref. 채팅창 스크롤 자동 최신화 위함.
 
   // 현호 작업구역
   // 검색 test
@@ -227,35 +200,72 @@ function TryJudiAI() {
       console.log(data);
       console.log('입력문은');
       console.log(userinput);
+      setAnswerState(!answerState);
+
+      // const speech = new SpeechSynthesisUtterance(data);
+      // window.speechSynthesis.speak(speech);
     } catch (error) {
       console.error(error);
     }
   };
 
-  // 변호사 메시지 표시 여부를 위한 새로운 state - setTimeout 관련
-  const [showLawyerMessage, setShowLawyerMessage] = useState(true);
+  // messages에 새로운 답변이 추가될 때마다 음성 파일 재생
+  useEffect(() => {
+    const sound = new Howl({
+      src: ['/answer.mp3'],
+      autoplay: true,
+      loop: false,
+    });
 
+    sound.play();
+    return () => {
+      sound.unload();
+    };
+  }, [answerState]);
+
+  // messages에 새로운 답변이 추가될 때마다 음성 파일 재생
+  useEffect(() => {
+    const sound = new Howl({
+      src: ['/answer.mp3'],
+      autoplay: true,
+      loop: false,
+    });
+
+    sound.play();
+    return () => {
+      sound.unload();
+    };
+  }, [answerState]);
+
+  // 솔빈: 변호사 이미지 위에 말풍선 추가하는 구역입니다.
+  // 변호사 메시지 표시 여부를 위한 새로운 state - setTimeout 관련
+  // const [showLawyerMessage, setShowLawyerMessage] = useState(true);
   // useEffect(() => {
   //   // 초기 변호사 메시지 설정
   //   setMessages([
   //     { text: "안녕하세요, 어떤 도움이 필요하신가요?", sender: 'lawyer' }
-  //   ]);
-    
+  //   ]);  
   //   // 3초 후에 변호사 메시지를 숨기는 로직  - setTimeout 관련 (사라지는 시간 조절)
   //   // const timer = setTimeout(() => {
   //   //   setShowLawyerMessage(false);
   //   // }, 2000);
   //   // // 컴포넌트가 언마운트될 때 타이머 클리어  - setTimeout 관련
   //   // return () => clearTimeout(timer);
-
   // }, []);
+
+
+  // 메시지 배열이 변경될 때마다 스크롤을 맨 아래로 이동시키는 useEffect
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]); // messages 배열이 변경될 때마다 실행
+
 
   // 변호사 메시지만 렌더링하는 함수
   const renderLawyerMessages = () => {
     return messages
-      .filter(message => message.sender === 'lawyer' && showLawyerMessage)
+      .filter(message => message.sender === 'lawyer')
       .map((message, index) => (
-        <div key={index} className="bubble lawyer-bubble">
+        <div key={index} className="bubble lawyer">
           {message.text}
         </div>
       ));
@@ -273,22 +283,18 @@ function TryJudiAI() {
   };
 
 
-  // 채팅 박스 생성 부분
+  // 채팅 박스 활성화/비활성화 부분
   const toggleChatbox = () => {
     setIsChatboxActive(!isChatboxActive);
   };
 
-  // 채팅의 응답을 제출하는 부분
+  // 채팅의 응답을 제출하는 부분. 이곳을 변경해서 변호사의 응답 부분을 화면에 표시되게 했습니다. 
   const submitResponse = () => {
     if (userInput.trim() !== "") {
-      // 메시지 상태에 새로운 사용자 메시지 추가
-      // 서버로 값 전송 내용 추가 요망 + 받은 답변도 띄워준다,
+      
       setMessages(prevMessages => [...prevMessages, { text: userInput, sender:'user' }]);
       chatbotChat(userInput)
-      // const return_data = chatbotChat(userInput)
-      // setMessages([...messages, { text: return_data, sender:'lawyer' }]);
-      // setUserInput("");
-      // TODO: Add logic for lawyer's response 변호사의 답변 로직을 추가하는 부분
+      setUserInput(""); // 사용자 입력을 초기화
     }
   };
 
@@ -302,6 +308,9 @@ function TryJudiAI() {
     <div key={index} className={`message-container ${message.sender}-container`}>
       <div className={`bubble ${message.sender}`}>
         {message.text}
+        {/* <audio controls autoplay>
+          <source src='/answer.mp3' type='audio/mp3' />
+        </audio> */}
       </div>
     </div>
   );
@@ -331,6 +340,22 @@ function TryJudiAI() {
     setUserInput(transcript); // 음성 인식 결과를 userInput에 설정
   };
 
+  // 연주 그래프 작업 구역
+  const data = [
+    {
+      "country": "300만원",
+      "벌금": 55
+    },
+    {
+      "country": "500만원",
+      "벌금": 41
+    },
+    {
+      "country": "10만원",
+      "벌금": 148
+    }
+  ]
+
 
   // 리턴 영역
   return (
@@ -341,14 +366,6 @@ function TryJudiAI() {
           <p>JudiAI</p>
         </div>
 
-        <div className="navigation_bar">
-          <ul>
-            <li><Link to="/">HOME</Link></li>
-            <li><Link to="/try-judiai">Try JudiAI</Link></li>
-            <li><a href="#a">Our Project</a></li>
-            <li><a href="#b">Contact us</a></li>
-          </ul>
-        </div>
       </div>
 
       {/* Chat Simulator */}
@@ -358,6 +375,7 @@ function TryJudiAI() {
           className="lawyer-image"
           src="/images/Judi_desk.png"
           alt="변호사"
+          onClick={toggleChatbox} // 이벤트 핸들러
         />
         {/* // 변호사의 말 띄울 구역 */}
         {/* {renderLawyerMessages()} */}
@@ -371,6 +389,7 @@ function TryJudiAI() {
           {/* 채팅 메시지를 표시하는 부분 */}
           <div className="chat-messages">
             {renderMessages}
+            <div ref={messagesEndRef} /> {/* 스크롤 조정을 위한 빈 div 추가 */}
           </div>
 
           {/* 입력창 및 버튼 관련 구역 */}
@@ -379,7 +398,7 @@ function TryJudiAI() {
               type="text" 
               value={userInput}
               onChange={handleInputChange}
-              placeholder="여기에 답변을 입력하세요..."
+              placeholder="여기에 상담 내용을 입력해주세요."
               onKeyDown={(event) => {
                 if (event.key === 'Enter') {
                   submitResponse();
@@ -429,9 +448,9 @@ function TryJudiAI() {
         {/* chat 아이콘을 눌렀을 때  chatbox가 열리는 영역 */}
         <div id="open-chatbox-button" onClick={toggleChatbox}>
           <img
-            src="/images/chat_icon.png"
+            src="/images/chat_icon3.png"
             alt="Chat Icon"
-            style={{ cursor: 'pointer' }}
+            style={{ cursor: 'pointer', width: '60px', height: 'auto'  }}
           />
         </div>
       </div>
@@ -439,7 +458,13 @@ function TryJudiAI() {
       {/* 음성 인식 텍스트 표시 */}
       {listening && <div className="transcript">상담 내용 확인: {transcript}</div>}
 
+      {/* 그래프 */}
+      <div style={{height:'500px', width:'600px', marginLeft:'50px'}}>
+        <Graph1 data = {data}/>
+      </div>
     </div>
+
+
   );
 }
 

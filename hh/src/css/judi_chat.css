@@ -17,7 +17,6 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   display: flex; /* Flexbox 레이아웃 사용 */
   justify-content: flex-start; /* 요소들을 시작 부분에 정렬 */
-  
   position: relative; /* 관계적으로 정리 */
   margin: 0 auto; /* 페이지 중앙 정렬 */
 }
@@ -39,10 +38,11 @@
 /* 챗박스 구역입니다. */
 #chatbox {
   width: 400px; 
-  height: 480px; 
+  height: 500px; 
   background-color: rgb(255, 255, 255); /* 챗박스 배경 색상 */
   border: 1px solid #ccc; /* 챗박스 테두리 */
   border-radius: 10px 10px 10px 10px; /* 모서리 둥글게 */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   z-index: 1000; /* 맨 앞으로 보내 놓은 상태. 겹쳐졌을때, 위로 표시 */
   margin-left: 20px; /* lawyer-image와의 간격 조절 */
   position: relative; /* 관계적으로 정리 */
@@ -51,19 +51,26 @@
 
 /* 채팅 메시지 영역 스타일링 */
 .chat-messages {
+  position: relative;
+  width: 380px;
+  height: calc(100% - 100px);
+  padding: 10px 5px 5px 5px;
   overflow-y: auto; /* 스크롤 가능하도록 설정 */
-  height: calc(100% - 60px); /* 입력창 높이 제외 */
-  padding: 10px;
+  overflow-x: hidden; /* 수평 스크롤바 숨김 */
+  line-height: 1.6; /* 글꼴 크기의 1.6배에 해당하는 줄 간격을 의미 */
+  
 }
 
 /* 입력창 및 버튼 영역 스타일링 */
 .chat-input-area {
   position: absolute;
-  bottom: 5px;
-  width: 95%;
+  left: 0; /* 좌측 끝부터 시작 */
+  right: 0; /* 우측 끝까지 확장 */
+  bottom: 0px;
+  width: 100%;
   background-color: #214674; /* 배경색 설정 */
   border-top: 1px solid #ccc; /* 상단 테두리 */
-  border-radius: 10px 10px 10px 10px; /* 모서리 둥글게 */
+  border-radius: 0px 0px 10px 10px; /* 모서리 둥글게 */
   padding: 10px;
   box-sizing: border-box; /* 패딩과 테두리를 너비에 포함 */
   overflow-x: hidden; /* 수평 스크롤바 숨김 */
@@ -76,7 +83,7 @@
 .voice-control-buttons {
   display: flex; /* Flex 컨테이너 설정 */
   justify-content: flex-end; /* 오른쪽 정렬 */
-  margin-bottom: 10px; /* chat-input-area와의 간격 */
+  margin-bottom: 2px; /* chat-input-area와의 간격 */
   padding: 5px;
 }
 
@@ -84,7 +91,7 @@
   width: 30px;
   height: 30px;
   cursor: pointer; /* 클릭 가능함을 나타내는 스타일 */
-  margin-left: 10px; /* 아이콘들 사이의 간격 */
+  margin-left: 15px; /* 아이콘들 사이의 간격 */
 }
 
 /* 채팅의 레이아웃을 위해 컨테이너에 담아서 사용했습니당 */
@@ -139,3 +146,9 @@
   /* 추가 스타일링 필요시 여기에 작성 */
 }
 
+/* chat-container가 expanded 상태가 아닐 때 #chatbox와 내부 요소들 숨기기 */
+.chat-container:not(.expanded) #chatbox,
+.chat-container:not(.expanded) #chatbox .chat-messages,
+.chat-container:not(.expanded) #chatbox .chat-input-area {
+  display: none; /* 숨김 처리 */
+}
