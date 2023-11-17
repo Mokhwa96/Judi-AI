@@ -7,9 +7,9 @@ import { ResponsiveBar } from '@nivo/bar'
 // no chart will be rendered.
 // website examples showcase many properties,
 // you'll often use just a few of them.
-const Graph1 = ({ data /* see data tab */ }) => (
+const Graph1 = ({ graphdata /* see data tab */ }) => (
     <ResponsiveBar
-        data={data}
+        data={graphdata}
         keys={[
             '벌금'
         ]}

@@ -47,7 +47,12 @@ app.post('/chat', (req, res) => {
 
             console.log('res :');
             console.log(resultData);
+            // 원본
             res.json(resultData);
+
+            // 그래프를 위한 수정 부분
+            // res.json({ chatResponse: resultData, graphData: graph_data });
+            
         } catch (error) {
             // JSON 파싱에 실패한 경우
             console.error('파이썬 스크립트에서 반환된 데이터가 유효한 JSON이 아닙니다');

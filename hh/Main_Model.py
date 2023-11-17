@@ -5,6 +5,7 @@ import numpy as np
 import json
 import sys
 
+# start 그래프를 위한 예시문. 나중에 이 부분은 삭제해야 됨
 sentences = ["피고인을 징역 1년 2월에 처한다. 다만, 이 판결 확정일로부터 3년간 위 형의 집행을 유예한다. 피고인에 대하여 240시간의 사회봉사를 명한다.",
              "피고인을 벌금 3,000,000원에 처한다. 피고인이 위 벌금을 납입하지 아니하는 경우 100,000원을 1일로 환산한 기간 피고인을 노역장에 유치한다. 위 벌금에 상당한 금액의 가납을 명한다.",
              '피고인을 벌금 1,000,000원에 처한다. 피고인이 위 벌금을 납입하지 아니하는 경우 100,000원을 1일로 환산한 기간 피고인을 노역장에 유치한다. 위 벌금에 상당한 금액의 가납을 명한다. 소송비용 중 증인 여비는 피고인이 부담한다.',
@@ -20,7 +21,7 @@ sentences = ["피고인을 징역 1년 2월에 처한다. 다만, 이 판결 확
              "피고인을 벌금 5,000,000원에 처한다. 피고인이 위 벌금을 납입하지 아니하는 경우 100,000원을 1일로 환산한 기간 피고인을 노역장에 유치한다. 피고인에게 위 벌금에 상당한 금액의 가납을 명한다. 피고인에게 40시간의 성폭력 치료프로그램의 이수를 명한다. 피고인에 대한 정보를 2년간 정보통신망을 이용하여 공개한다. 피고인에 대하여 아동·청소년 관련기관 등 및 장애인복지시설에 3년간 취업제한을 명한다.",
              "피고인을 벌금 300만 원에 처한다. 피고인이 위 벌금을 납입하지 아니하는 경우 10만 원을 1일로 환산한 기간 피고인을 노역장에 유치한다. 위 벌금에 상당한 금액의 가납을 명한다.",
              '피고인을 금고 8월에 처한다. 다만, 이 판결 확정일부터 2년간 위 형의 집행을 유예한다. 피고인에 대하여 40시간의 준법운전강의 수강을 명한다.']
-
+# end 그래프를 위한 예시문. 나중에 이 부분은 삭제해야 됨
 
 def chatbot(api_key, input_text):
     client = OpenAI(api_key=api_key,)    
@@ -69,7 +70,6 @@ def get_similar_sentences(api_key, data_path, input_sentence, engine='text-embed
 
 
 def result(sentences):
-    print("def result start")
 
     import matplotlib.pyplot as plt
     import re
@@ -312,54 +312,46 @@ def result(sentences):
         count = create_bar_chart(아동_청소년_장애인복지시설_취업제한, '아동 청소년 장애인복지시설 취업제한', pltcount, count)
     if 준법운전강의:
         count = create_bar_chart(준법운전강의, '준법운전강의', pltcount, count)
-    
+
     return {'징역':징역, '금고':금고, '벌금':벌금, '집행유예':집행유예, '사회봉사':사회봉사,
             '성폭력_치료프로그램':성폭력_치료프로그램, '피고인_정보공개':피고인_정보공개,
             '아동_청소년_장애인복지시설_취업제한':아동_청소년_장애인복지시설_취업제한,
             '준법운전강의':준법운전강의}
 
 def model(api_key, data_path, message):
-  print("def model start")
   import matplotlib.pyplot as plt
   message = message
-#   similar_sentences = get_similar_sentences(api_key, data_path, message)
-#   sentences = [line for line in similar_sentences['ruling']]
-#   results = {"results":sentences}
-#   fig1, fig2 = result(sentences)
-#   plt.show()
-#   return json.dumps(results, ensure_ascii=False)
-  print("def model finished")
+  similar_sentences = get_similar_sentences(api_key, data_path, message)
+  sentences = [line for line in similar_sentences['ruling']]
   graph_data = result(sentences)
-  graph_data = json.dumps(graph_data)
-  print(type(graph_data))
-  print(graph_data)
-  return "graph_data"
+  results = {"results":sentences, "graph":graph_data}
+  return json.dumps(results, ensure_ascii=False)
+  # start 모델 완성되면 지워야 함
+  #graph_data = result(sentences)
+  #graph_data = json.dumps(graph_data)
+  #return "graph_data"
+  # end 모델 완성되면 지워야 함
+
 if __name__ == "__main__":
-  api_key = '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'
-  data_path = "C:/Users/gjaischool/Judi-AI/hh/total_embedding_done.csv"
-  request = 'chat'
+  api_key = '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'
+  data_path = "C:/Users/gjaischool/Desktop/2차_프로젝트/total_embedding_done.csv"
 
-  # 요청 처리 및 결과 저장
-  result_text = chatbot(api_key, request)
-  graph_data = model(api_key, data_path, result_text)
-#   try:
-#    line = sys.stdin.readline()
-#    request = json.loads(line)['chat']
+  try:
+   line = sys.stdin.readline()
+   request = json.loads(line)['chat']
 
+   # 요청 처리 및 결과 저장
+   result_text = chatbot(api_key, request)
+   result_model = model(api_key, data_path, result_text)
 
-#    # 요청 처리 및 결과 저장
-#    result_text = chatbot(api_key, request)
-#    result_model = model(api_key, data_path, result_text)
-#    print('line322', result_model)
-#    print("line323")
-#    # 결과를 클라이언트로 전송
-#    sys.stdout.write(json.dumps(result_text))
-#    sys.stdout.flush()
-#   except Exception as e:
-#    # 오류 처리
-#    error_message = {'error':str(e)}
-#    sys.stderr.write(json.dumps(error_message))
-#    sys.stderr.flush()
+   # 결과를 클라이언트로 전송
+   sys.stdout.write(json.dumps(result_text))
+   sys.stdout.flush()
+  except Exception as e:
+   # 오류 처리
+   error_message = {'error':str(e)}
+   sys.stderr.write(json.dumps(error_message))
+   sys.stderr.flush()
 
 #   results = model(api_key, data_path, result_text)
 #   print(results)

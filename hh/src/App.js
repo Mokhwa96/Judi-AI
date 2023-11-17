@@ -172,6 +172,10 @@ function TryJudiAI() {
   const [messages, setMessages] = useState([{ text: "안녕하세요, 어떤 도움이 필요하신가요?", sender: 'lawyer' }]);
   const [userInput, setUserInput] = useState('');
   const navigate = useNavigate();
+  // 그래프 시작
+  // const [graphdata, setGraphdata] = useState(null);
+  //그래프 끝
+
 
   // 현호 작업구역
   // 검색 test
@@ -179,6 +183,7 @@ function TryJudiAI() {
   // 서버로 데이터를 전송하고 받는 함수
   const chatbotChat = async (userinput) => {
     const chatdata = {'chat': userinput};
+
     try {
       const response = await fetch('/chat', {
         method: 'POST',
@@ -188,6 +193,10 @@ function TryJudiAI() {
         body: JSON.stringify(chatdata),
       });
       const data = await response.json();
+
+      // 그래프 시작
+      // setGraphdata(data.graph) // 서버에서 받아온 데이터 중 'graph' 키의 값을 그래프 데이터로 설정
+      // 그래프 끝
 
       console.log(messages);
       console.log('진짜진짜 최종');
@@ -301,23 +310,6 @@ function TryJudiAI() {
     setUserInput(transcript); // 음성 인식 결과를 userInput에 설정
   };
 
-  // 연주 그래프 작업 구역
-  const data = [
-    {
-      "country": "300만원",
-      "벌금": 55
-    },
-    {
-      "country": "500만원",
-      "벌금": 41
-    },
-    {
-      "country": "10만원",
-      "벌금": 148
-    }
-  ]
-
-
   // 리턴 영역
   return (
     <div>
@@ -418,9 +410,11 @@ function TryJudiAI() {
       {listening && <div className="transcript">상담 내용 확인: {transcript}</div>}
 
       {/* 그래프 */}
+      {/* 
       <div style={{height:'500px', width:'600px', marginLeft:'50px'}}>
-        <Graph1 data = {data}/>
+        <Graph1 data = {graphdata}/>
       </div>
+                */}
     </div>
 
 
