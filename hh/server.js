@@ -8,9 +8,9 @@ const iconv = require('iconv-lite');
 
 app.use(bodyParser.json());
 
-app.use(express.static(path.join('C:/Users/gjaischool/Judi-AI/hh/', 'build')));
+app.use(express.static(path.join('C:/Users/gjaischool/Desktop/My_coding/final_projects/JUDIAI/hh', 'build')));
 app.get('/', (req, res) => {
-    res.sendFile(path.join('C:/Users/gjaischool/Judi-AI/hh/', 'build', 'index.html'));
+    res.sendFile(path.join('C:/Users/gjaischool/Desktop/My_coding/final_projects/JUDIAI/hh', 'build', 'index.html'));
 });
 
 app.post('/chat', (req, res) => {
