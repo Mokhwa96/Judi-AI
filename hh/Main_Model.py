@@ -196,8 +196,9 @@ def model(api_key, data_path, message):
   similar_sentences = get_similar_sentences(api_key, data_path, message)
   sentences = [line for line in similar_sentences['ruling']]
   results = {"results":sentences}
+  fig1, fig2 = result(sentences)
+  plt.show()
   return json.dumps(results, ensure_ascii=False)
-
 
 if __name__ == "__main__":
   api_key = 'apikey'
