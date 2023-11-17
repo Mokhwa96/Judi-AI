@@ -4,82 +4,81 @@ import pandas as pd
 import numpy as np
 import json
 import sys
-
-# start 그래프를 위한 예시문. 나중에 이 부분은 삭제해야 됨
-sentences = ["피고인을 징역 1년 2월에 처한다. 다만, 이 판결 확정일로부터 3년간 위 형의 집행을 유예한다. 피고인에 대하여 240시간의 사회봉사를 명한다.",
-             "피고인을 벌금 3,000,000원에 처한다. 피고인이 위 벌금을 납입하지 아니하는 경우 100,000원을 1일로 환산한 기간 피고인을 노역장에 유치한다. 위 벌금에 상당한 금액의 가납을 명한다.",
-             '피고인을 벌금 1,000,000원에 처한다. 피고인이 위 벌금을 납입하지 아니하는 경우 100,000원을 1일로 환산한 기간 피고인을 노역장에 유치한다. 위 벌금에 상당한 금액의 가납을 명한다. 소송비용 중 증인 여비는 피고인이 부담한다.',
-             "피고인을 벌금 300,000원에 처한다. 피고인이 위 벌금을 납입하지 아니하는 경우 100,000원을 1일로 환산한 기간 피고인을 노역장에 유치한다. 피고인에게 위 벌금에 상당한 금액의 가납을 명한다.",
-             "피고인을 징역 6월에 처한다. 다만, 이 판결 확정일로부터 2년간 위 형의 집행을 유예한다. 피고인에게 80시간의 사회봉사를 명한다.",
-             "피고인을 벌금 3,000,000원에 처한다. 피고인이 위 벌금을 납입하지 아니하는 경우 10만 원을 1일로 환산한 기간 피고인을 노역장에 유치한다. 위 벌금에 상당한 금액의 가납을 명한다.",
-             "피고인을 벌금 50만 원에 처한다. 다만, 이 판결 확정일로부터 1년간 위 형의 집행을 유예한다. 위 집행유예 선고가 실효 또는 취소되고 피고인이 위 벌금을 납입하지 아니하는 경우 10만 원을 1일로 환산한 기간 피고인을 노역장에 유치한다.",
-             '피고인을 벌금 200만 원에 처한다. 피고인이 위 벌금을 납입하지 아니하는 경우 10만 원을 1일로 환산한 기간 피고인을 노역장에 유치한다. 위 벌금 상당액의 가납을 명한다.',
-             "피고인을 벌금 500,000원에 처한다. 다만, 이 판결 확정일로부터 1년간 위 형의 집행을 유예한다. 위 집행유예 선고가 실효 또는 취소되고 피고인이 위 벌금을 납입하지 아니하는 경우 100,000원을 1일로 환산한 기간 피고인을 노역장에 유치한다.",
-             '피고인을 벌금 700만 원에 처한다. 피고인이 위 벌금을 납입하지 아니하는 경우 10만 원을 1일로 환산한 기간 피고인을 노역장에 유치한다. 피고인에게 40시간의 성폭력치료 프로그램의 이수를 명한다. 피고인에게 아동·청소년 관련기관 등과 장애인복지시설에 3년간 취업제한을 명한다. 위 벌금에 상당한 금액의 가납을 명한다.',
-             "피고인을 벌금 4,000,000원에 처한다. 피고인이 위 벌금을 납입하지 않는 경우 100,000원을 1일로 환산한 기간 피고인을 노역장에 유치한다. 피고인에게 80시간의 성폭력치료 프로그램 이수를 명한다. 피고인에게 아동·청소년 관련기관 등과 장애인복지시설에 각 3년간 취업제한을 명한다. 위 벌금에 상당한 금액의 가납을 명한다.",
-             '피고인을 벌금 200만 원에 처한다. 피고인이 위 벌금을 납입하지 아니할 경우 10만 원을 1일로 환산한 기간 피고인을 노역장에 유치한다. 피고인에 대하여 40시간의 성폭력 치료프로그램 이수를 명한다. 위 벌금에 상당한 금액의 가납을 명한다.',
-             "피고인을 벌금 5,000,000원에 처한다. 피고인이 위 벌금을 납입하지 아니하는 경우 100,000원을 1일로 환산한 기간 피고인을 노역장에 유치한다. 피고인에게 위 벌금에 상당한 금액의 가납을 명한다. 피고인에게 40시간의 성폭력 치료프로그램의 이수를 명한다. 피고인에 대한 정보를 2년간 정보통신망을 이용하여 공개한다. 피고인에 대하여 아동·청소년 관련기관 등 및 장애인복지시설에 3년간 취업제한을 명한다.",
-             "피고인을 벌금 300만 원에 처한다. 피고인이 위 벌금을 납입하지 아니하는 경우 10만 원을 1일로 환산한 기간 피고인을 노역장에 유치한다. 위 벌금에 상당한 금액의 가납을 명한다.",
-             '피고인을 금고 8월에 처한다. 다만, 이 판결 확정일부터 2년간 위 형의 집행을 유예한다. 피고인에 대하여 40시간의 준법운전강의 수강을 명한다.']
-# end 그래프를 위한 예시문. 나중에 이 부분은 삭제해야 됨
+import re
 
 def chatbot(api_key, input_text):
-    client = OpenAI(api_key=api_key,)    
-    
-    messages = [{"role":"system", "content":"너는 법률 문제에 대해 상담을 진행해주는 변호사야. 지금 나는 너에게 법률 문제에 대해 상담을 받으러 왔고, 내가 처한 상황을 설명할거야. 너는 내가 하는 말에 공감해주면서 사실관계 파악을 위해 부족한 정보가 있다면 하나씩 친절하게 물어볼 수 있어. 사실관계 파악을 위한 충분한 정보가 모였다면, 마지막에는 파악된 정보를 요약해서 알려줘"},]
+    client = OpenAI(api_key=api_key,)
 
+    messages = [{"role": "system", "content": "너는 법률 문제에 대해 상담을 진행해주는 변호사야. 지금 나는 너에게 법률 문제에 대해 상담을 받으러 왔고, 내가 처한 상황을 설명할거야. 너는 내가 하는 말에 공감해주면서 사실관계 파악을 위해 부족한 정보가 있다면 하나씩 친절하게 물어볼 수 있어. 사실관계 파악을 위한 충분한 정보가 모였다면, 마지막에는 파악된 정보를 요약해서 알려줘"}, ]
+    # chat = client.chat.completions.create(model='gpt-4', messages=[{"role": "user","content": last_content + "\n위 글을\n" + "피해자 B과 피고인 A은 과거 연인 사이였다. 피고인은 위 2021. 3. 7. 03:00경에서 같은 날 04:30경 사이 광주 서구 C, 3층에 있는 D주점 내 불상의 방에서 피해자 B이 자신을 폭행하였다는 이유로 피해자의 머리채를 잡아 바닥에 밀쳐놓고 피해자의 얼굴과 머리, 팔, 어깨 등을 손으로 수회 때리거나 발로 밟아 폭행하고, 다른 방으로 도망한 피해자를 찾아가 또다시 주먹으로 피해자의 얼굴을 2회 때리고 7~8회 가량 침을 뱉고 생수를 머리에 붓는 등 폭행하였다. 이로써 피고인은 피해자를 폭행하여 우측 후이개, 하악, 협부의 부종과 잠깐의 의식소실 및 후두부 타박으로 인한 압통 등 약 2주간의 치료를 필요로 하는 상해를 가하였다." + "\n와 같은 형식으로 바꿔줘"}])
     if input_text == 'break':
        last_content = messages[-1]['content']
-       chat = client.chat.completions.create(model='gpt-4', messages=[{"role":"user" , "content": last_content + "\n위 글을\n" + "피해자 B과 피고인 A은 과거 연인 사이였다. 피고인은 위 2021. 3. 7. 03:00경에서 같은 날 04:30경 사이 광주 서구 C, 3층에 있는 D주점 내 불상의 방에서 피해자 B이 자신을 폭행하였다는 이유로 피해자의 머리채를 잡아 바닥에 밀쳐놓고 피해자의 얼굴과 머리, 팔, 어깨 등을 손으로 수회 때리거나 발로 밟아 폭행하고, 다른 방으로 도망한 피해자를 찾아가 또다시 주먹으로 피해자의 얼굴을 2회 때리고 7~8회 가량 침을 뱉고 생수를 머리에 붓는 등 폭행하였다. 이로써 피고인은 피해자를 폭행하여 우측 후이개, 하악, 협부의 부종과 잠깐의 의식소실 및 후두부 타박으로 인한 압통 등 약 2주간의 치료를 필요로 하는 상해를 가하였다." + "\n와 같은 형식으로 바꿔줘"}])
+       chat = client.chat.completions.create(model='gpt-4', messages=[{"role":"user" , "content": last_content + "\n위 글의 사건 상황을 정리해서 판례문 형식으로 바꿔주고 마지막에 '강제추행', '공무집행방해', '교통사고처리특례법위반(치상)', '도로교통법위반(음주운전)', '사기', '상해','폭행'중 가장 근접한 한가지를 했다고 적어줘"}])
        last_paragraph = chat.choices[0].message.content
-       messages.append({"role":"assistant", "content":last_paragraph})
+       messages.append({"role": 'assistant', 'content': last_paragraph})
        return last_paragraph
     
     messages.append({"role":"user", "content":input_text})
     chat = client.chat.completions.create(model='gpt-4', messages=messages)
     reply = chat.choices[0].message.content
-    messages.append({"role":"assistant", "content":reply})
+    messages.append({"role":'assistant', 'content':reply})
     return reply
 
-def get_similar_sentences(api_key, data_path, input_sentence, engine='text-embedding-ada-002'):
+def casename_find(sentence):
+
+    casename = ''
+    if '강제추행' in sentence[-100:]:
+        casename = '강제추행'
+    elif '공무집행방해' in sentence[-100:]:
+        casename = '공무집행방해'
+    elif '교통사고처리특례법위반(치상)' in sentence[-100:]:
+        casename = '교통사고처리특례법위반(치상)'
+    elif '도로교통법위반(음주운전)' in sentence[-100:]:
+        casename = '도로교통법위반(음주운전)'
+    elif '사기' in sentence[-100:]:
+        casename = '사기'
+    elif '상해' in sentence[-100:]:
+        casename = '상해'
+    elif '폭행' in sentence[-100:]:
+        casename = '폭행'
+    
+    return casename
+
+
+def get_similar_sentences(api_key, file_path, input_sentence, threshold=0.9, engine='text-embedding-ada-002'):
     # API 키 설정
-    client = OpenAI(api_key=api_key,)
+    client = OpenAI(api_key=api_key)
 
     # 데이터 불러오기
-    data = pd.read_csv(data_path)
+    data = pd.read_csv(file_path + "data.csv")
+    # print(f'data.head :\n{data.head()}')
+    array = np.load(file_path +'embedding.npy')
+    # print(f'array : {array[0]}')
 
-    # 샘플만 사용하고 복사본을 만듭니다.
-    data_sample = data.copy()
-
-    # 'embedding' 열의 문자열을 NumPy 배열로 변환
-    data_sample['embedding'] = data_sample['embedding'].apply(lambda x: np.array(eval(x)))
+    # 입력 문장의 임베딩 계산
+    input_sentence_embed = client.embeddings.create(input=input_sentence, model=engine).data[0].embedding
+    input_fin = np.array(input_sentence_embed)
 
     # 유사도 계산
-    input_sentence_embed = client.embeddings.create(input = input_sentence, model=engine).data[0].embedding
+    similarities = np.dot(array, input_fin) / (np.sqrt((array**2).sum(axis=-1)) * np.sqrt((input_fin**2).sum()))
+    # print(f'similarities : {similarities}')
+        
+    # 유사도가 threshold 이상인 모든 인덱스 찾기
+    similar_indexes = np.where(similarities >= threshold)[0]
+    # print(f'similar_indexes : {similar_indexes}')
 
-    input_fin = np.array(input_sentence_embed)  # 임베딩을 NumPy 배열로 변환
+    # 유사도와 인덱스 쌍을 반환
+    similar_sentences_sorted = sorted([(index, similarities[index]) for index in similar_indexes], key=lambda x: x[1], reverse=True)
+    # print(f'similar_sentences_sorted : {similar_sentences_sorted}')
 
-    query_2d = input_fin.reshape(1, -1)
+    # 결과를 데이터 프레임으로 변환
+    result_df = pd.DataFrame([data.iloc[i[0]][["casename", "facts", "ruling"]].to_dict() for i in similar_sentences_sorted])
+    # print(f'result_df :\n{result_df}')
 
-    data_sample['similarity'] = data_sample['embedding'].apply(lambda x: cosine_similarity(x.reshape(1, -1), query_2d)[0][0])
-    
-    top_similar_sentence = data_sample.sort_values("similarity", ascending=False).head(20)[["casename", "facts", "ruling"]]
-    
-    # 유사한 문장 찾기
-    return top_similar_sentence
+    return result_df
 
 
-def result(sentences):
-
-    import matplotlib.pyplot as plt
-    import re
-    import matplotlib.font_manager as fm
-
-    # 로컬실행 그래프 한글폰트설정
-
-    font_path = 'C:/Windows/Fonts/malgun.ttf'
-    font_name = fm.FontProperties(fname=font_path).get_name()
-    plt.rc('font', family=font_name)
+def result_statistics(sentences):
 
     징역 = {}
     금고 = {}
@@ -191,167 +190,30 @@ def result(sentences):
     피고인_정보공개 = dict(sorted(피고인_정보공개.items(), key=lambda x:x[1], reverse=True))
     아동_청소년_장애인복지시설_취업제한 = dict(sorted(아동_청소년_장애인복지시설_취업제한.items(), key=lambda x:x[1], reverse=True))
     준법운전강의 = dict(sorted(준법운전강의.items(), key=lambda x:x[1], reverse=True))
-    pltcount = sum(bool(x) for x in [징역, 금고, 벌금, 집행유예, 사회봉사, 성폭력_치료프로그램, 피고인_정보공개, 아동_청소년_장애인복지시설_취업제한, 준법운전강의])
 
-    # pie 그래프 그리는 함수 정의
-    def create_pie_chart(data_dict, category_name, pltcount, count):
-      total = sum(data_dict.values())  # 총합 계산
-      labels = []
-      sizes = []
-      others = 0  # "기타"의 값
+    casename_dict = {'징역': 징역, '금고': 금고, '벌금': 벌금, '집행유예': 집행유예, '사회봉사': 사회봉사, '성폭력_치료프로그램': 성폭력_치료프로그램,
+                     '피고인_정보공개': 피고인_정보공개, '아동_청소년_장애인복지시설_취업제한': 아동_청소년_장애인복지시설_취업제한,
+                     '준법운전강의': 준법운전강의}
 
-      # 항목별 비중을 계산하고, 10% 미만 항목은 "기타"로 묶음
-      for label, size in data_dict.items():
-          if size / total >= 0.1:  # 비중이 10% 이상인 경우
-              labels.append(label)
-              sizes.append(size)
-          else:  # 비중이 10% 미만인 경우
-              others += size
-
-      # "기타" 항목을 리스트에 추가
-      if others > 0:
-          labels.append('기타')
-          sizes.append(others)
-
-      plt.subplot(2, (pltcount+1)//2, count)
-      plt.pie(sizes, labels=labels, autopct='%1.1f%%')  # 파이 차트 생성
-      plt.xlabel(category_name)
-      count += 1
-      return count
-
-		#=========pie=========
-
-    # 파이 차트를 위한 셋업
-    fig1 = plt.figure(figsize=(10 * pltcount, 10))  # 전체 그림 크기 조절
-    count = 1
-
-    # 각 범주별 파이 차트 생성
-    if 징역:
-        count = create_pie_chart(징역, '징역', pltcount, count)
-    if 금고:
-        count = create_pie_chart(금고, '금고', pltcount, count)
-    if 벌금:
-        count = create_pie_chart(벌금, '벌금', pltcount, count)
-    if 집행유예:
-        count = create_pie_chart(집행유예, '집행유예', pltcount, count)
-    if 사회봉사:
-        count = create_pie_chart(사회봉사, '사회봉사', pltcount, count)
-    if 성폭력_치료프로그램:
-        count = create_pie_chart(성폭력_치료프로그램, '성폭력 치료프로그램', pltcount, count)
-    if 피고인_정보공개:
-        count = create_pie_chart(피고인_정보공개, '피고인 정보공개', pltcount, count)
-    if 아동_청소년_장애인복지시설_취업제한:
-        count = create_pie_chart(아동_청소년_장애인복지시설_취업제한, '아동 청소년 장애인복지시설 취업제한', pltcount, count)
-    if 준법운전강의:
-        count = create_pie_chart(준법운전강의, '준법운전강의', pltcount, count)
-
-
-    # bar 그래프 그리는 함수 정의
-    def create_bar_chart(data_dict, category_name, pltcount, count):
-        total = sum(data_dict.values())
-        labels = []
-        sizes = []
-        others = 0  # "기타"의 값
-
-        # 항목별 비중을 계산하고, 10% 미만 항목은 "기타"로 묶음
-        for label, size in data_dict.items():
-            percentage = (size / total) * 100
-            if percentage >= 10.0:  # 비중이 10% 이상인 경우
-                labels.append(f"{label} ({percentage:.1f}%, {size}건)")
-                sizes.append(size)
-            else:  # 비중이 10% 미만인 경우
-                others += size
-
-        # "기타" 항목을 리스트에 추가
-        if others > 0:
-            other_percentage = (others / total) * 100
-            labels.append(f"기타 ({other_percentage:.1f}%, {others}건)")
-            sizes.append(others)
-
-        plt.subplot(3, (pltcount+2)//3, count)
-        plt.bar(labels, sizes, color='red')  # 바 차트 생성
-
-        # 총 데이터 개수를 x축 라벨에 표시
-        xlabel = f'{category_name} - {total}건'
-        plt.xlabel(xlabel)
-
-        # 최대값 + 10% 정도 여유를 두어 최상위 눈금 설정
-        upper_limit = int(max(sizes)*1.1)
-
-        # 강제로 y축 눈금을 정수로 설정
-        plt.gca().yaxis.set_major_locator(plt.MaxNLocator(integer=True))
-
-        # y축 범위 설정
-        plt.ylim(0, upper_limit)
-        count += 1
-        return count
-
-
-    #===========bar=================
-
-    # 바 차트를 위한 셋업
-    fig2 = plt.figure(figsize=(10 * pltcount, 10))  # 전체 그림 크기 조절
-    count = 1
-
-    # 각 범주별 바 차트 생성
-    if 징역:
-        count = create_bar_chart(징역, '징역', pltcount, count)
-    if 금고:
-        count = create_bar_chart(금고, '금고', pltcount, count)
-    if 벌금:
-        count = create_bar_chart(벌금, '벌금', pltcount, count)
-    if 집행유예:
-        count = create_bar_chart(집행유예, '집행유예', pltcount, count)
-    if 사회봉사:
-        count = create_bar_chart(사회봉사, '사회봉사', pltcount, count)
-    if 성폭력_치료프로그램:
-        count = create_bar_chart(성폭력_치료프로그램, '성폭력 치료프로그램', pltcount, count)
-    if 피고인_정보공개:
-        count = create_bar_chart(피고인_정보공개, '피고인 정보공개', pltcount, count)
-    if 아동_청소년_장애인복지시설_취업제한:
-        count = create_bar_chart(아동_청소년_장애인복지시설_취업제한, '아동 청소년 장애인복지시설 취업제한', pltcount, count)
-    if 준법운전강의:
-        count = create_bar_chart(준법운전강의, '준법운전강의', pltcount, count)
-
-    return {'징역':징역, '금고':금고, '벌금':벌금, '집행유예':집행유예, '사회봉사':사회봉사,
-            '성폭력_치료프로그램':성폭력_치료프로그램, '피고인_정보공개':피고인_정보공개,
-            '아동_청소년_장애인복지시설_취업제한':아동_청소년_장애인복지시설_취업제한,
-            '준법운전강의':준법운전강의}
-
-def model(api_key, data_path, message):
-  import matplotlib.pyplot as plt
-  message = message
-  similar_sentences = get_similar_sentences(api_key, data_path, message)
-  sentences = [line for line in similar_sentences['ruling']]
-  graph_data = result(sentences)
-  results = {"results":sentences, "graph":graph_data}
-  return json.dumps(results, ensure_ascii=False)
-  # start 모델 완성되면 지워야 함
-  #graph_data = result(sentences)
-  #graph_data = json.dumps(graph_data)
-  #return "graph_data"
-  # end 모델 완성되면 지워야 함
+    return casename_dict
 
 if __name__ == "__main__":
   api_key = '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'
   data_path = "C:/Users/gjaischool/Desktop/2차_프로젝트/total_embedding_done.csv"
 
-  try:
-   line = sys.stdin.readline()
-   request = json.loads(line)['chat']
+  line = sys.stdin.readline()
+  request = json.loads(line)['chat']
 
-   # 요청 처리 및 결과 저장
-   result_text = chatbot(api_key, request)
-   result_model = model(api_key, data_path, result_text)
+  # 요청 처리 및 결과 저장
+  reply_text = chatbot(api_key, request)
+  df_similar_sentences = get_similar_sentences(api_key, file_path, reply_text, engine='text-embedding-ada-002')
+  if (df_similar_sentences.empty):
+      sentences = [line for line in df_similar_sentences['ruling']]
+  else:
+      sentences = []
+  result_final = result_statistics(sentences)
+  result_final['results'] = reply_text
 
-   # 결과를 클라이언트로 전송
-   sys.stdout.write(json.dumps(result_text))
-   sys.stdout.flush()
-  except Exception as e:
-   # 오류 처리
-   error_message = {'error':str(e)}
-   sys.stderr.write(json.dumps(error_message))
-   sys.stderr.flush()
-
-#   results = model(api_key, data_path, result_text)
-#   print(results)
+  # 결과를 클라이언트로 전송
+  sys.stdout.write(json.dumps(result_final, ensure_ascii=False))
+  sys.stdout.flush()

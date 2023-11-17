@@ -11,6 +11,7 @@ import UserForm from "./components/UserForm";
 import Navigation from './components/Navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowCircleDown } from '@fortawesome/free-solid-svg-icons';
+import { Howl } from 'howler';
 import Graph1 from './graph1'
 
 function Home() {
@@ -171,11 +172,13 @@ function TryJudiAI() {
   const [isChatboxActive, setIsChatboxActive] = useState(false);
   const [messages, setMessages] = useState([{ text: "안녕하세요, 어떤 도움이 필요하신가요?", sender: 'lawyer' }]);
   const [userInput, setUserInput] = useState('');
+  const [answerState, setAnswerState] = useState(false);
   const navigate = useNavigate();
   // 그래프 시작
   // const [graphdata, setGraphdata] = useState(null);
   //그래프 끝
 
+  const messagesEndRef = useRef(null); // 새로운 ref. 채팅창 스크롤 자동 최신화 위함.
 
   // 현호 작업구역
   // 검색 test
@@ -206,35 +209,58 @@ function TryJudiAI() {
       console.log(data);
       console.log('입력문은');
       console.log(userinput);
+      setAnswerState(!answerState);
+
+      // const speech = new SpeechSynthesisUtterance(data);
+      // window.speechSynthesis.speak(speech);
     } catch (error) {
       console.error(error);
     }
   };
 
-  // 변호사 메시지 표시 여부를 위한 새로운 state - setTimeout 관련
-  const [showLawyerMessage, setShowLawyerMessage] = useState(true);
+  // messages에 새로운 답변이 추가될 때마다 음성 파일 재생
+  useEffect(() => {
+    const sound = new Howl({
+      src: ['/answer.mp3'],
+      autoplay: true,
+      loop: false,
+    });
 
+    sound.play();
+    return () => {
+      sound.unload();
+    };
+  }, [answerState]);
+
+  // 솔빈: 변호사 이미지 위에 말풍선 추가하는 구역입니다.
+  // 변호사 메시지 표시 여부를 위한 새로운 state - setTimeout 관련
+  // const [showLawyerMessage, setShowLawyerMessage] = useState(true);
   // useEffect(() => {
   //   // 초기 변호사 메시지 설정
   //   setMessages([
   //     { text: "안녕하세요, 어떤 도움이 필요하신가요?", sender: 'lawyer' }
-  //   ]);
-    
+  //   ]);  
   //   // 3초 후에 변호사 메시지를 숨기는 로직  - setTimeout 관련 (사라지는 시간 조절)
   //   // const timer = setTimeout(() => {
   //   //   setShowLawyerMessage(false);
   //   // }, 2000);
   //   // // 컴포넌트가 언마운트될 때 타이머 클리어  - setTimeout 관련
   //   // return () => clearTimeout(timer);
-
   // }, []);
+
+
+  // 메시지 배열이 변경될 때마다 스크롤을 맨 아래로 이동시키는 useEffect
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]); // messages 배열이 변경될 때마다 실행
+
 
   // 변호사 메시지만 렌더링하는 함수
   const renderLawyerMessages = () => {
     return messages
-      .filter(message => message.sender === 'lawyer' && showLawyerMessage)
+      .filter(message => message.sender === 'lawyer')
       .map((message, index) => (
-        <div key={index} className="bubble lawyer-bubble">
+        <div key={index} className="bubble lawyer">
           {message.text}
         </div>
       ));
@@ -252,22 +278,18 @@ function TryJudiAI() {
   };
 
 
-  // 채팅 박스 생성 부분
+  // 채팅 박스 활성화/비활성화 부분
   const toggleChatbox = () => {
     setIsChatboxActive(!isChatboxActive);
   };
 
-  // 채팅의 응답을 제출하는 부분
+  // 채팅의 응답을 제출하는 부분. 이곳을 변경해서 변호사의 응답 부분을 화면에 표시되게 했습니다. 
   const submitResponse = () => {
     if (userInput.trim() !== "") {
-      // 메시지 상태에 새로운 사용자 메시지 추가
-      // 서버로 값 전송 내용 추가 요망 + 받은 답변도 띄워준다,
+      
       setMessages(prevMessages => [...prevMessages, { text: userInput, sender:'user' }]);
       chatbotChat(userInput)
-      // const return_data = chatbotChat(userInput)
-      // setMessages([...messages, { text: return_data, sender:'lawyer' }]);
-      // setUserInput("");
-      // TODO: Add logic for lawyer's response 변호사의 답변 로직을 추가하는 부분
+      setUserInput(""); // 사용자 입력을 초기화
     }
   };
 
@@ -281,6 +303,9 @@ function TryJudiAI() {
     <div key={index} className={`message-container ${message.sender}-container`}>
       <div className={`bubble ${message.sender}`}>
         {message.text}
+        {/* <audio controls autoplay>
+          <source src='/answer.mp3' type='audio/mp3' />
+        </audio> */}
       </div>
     </div>
   );
@@ -328,6 +353,7 @@ function TryJudiAI() {
           className="lawyer-image"
           src="/images/Judi_desk.png"
           alt="변호사"
+          onClick={toggleChatbox} // 이벤트 핸들러
         />
         {/* // 변호사의 말 띄울 구역 */}
         {/* {renderLawyerMessages()} */}
@@ -341,6 +367,7 @@ function TryJudiAI() {
           {/* 채팅 메시지를 표시하는 부분 */}
           <div className="chat-messages">
             {renderMessages}
+            <div ref={messagesEndRef} /> {/* 스크롤 조정을 위한 빈 div 추가 */}
           </div>
 
           {/* 입력창 및 버튼 관련 구역 */}
@@ -349,7 +376,7 @@ function TryJudiAI() {
               type="text" 
               value={userInput}
               onChange={handleInputChange}
-              placeholder="여기에 답변을 입력하세요..."
+              placeholder="여기에 상담 내용을 입력해주세요."
               onKeyDown={(event) => {
                 if (event.key === 'Enter') {
                   submitResponse();
@@ -399,9 +426,9 @@ function TryJudiAI() {
         {/* chat 아이콘을 눌렀을 때  chatbox가 열리는 영역 */}
         <div id="open-chatbox-button" onClick={toggleChatbox}>
           <img
-            src="/images/chat_icon.png"
+            src="/images/chat_icon3.png"
             alt="Chat Icon"
-            style={{ cursor: 'pointer' }}
+            style={{ cursor: 'pointer', width: '60px', height: 'auto'  }}
           />
         </div>
       </div>

@@ -5,12 +5,17 @@ const port = process.env.PORT || 3001;
 const {spawn} = require('child_process');
 const bodyParser = require('body-parser');
 const iconv = require('iconv-lite');
+// 구글 TTS 이용하기 위한 자리
+const textToSpeech = require('@google-cloud/text-to-speech');
+const fs = require('fs');
+const util = require('util');
+const client = new textToSpeech.TextToSpeechClient();
 
 app.use(bodyParser.json());
 
-app.use(express.static(path.join('C:/Users/gjaischool/Desktop/2차_프로젝트/reactest/hh/', 'build')));
+app.use(express.static(path.join('C:/Users/gh576/JudiAI/hh/', 'build')));
 app.get('/', (req, res) => {
-    res.sendFile(path.join('C:/Users/gjaischool/Desktop/2차_프로젝트/reactest/hh/', 'build', 'index.html'));
+    res.sendFile(path.join('C:/Users/gh576/JudiAI/hh/', 'build', 'index.html'));
 });
 
 app.post('/chat', (req, res) => {
@@ -22,7 +27,7 @@ app.post('/chat', (req, res) => {
     console.log(JSON.stringify(clientRequest));
 
     // 파이썬 프로그램 실행
-    const pythonProcess = spawn('C:/Users/gjaischool/anaconda3/python', ['Main_Model.py']);
+    const pythonProcess = spawn('C:/Users/gh576/anaconda3/python', ['Main_Model.py']);
 
     const buffers = [];
 
@@ -31,7 +36,7 @@ app.post('/chat', (req, res) => {
     pythonProcess.stdin.end();
 
     // 파이썬 프로세스의 표준 출력에서 데이터를 읽어옴
-    pythonProcess.stdout.on('data', (data) => {
+    pythonProcess.stdout.on('data', async (data) => {
         console.log('반환된 데이터는');
         console.log(data);
         buffers.push(data);
@@ -45,14 +50,21 @@ app.post('/chat', (req, res) => {
             // JSON 문자열을 파싱하여 JavaScript 객체로 변환
             const resultData = JSON.parse(decodedResult);
 
+            // 응답을 TTS를 이용하여 변환
+            const request_speech = {
+                input: { text: resultData['results']},
+                voice: { languageCode: 'ko-KR', name: 'ko-KR-Wavenet-B', ssmlGender: 'FEMALE'},
+                audioConfig: { audioEncoding: 'MP3', pitch: 0.4, speakingRate: 1.1}, 
+            };
+
+            const [response_speech] = await client.synthesizeSpeech(request_speech);
+
+            const writeFile = util.promisify(fs.writeFile);
+            await writeFile('public/answer.mp3', response_speech.audioContent, 'binary')
+
             console.log('res :');
             console.log(resultData);
-            // 원본
-            res.json(resultData);
-
-            // 그래프를 위한 수정 부분
-            // res.json({ chatResponse: resultData, graphData: graph_data });
-            
+            res.json(resultData['results']);
         } catch (error) {
             // JSON 파싱에 실패한 경우
             console.error('파이썬 스크립트에서 반환된 데이터가 유효한 JSON이 아닙니다');

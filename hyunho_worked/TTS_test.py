@@ -24,6 +24,8 @@ def google_tts(text, filename):
     response = client.synthesize_speech(
         request={"input": input_text, "voice": voice, "audio_config": audio_config}
     )
+    print(response)
+    print(type(response))
 
     # The response's audio_content is binary.
     with open(filename, "wb") as out:
