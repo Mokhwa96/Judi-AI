@@ -45,43 +45,31 @@ def casename_find(sentence):
     return casename
 
 
-def get_similar_sentences(api_key, data_path, input_sentence, engine='text-embedding-ada-002'):
+def get_similar_sentences(api_key, file_path, input_sentence, threshold=0.95, engine='text-embedding-ada-002'):
     # API 키 설정
-    client = OpenAI(api_key=api_key,)
+    client = OpenAI(api_key=api_key)
 
     # 데이터 불러오기
-    data = pd.read_csv(data_path)
+    data = pd.read_csv(file_path + "data.csv")
+    array = np.load(file_path +'embedding.npy')
 
-    # 샘플만 사용하고 복사본을 만듭니다.
-    data_sample = data.copy()
-
-    # 'embedding' 열의 문자열을 NumPy 배열로 변환
-    data_sample['embedding'] = data_sample['embedding'].apply(lambda x: np.array(eval(x)))
+    # 입력 문장의 임베딩 계산
+    input_sentence_embed = client.embeddings.create(input=input_sentence, model=engine).data[0].embedding
+    input_fin = np.array(input_sentence_embed)
 
     # 유사도 계산
-    input_sentence_embed = client.embeddings.create(input = input_sentence, model=engine).data[0].embedding
+    similarities = np.dot(array, input_fin) / (np.sqrt((array**2).sum(axis=-1)) * np.sqrt((input_fin**2).sum()))
+        
+    # 유사도가 threshold 이상인 모든 인덱스 찾기
+    similar_indexes = np.where(similarities >= threshold)[0]
 
-    input_fin = np.array(input_sentence_embed)  # 임베딩을 NumPy 배열로 변환
+    # 유사도와 인덱스 쌍을 반환
+    similar_sentences_sorted = sorted([(index, similarities[index]) for index in similar_indexes], key=lambda x: x[1], reverse=True)
 
-    query_2d = input_fin.reshape(1, -1)
+    # 결과를 데이터 프레임으로 변환
+    result_df = pd.DataFrame([data.iloc[i[0]][["casename", "facts", "ruling"]].to_dict() for i in similar_sentences_sorted])
 
-
-
-    # casename = MODEL_1(query_2d)
-
-    # print('예상casename:',casename)
-
-    data_sample_predict_case = data_sample[data_sample['casename']=='casename']
-
-
-
-    data_sample_predict_case.loc[:,'similarity'] = data_sample_predict_case['embedding'].apply(lambda x: cosine_similarity(x.reshape(1, -1), query_2d)[0][0])
-
-    global top_similar_sentence
-
-    top_similar_sentence = data_sample_predict_case.sort_values("similarity", ascending=False).head(15)[["casename", "facts", "ruling"]]
-
-    return top_similar_sentence
+    return result_df
 
 
 def result_statistics(sentences):
@@ -209,6 +197,7 @@ def model(api_key, data_path, message):
   sentences = [line for line in similar_sentences['ruling']]
   results = {"results":sentences}
   return json.dumps(results, ensure_ascii=False)
+
 
 if __name__ == "__main__":
   api_key = 'apikey'
