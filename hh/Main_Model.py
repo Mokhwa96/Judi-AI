@@ -13,7 +13,7 @@ def chatbot(api_key, input_text):
     # chat = client.chat.completions.create(model='gpt-4', messages=[{"role": "user","content": last_content + "\n위 글을\n" + "피해자 B과 피고인 A은 과거 연인 사이였다. 피고인은 위 2021. 3. 7. 03:00경에서 같은 날 04:30경 사이 광주 서구 C, 3층에 있는 D주점 내 불상의 방에서 피해자 B이 자신을 폭행하였다는 이유로 피해자의 머리채를 잡아 바닥에 밀쳐놓고 피해자의 얼굴과 머리, 팔, 어깨 등을 손으로 수회 때리거나 발로 밟아 폭행하고, 다른 방으로 도망한 피해자를 찾아가 또다시 주먹으로 피해자의 얼굴을 2회 때리고 7~8회 가량 침을 뱉고 생수를 머리에 붓는 등 폭행하였다. 이로써 피고인은 피해자를 폭행하여 우측 후이개, 하악, 협부의 부종과 잠깐의 의식소실 및 후두부 타박으로 인한 압통 등 약 2주간의 치료를 필요로 하는 상해를 가하였다." + "\n와 같은 형식으로 바꿔줘"}])
     if input_text == 'break':
        last_content = messages[-1]['content']
-       chat = client.chat.completions.create(model='gpt-4', messages=[{"role":"user" , "content": last_content + "\n위 글의 사건 상황을 정리해서 판레문 형식으로 바꿔주고 마지막에 '강제추행', '공무집행방해', '교통사고처리특례법위반(치상)', '도로교통법위반(음주운전)', '사기', '상해','폭행'중 가장 근접한 한가지를 했다고 적어줘"}])
+       chat = client.chat.completions.create(model='gpt-4', messages=[{"role":"user" , "content": last_content + "\n위 글의 사건 상황을 정리해서 판례문 형식으로 바꿔주고 마지막에 '강제추행', '공무집행방해', '교통사고처리특례법위반(치상)', '도로교통법위반(음주운전)', '사기', '상해','폭행'중 가장 근접한 한가지를 했다고 적어줘"}])
        last_paragraph = chat.choices[0].message.content
        messages.append({"role": 'assistant', 'content': last_paragraph})
        return last_paragraph
@@ -45,13 +45,15 @@ def casename_find(sentence):
     return casename
 
 
-def get_similar_sentences(api_key, file_path, input_sentence, threshold=0.95, engine='text-embedding-ada-002'):
+def get_similar_sentences(api_key, file_path, input_sentence, threshold=0.9, engine='text-embedding-ada-002'):
     # API 키 설정
     client = OpenAI(api_key=api_key)
 
     # 데이터 불러오기
     data = pd.read_csv(file_path + "data.csv")
+    # print(f'data.head :\n{data.head()}')
     array = np.load(file_path +'embedding.npy')
+    # print(f'array : {array[0]}')
 
     # 입력 문장의 임베딩 계산
     input_sentence_embed = client.embeddings.create(input=input_sentence, model=engine).data[0].embedding
@@ -59,15 +61,19 @@ def get_similar_sentences(api_key, file_path, input_sentence, threshold=0.95, en
 
     # 유사도 계산
     similarities = np.dot(array, input_fin) / (np.sqrt((array**2).sum(axis=-1)) * np.sqrt((input_fin**2).sum()))
+    # print(f'similarities : {similarities}')
         
     # 유사도가 threshold 이상인 모든 인덱스 찾기
     similar_indexes = np.where(similarities >= threshold)[0]
+    # print(f'similar_indexes : {similar_indexes}')
 
     # 유사도와 인덱스 쌍을 반환
     similar_sentences_sorted = sorted([(index, similarities[index]) for index in similar_indexes], key=lambda x: x[1], reverse=True)
+    # print(f'similar_sentences_sorted : {similar_sentences_sorted}')
 
     # 결과를 데이터 프레임으로 변환
     result_df = pd.DataFrame([data.iloc[i[0]][["casename", "facts", "ruling"]].to_dict() for i in similar_sentences_sorted])
+    # print(f'result_df :\n{result_df}')
 
     return result_df
 
@@ -191,26 +197,20 @@ def result_statistics(sentences):
 
     return casename_dict
 
-def model(api_key, data_path, message):
-  message = message
-  similar_sentences = get_similar_sentences(api_key, data_path, message)
-  sentences = [line for line in similar_sentences['ruling']]
-  results = {"results":sentences}
-  fig1, fig2 = result(sentences)
-  plt.show()
-  return json.dumps(results, ensure_ascii=False)
-
 if __name__ == "__main__":
-  api_key = 'apikey'
-  data_path = "C:/Users/gh576/JudiAI/hh/total_embedding_done.csv"
+  api_key = 'api_key'
+  file_path = "C:/Users/gh576/JudiAI/hh/"
 
   line = sys.stdin.readline()
   request = json.loads(line)['chat']
 
   # 요청 처리 및 결과 저장
   reply_text = chatbot(api_key, request)
-  df_similar_sentences = get_similar_sentences(api_key, data_path, reply_text, engine='text-embedding-ada-002')
-  sentences = [line for line in df_similar_sentences['ruling']]
+  df_similar_sentences = get_similar_sentences(api_key, file_path, reply_text, engine='text-embedding-ada-002')
+  if (df_similar_sentences.empty):
+      sentences = [line for line in df_similar_sentences['ruling']]
+  else:
+      sentences = []
   result_final = result_statistics(sentences)
   result_final['results'] = reply_text
 

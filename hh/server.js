@@ -15,7 +15,7 @@ app.use(bodyParser.json());
 
 app.use(express.static(path.join('C:/Users/gh576/JudiAI/hh/', 'build')));
 app.get('/', (req, res) => {
-    res.sendFile(path.join('C:/Users/gjaischool/Desktop/2차_프로젝트/reactest/hh/', 'build', 'index.html'));
+    res.sendFile(path.join('C:/Users/gh576/JudiAI/hh/', 'build', 'index.html'));
 });
 
 app.post('/chat', (req, res) => {
@@ -52,7 +52,7 @@ app.post('/chat', (req, res) => {
 
             // 응답을 TTS를 이용하여 변환
             const request_speech = {
-                input: { text: resultData},
+                input: { text: resultData['results']},
                 voice: { languageCode: 'ko-KR', name: 'ko-KR-Wavenet-B', ssmlGender: 'FEMALE'},
                 audioConfig: { audioEncoding: 'MP3', pitch: 0.4, speakingRate: 1.1}, 
             };
@@ -64,7 +64,7 @@ app.post('/chat', (req, res) => {
 
             console.log('res :');
             console.log(resultData);
-            res.json(resultData);
+            res.json(resultData['results']);
         } catch (error) {
             // JSON 파싱에 실패한 경우
             console.error('파이썬 스크립트에서 반환된 데이터가 유효한 JSON이 아닙니다');
