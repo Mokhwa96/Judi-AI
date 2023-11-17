@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'; //음성 입력용
 import { BrowserRouter as Router, Route, Routes, Link, useNavigate} from 'react-router-dom';
 import './css/reset.css';
@@ -8,30 +8,20 @@ import './css/center.css';
 // import './css/styles.css';
 import './css/judi_chat.css';
 import UserForm from "./components/UserForm";
+import Navigation from './components/Navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowCircleDown } from '@fortawesome/free-solid-svg-icons';
 import { Howl } from 'howler';
+import Graph1 from './graph1'
 
 function Home() {
   const navigate = useNavigate(); // useNavigate 훅을 사용하여 navigate 함수를 가져옵니다
-  // 토글 메뉴
-  const [isDropdownVisible, setDropdownVisible] = useState(false);
-  const toggleDropdown = () => {
-    setDropdownVisible(!isDropdownVisible);
-    console.log("isDropdownVisible 상태값:", isDropdownVisible);
+  // 스크롤 기능
+  const project_ref = useRef(null)  // Our Project로 스크롤
+  const contact_ref = useRef(null)  // Contact us로 스크롤
+  const handleClick = () => {
+    project_ref.current?.scrollIntoView({behavior: 'smooth'})
   };
-
-  // 화면 너비 상태
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-
-  // 화면 크기가 작을 때 드롭다운 메뉴를 표시
-  const showDropdown = windowWidth <= 768;
-
-  // 브라우저 창 크기가 변경될 때 화면 너비 상태 업데이트
-  window.addEventListener('resize', () => {
-    setWindowWidth(window.innerWidth);
-  });
-
 
   return (
   <div className='home'>
@@ -41,27 +31,8 @@ function Home() {
       <div className="logo" onClick={() => navigate('/')}>
         <p>JudiAI</p>
       </div>
-      <div className={`navigation_bar ${showDropdown ? 'dropdown' : ''}`}>
-
-        <ul className={isDropdownVisible ? 'show' : ''}>
-          <li><Link to="/">HOME</Link></li>
-          <li><Link to="/try-judiai">Try JudiAI</Link></li>
-          <li><a href="#a">Our Project</a></li>
-          <li><a href="#b">Contact us</a></li>
-        </ul>
-        {/* 화면이 좁하질 때 토글 메뉴 생김 */}
-        <div className="menu-toggle-background">
-          <button className="menu-toggle" onClick={toggleDropdown}><i className="fa fa-bars"></i></button>
-          {isDropdownVisible && (
-            <ul className="menu-toggle-active">
-              <a><Link to="/">HOME</Link></a>
-              <a><Link to="/try-judiai">Try JudiAI</Link></a>
-              <a href="#a">Our Project</a>
-              <a href="#b">Contact us</a>
-            </ul>
-          )}
-        </div>
-      </div>
+      {/* 상단 메뉴 */}
+      <Navigation project_ref={project_ref} contact_ref={contact_ref} />
     </div>
 
     {/* Center */}
@@ -73,20 +44,19 @@ function Home() {
           <p>당신의 법률 문제</p>
           <p>JudiAI와 함께</p>
           <p>해결하세요</p>
-          
           <button className="Try_JudiAI" onClick={() => navigate('/try-judiai')}>
             Try JudiAI
           </button>
         </span>
         {/* 아래 화살표 아이콘 */}
-        <FontAwesomeIcon className='faArrowCircleDown' icon={faArrowCircleDown} style={{color:"#ffffff", }} size='3x' />
+        <FontAwesomeIcon className='faArrowCircleDown' onClick={handleClick} icon={faArrowCircleDown} style={{color:"#ffffff", }} size='3x' />
       </div>
 
       {/* Our Project Start -- */}
-      <div className='our_project'>
+      <div className='our_project' ref={project_ref}>
         <div className="dashed-line"></div>
         <h1>Our Project</h1>
-        {/* Our Project 채팅 */}
+        {/* 채팅 */}
         <div className="judiexplain">
           <div className="judi_white">
             <img src={process.env.PUBLIC_URL +"./images/Judi_desk.png"} alt="주디 이미지" />
@@ -110,7 +80,7 @@ function Home() {
             <span className="send_button">전송</span>
           </div>
         </div>
-        {/* Our Project 설명 */}
+        {/* 설명 */}
         <div className="introducing-back">
           <p>JudiAI와 함께 여러분의 다양한 법률 문제를 탐색하세요.</p>
           <br></br>
@@ -126,7 +96,7 @@ function Home() {
 
 
       {/* Contact us Start -- */}
-      <div className='contact_us'>
+      <div className='contact_us' ref={contact_ref}>
         <div className="dashed-line"></div>
         <h1>Contact us</h1>
         {/* 이메일, 제목, 메세지 입력창 */}
@@ -354,6 +324,22 @@ function TryJudiAI() {
     setUserInput(transcript); // 음성 인식 결과를 userInput에 설정
   };
 
+  // 연주 그래프 작업 구역
+  const data = [
+    {
+      "country": "300만원",
+      "벌금": 55
+    },
+    {
+      "country": "500만원",
+      "벌금": 41
+    },
+    {
+      "country": "10만원",
+      "벌금": 148
+    }
+  ]
+
 
   // 리턴 영역
   return (
@@ -364,14 +350,6 @@ function TryJudiAI() {
           <p>JudiAI</p>
         </div>
 
-        <div className="navigation_bar">
-          <ul>
-            <li><Link to="/">HOME</Link></li>
-            <li><Link to="/try-judiai">Try JudiAI</Link></li>
-            <li><a href="#a">Our Project</a></li>
-            <li><a href="#b">Contact us</a></li>
-          </ul>
-        </div>
       </div>
 
       {/* Chat Simulator */}
@@ -462,7 +440,13 @@ function TryJudiAI() {
       {/* 음성 인식 텍스트 표시 */}
       {listening && <div className="transcript">상담 내용 확인: {transcript}</div>}
 
+      {/* 그래프 */}
+      <div style={{height:'500px', width:'600px', marginLeft:'50px'}}>
+        <Graph1 data = {data}/>
+      </div>
     </div>
+
+
   );
 }
 
