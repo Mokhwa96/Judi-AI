@@ -64,7 +64,7 @@ app.post('/chat', (req, res) => {
 
             console.log('res :');
             console.log(resultData);
-            res.json(resultData['results']);
+            res.json(resultData);
         } catch (error) {
             // JSON 파싱에 실패한 경우
             console.error('파이썬 스크립트에서 반환된 데이터가 유효한 JSON이 아닙니다');

@@ -13,6 +13,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowCircleDown } from '@fortawesome/free-solid-svg-icons';
 import { Howl } from 'howler';
 import Graph1 from './graph1'
+// import { ResponsiveBar } from '@nivo/bar'
 
 function Home() {
   const navigate = useNavigate(); // useNavigate 훅을 사용하여 navigate 함수를 가져옵니다
@@ -175,7 +176,29 @@ function TryJudiAI() {
   const [answerState, setAnswerState] = useState(false);
   const navigate = useNavigate();
   // 그래프 시작
-  // const [graphdata, setGraphdata] = useState(null);
+  const [graphdata, setGraphdata] = useState({
+    '징역': {},
+    '금고': {},
+    '벌금': {'100만원':10, '10만원':7},
+    '집행유예': {},
+    '사회봉사': {},
+    '성폭력_치료프로그램': {},
+    '피고인_정보공개': {},
+    '아동_청소년_장애인복지시설_취업제한': {},
+    '준법운전강의': {},
+    results: '안녕하세요, 변호사입니다. 당신의 말씀을 모두 이해하기 어려워 몇 가지 추가적인 정보를 듣고 싶습니다.\n' +
+      '\n' +
+      '첫 번째로, 상대방 A와 B가 귀하에게 감금, 폭행, 협박이라는 범죄를 저질렀다고 말씀하셨는데, 범행 장소를 언급하신 건가요? 이것이 확실한 정보인가요?\n' +
+      '\n' +
+      '두 번째로, 이 사건에 연루된 C와 D는 누구인가요? 이들이 B와 어떤 관계가 있는지, 또 그들의 역할은 무엇인가요?\n' +
+      '\n' +
+      '세 번째로, 검찰에 상고하셨다고 말씀하신 부분에 대하여 좀 더 설명해주실 수 있나요? 검찰에 제출하신 증거나 관련 문서 등을 가지고 계신가요?\n' +
+      '\n' +
+      "마지막으로, '변호인을 구할 필요가 있다'는 부분이 조금 불분명합니다. 이미 변호인이 선임되어 있는 상황인가요? 아니면 변호인을 찾으셔야 하는 상황인가요?\n" +
+      '\n' +
+      '이러한 정보를 좀 더 명확히 설명해주시면, 사건에 대한 더 정확한 이해와 적절한 조언을 드릴 수 있을 것 같습니다.'
+  });
+
   //그래프 끝
 
   const messagesEndRef = useRef(null); // 새로운 ref. 채팅창 스크롤 자동 최신화 위함.
@@ -197,19 +220,19 @@ function TryJudiAI() {
       });
       const data = await response.json();
 
-      // 그래프 시작
-      // setGraphdata(data.graph) // 서버에서 받아온 데이터 중 'graph' 키의 값을 그래프 데이터로 설정
-      // 그래프 끝
-
       console.log(messages);
       console.log('진짜진짜 최종');
-      setMessages(prevMessages => [...prevMessages, { text: data, sender:'lawyer' }]);
+      setMessages(prevMessages => [...prevMessages, { text: data['results'], sender:'lawyer' }]);
       console.log(messages);
       console.log('응답은');
       console.log(data);
       console.log('입력문은');
       console.log(userinput);
       setAnswerState(!answerState);
+
+      // 그래프 시작
+      setGraphdata(data['벌금']) // 서버에서 받아온 데이터 중 'graph' 키의 값을 그래프 데이터로 설정
+      // 그래프 끝
 
       // const speech = new SpeechSynthesisUtterance(data);
       // window.speechSynthesis.speak(speech);
@@ -437,14 +460,10 @@ function TryJudiAI() {
       {listening && <div className="transcript">상담 내용 확인: {transcript}</div>}
 
       {/* 그래프 */}
-      {/* 
       <div style={{height:'500px', width:'600px', marginLeft:'50px'}}>
-        <Graph1 data = {graphdata}/>
+        <Graph1 graphdata={graphdata} />
       </div>
-                */}
     </div>
-
-
   );
 }
 
