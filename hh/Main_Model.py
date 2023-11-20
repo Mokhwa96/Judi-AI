@@ -200,8 +200,8 @@ def result_statistics(sentences):
     return casename_dict
 
 if __name__ == "__main__":
-  api_key = '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'
-  data_path = "C:/Users/gjaischool/Desktop/2차_프로젝트/total_embedding_done.csv"
+  api_key = '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'
+  file_path = "C:/Users/gh576/JudiAI/hh/"
 
   line = sys.stdin.readline()
   request = json.loads(line)['chat']
@@ -218,9 +218,9 @@ if __name__ == "__main__":
   reply_text = chatbot(api_key, request)
   df_similar_sentences = get_similar_sentences(api_key, data_path, reply_text, engine='text-embedding-ada-002')
   if (df_similar_sentences.empty):
-      sentences = [line for line in df_similar_sentences['ruling']]
-  else:
       sentences = []
+  else:
+      sentences = [line for line in df_similar_sentences['ruling']]
   result_final = result_statistics(sentences)
   result_final['results'] = reply_text
 
