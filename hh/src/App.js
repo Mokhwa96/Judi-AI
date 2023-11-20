@@ -231,7 +231,7 @@ function TryJudiAI() {
       setAnswerState(!answerState);
 
       // 그래프 시작
-      setGraphdata(data['벌금']) // 서버에서 받아온 데이터 중 'graph' 키의 값을 그래프 데이터로 설정
+      setGraphdata(data) // 서버에서 받아온 데이터 중 'graph' 키의 값을 그래프 데이터로 설정
       // 그래프 끝
 
       // const speech = new SpeechSynthesisUtterance(data);
