@@ -460,9 +460,9 @@ function TryJudiAI() {
       {listening && <div className="transcript">상담 내용 확인: {transcript}</div>}
 
       {/* 그래프 */}
-      <div style={{height:'500px', width:'600px', marginLeft:'50px'}}>
+      {/* <div style={{height:'500px', width:'600px', marginLeft:'50px'}}>
         <Graph1 graphdata={graphdata} />
-      </div>
+      </div> */}
     </div>
   );
 }

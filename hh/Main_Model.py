@@ -9,6 +9,14 @@ import re
 import pymysql
 
 def chatbot(api_key, input_text):
+     # MYSQL Connection 연결
+    con = pymysql.connect(host='localhost', user='judiai', password='mococo00.',db='mococodb', charset='utf8mb4')
+    cur = con.cursor()
+    # input_text 데이터베이스 question 컬럼에 삽입
+    sql = "INSERT INTO qna(question) VALUES (%s)"
+    input_text = "dfd"
+    cur.execute(sql,input_text)
+
     client = OpenAI(api_key=api_key,)
 
     messages = [{"role": "system", "content": "너는 법률 문제에 대해 상담을 진행해주는 변호사야. 지금 나는 너에게 법률 문제에 대해 상담을 받으러 왔고, 내가 처한 상황을 설명할거야. 너는 내가 하는 말에 공감해주면서 사실관계 파악을 위해 부족한 정보가 있다면 하나씩 친절하게 물어볼 수 있어. 사실관계 파악을 위한 충분한 정보가 모였다면, 마지막에는 파악된 정보를 요약해서 알려줘"}, ]
@@ -19,11 +27,16 @@ def chatbot(api_key, input_text):
        last_paragraph = chat.choices[0].message.content
        messages.append({"role": 'assistant', 'content': last_paragraph})
        return last_paragraph
-    
+
     messages.append({"role":"user", "content":input_text})
     chat = client.chat.completions.create(model='gpt-4', messages=messages)
     reply = chat.choices[0].message.content
     messages.append({"role":'assistant', 'content':reply})
+
+    # reply 데이터베이스 answer 컬럼에 삽입
+    sql = "INSERT INTO qna(question) VALUES (%s)"
+    cur.execute(sql,reply)
+
     return reply
 
 def casename_find(sentence):
@@ -201,33 +214,22 @@ def result_statistics(sentences):
 
 if __name__ == "__main__":
   api_key = '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'
-  file_path = "C:/Users/gh576/JudiAI/hh/"
+  file_path = "C:/Users/gjaischool1/.vscode/react-app/hh/Judi-AI-1/hh/"
 
   line = sys.stdin.readline()
   request = json.loads(line)['chat']
-  
-  # MYSQL Connection 연결
-  con = pymysql.connect(host='localhost', user='judiai', password='mococo00.',db='mococodb', charset='utf8')
-  cur = con.cursor()
-
-  # request 데이터베이스 question 컬럼에 삽입
-  sql = "INSERT INTO qna(question) VALUES (%s)"
-  cur.execute(sql,request)
 
   # 요청 처리 및 결과 저장
-  reply_text = chatbot(api_key, request)
-  df_similar_sentences = get_similar_sentences(api_key, data_path, reply_text, engine='text-embedding-ada-002')
-  if (df_similar_sentences.empty):
-      sentences = []
-  else:
-      sentences = [line for line in df_similar_sentences['ruling']]
-  result_final = result_statistics(sentences)
-  result_final['results'] = reply_text
-
-  # reply_text 데이터베이스 answer 컬럼에 삽입
-  sql = "INSERT INTO qna(answer) VALUES (%s)"
-  cur.execute(sql,reply_text)
-
+#   reply_text = chatbot(api_key, request)
+#   df_similar_sentences = get_similar_sentences(api_key, file_path, reply_text, engine='text-embedding-ada-002')
+#   if (df_similar_sentences.empty):
+#       sentences = []
+#   else:
+#       sentences = [line for line in df_similar_sentences['ruling']]
+#   result_final = result_statistics(sentences)
+  # result_final['results'] = reply_text
+  result_final = {}
+  result_final['results'] = request
   # 결과를 클라이언트로 전송
   sys.stdout.write(json.dumps(result_final, ensure_ascii=False))
   sys.stdout.flush()

@@ -13,11 +13,10 @@ const client = new textToSpeech.TextToSpeechClient();
 
 app.use(bodyParser.json());
 
-app.use(express.static(path.join('C:/Users/gh576/JudiAI/hh/', 'build')));
+app.use(express.static(path.join('C:/Users/gjaischool1/.vscode/react-app/hh/Judi-AI-1/hh/', 'build')));
 app.get('/', (req, res) => {
-    res.sendFile(path.join('C:/Users/gh576/JudiAI/hh/', 'build', 'index.html'));
+    res.sendFile(path.join('C:/Users/gjaischool1/.vscode/react-app/hh/Judi-AI-1/hh/', 'build', 'index.html'));
 });
-
 app.post('/chat', (req, res) => {
     // 클라이언트 요청
     const clientRequest = req.body;
@@ -25,9 +24,10 @@ app.post('/chat', (req, res) => {
     console.log(clientRequest);
     console.log('제이슨으로 변환하면');
     console.log(JSON.stringify(clientRequest));
+    console.log(JSON.stringify(clientRequest)['chat']);
 
     // 파이썬 프로그램 실행
-    const pythonProcess = spawn('C:/Users/gh576/anaconda3/python', ['Main_Model.py']);
+    const pythonProcess = spawn('C:/Users/gjaischool1/anaconda3/python', ['Main_Model.py']);
 
     const buffers = [];
 
@@ -46,6 +46,7 @@ app.post('/chat', (req, res) => {
 
             // iconv-lite를 사용하여 UTF-8로 디코딩
             const decodedResult = iconv.decode(concatenatedBuffer, 'euc-kr');
+            console.log(decodedResult);
 
             // JSON 문자열을 파싱하여 JavaScript 객체로 변환
             const resultData = JSON.parse(decodedResult);

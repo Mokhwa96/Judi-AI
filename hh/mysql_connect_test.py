@@ -18,3 +18,4 @@ print(rows)  # 전체 rows
 
 # DB 연결 종료
 con.close()
+
