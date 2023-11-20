@@ -5,7 +5,6 @@ import './css/reset.css';
 import './css/bottom.css';
 import './css/top.css';
 import './css/center.css';
-// import './css/styles.css';
 import './css/judi_chat.css';
 import UserForm from "./components/UserForm";
 import Navigation from './components/Navigation';
@@ -13,7 +12,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowCircleDown } from '@fortawesome/free-solid-svg-icons';
 import { Howl } from 'howler';
 import Graph1 from './graph1'
-// import { ResponsiveBar } from '@nivo/bar'
 
 function Home() {
   const navigate = useNavigate(); // useNavigate 훅을 사용하여 navigate 함수를 가져옵니다
@@ -119,15 +117,6 @@ function Home() {
               <h1 className="m-0 mt-n2 text-white display-4">JudiAI</h1>
             </a>
             <p>JudiAI는 인공지능 법률 상담 서비스입니다.<br></br>여러분의 상황과 유사한 법률 판례를 분석하고, 대략적인 결과를 제공합니다.</p>
-            {/*              
-            <h6 className="text-uppercase text-white py-2">Follow Us</h6>
-            <div className="d-flex justify-content-start">
-              <a className="btn btn-lg btn-primary btn-lg-square mr-2" href="#"><i className="fab fa-twitter"></i></a>
-              <a className="btn btn-lg btn-primary btn-lg-square mr-2" href="#"><i className="fab fa-facebook-f"></i></a>
-              <a className="btn btn-lg btn-primary btn-lg-square mr-2" href="#"><i className="fab fa-linkedin-in"></i></a>
-              <a className="btn btn-lg btn-primary btn-lg-square" href="#"><i className="fab fa-instagram"></i></a>
-            </div>
-            */}
           </div>
           <div className="col-lg-3 col-md-6 mb-5">
             <h4 className="text-uppercase text-white mb-4">Get In Touch</h4>
@@ -203,9 +192,6 @@ function TryJudiAI() {
 
   const messagesEndRef = useRef(null); // 새로운 ref. 채팅창 스크롤 자동 최신화 위함.
 
-  // 현호 작업구역
-  // 검색 test
-
   // 서버로 데이터를 전송하고 받는 함수
   const chatbotChat = async (userinput) => {
     const chatdata = {'chat': userinput};
@@ -220,10 +206,7 @@ function TryJudiAI() {
       });
       const data = await response.json();
 
-      console.log(messages);
-      console.log('진짜진짜 최종');
       setMessages(prevMessages => [...prevMessages, { text: data['results'], sender:'lawyer' }]);
-      console.log(messages);
       console.log('응답은');
       console.log(data);
       console.log('입력문은');
@@ -234,8 +217,6 @@ function TryJudiAI() {
       setGraphdata(data) // 서버에서 받아온 데이터 중 'graph' 키의 값을 그래프 데이터로 설정
       // 그래프 끝
 
-      // const speech = new SpeechSynthesisUtterance(data);
-      // window.speechSynthesis.speak(speech);
     } catch (error) {
       console.error(error);
     }
@@ -255,51 +236,10 @@ function TryJudiAI() {
     };
   }, [answerState]);
 
-  // 솔빈: 변호사 이미지 위에 말풍선 추가하는 구역입니다.
-  // 변호사 메시지 표시 여부를 위한 새로운 state - setTimeout 관련
-  // const [showLawyerMessage, setShowLawyerMessage] = useState(true);
-  // useEffect(() => {
-  //   // 초기 변호사 메시지 설정
-  //   setMessages([
-  //     { text: "안녕하세요, 어떤 도움이 필요하신가요?", sender: 'lawyer' }
-  //   ]);  
-  //   // 3초 후에 변호사 메시지를 숨기는 로직  - setTimeout 관련 (사라지는 시간 조절)
-  //   // const timer = setTimeout(() => {
-  //   //   setShowLawyerMessage(false);
-  //   // }, 2000);
-  //   // // 컴포넌트가 언마운트될 때 타이머 클리어  - setTimeout 관련
-  //   // return () => clearTimeout(timer);
-  // }, []);
-
-
   // 메시지 배열이 변경될 때마다 스크롤을 맨 아래로 이동시키는 useEffect
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]); // messages 배열이 변경될 때마다 실행
-
-
-  // 변호사 메시지만 렌더링하는 함수
-  const renderLawyerMessages = () => {
-    return messages
-      .filter(message => message.sender === 'lawyer')
-      .map((message, index) => (
-        <div key={index} className="bubble lawyer">
-          {message.text}
-        </div>
-      ));
-  };
-
-  // 사용자 메시지만 렌더링하는 함수
-  const renderUserMessages = () => {
-    return messages
-      .filter(message => message.sender === 'user')
-      .map((message, index) => (
-        <div key={index} className="bubble user">
-          {message.text}
-        </div>
-      ));
-  };
-
 
   // 채팅 박스 활성화/비활성화 부분
   const toggleChatbox = () => {
@@ -326,9 +266,6 @@ function TryJudiAI() {
     <div key={index} className={`message-container ${message.sender}-container`}>
       <div className={`bubble ${message.sender}`}>
         {message.text}
-        {/* <audio controls autoplay>
-          <source src='/answer.mp3' type='audio/mp3' />
-        </audio> */}
       </div>
     </div>
   );
@@ -378,12 +315,6 @@ function TryJudiAI() {
           alt="변호사"
           onClick={toggleChatbox} // 이벤트 핸들러
         />
-        {/* // 변호사의 말 띄울 구역 */}
-        {/* {renderLawyerMessages()} */}
-        {/* <div className="bubble lawyer-bubble hidden">
-            여기에 변호사가 말하게 하려는 내용을 추가
-            안녕하세요 이건 샘플 문장 입니다.
-        </div> */}
 
         {/* // 챗 박스 관련 구역 */}
         <div id="chatbox" className={`chatbox ${isChatboxActive ? 'active' : 'hidden'}`}>
@@ -460,9 +391,9 @@ function TryJudiAI() {
       {listening && <div className="transcript">상담 내용 확인: {transcript}</div>}
 
       {/* 그래프 */}
-      <div style={{height:'500px', width:'600px', marginLeft:'50px'}}>
+      {/* <div style={{height:'500px', width:'600px', marginLeft:'50px'}}>
         <Graph1 graphdata={graphdata} />
-      </div>
+      </div> */}
     </div>
   );
 }
