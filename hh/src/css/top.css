@@ -10,54 +10,49 @@
 }
 
 
-    .logo {
-        color: var(--point-color);
-        padding: 1%;
-        padding-left:3em;
-        font-size: 1.8em;
-        font-weight: bold;
-        cursor: pointer;
-        display: inline-block; /* 로고를 인라인 블록으로 설정 */
-    }
+.logo {
+    color: var(--point-color);
+    padding: 1%;
+    padding-left:3em;
+    font-size: 1.8em;
+    font-weight: bold;
+    cursor: pointer;
+    display: inline-block; /* 로고를 인라인 블록으로 설정 */
+}
 
-    .navigation_bar {
-        display: inline-block; /* 네비게이션 바를 인라인 블록으로 설정 */
-        padding-right:3em;
-    }
-        ul {
-            list-style: none;
-            
-            padding: 0;
-            margin:0;
-            text-align:right;
-            white-space: nowrap; /* 텍스트 줄 바꿈 방지 */
-        }
+.navigation_bar {
+    display: inline-block; /* 네비게이션 바를 인라인 블록으로 설정 */
+    padding-right:3em;
+}
+ul {
+    list-style: none;
+    padding: 0;
+    margin:0;
+    text-align:right;
+    white-space: nowrap; /* 텍스트 줄 바꿈 방지 */
+}
+
+
+li {
+    display: inline-block;
+    margin-left: 0; /* 목록 항목 간의 간격을 조정할 수 있습니다. */
+    /* margin-right: 30px; */
+    cursor: pointer;
+    font-size: 120%;
+    color: #000000ac; /* 텍스트 색상 */
+    padding: 0.5vh 2vh; /* 내부 간격 */
+    border-radius: 10px;
+    margin: 1vh; /* 메뉴 아이템 간 간격 */
+    transition: background-color 0.3s; /* 배경 색상 변화에 애니메이션 추가 */
+
+}
         
-
-        li {
-            display: inline-block;
-            margin-left: 0; /* 목록 항목 간의 간격을 조정할 수 있습니다. */
-            /* margin-right: 30px; */
-            
-        }
-
-        li a {
-            text-decoration: none; /* 밑줄 제거 */
-            
-            font-size: 120%;
-            color: #000000ac; /* 텍스트 색상 */
-            padding: 0.5vh 2vh; /* 내부 간격 */
-            border-radius: 10px;
-            margin: 1vh; /* 메뉴 아이템 간 간격 */
-            transition: background-color 0.3s; /* 배경 색상 변화에 애니메이션 추가 */
-        }
-        
-        /* 메뉴 아이템에 호버(마우스를 올렸을 때) 스타일 */
-        li a:hover {
-            background-color: rgba(194, 194, 194, 0.314); /* 호버시 배경 색상 변경 */
-            color: #000000; /* 호버시 텍스트 색상 변경 */
-            /* font-weight: bold; 글꼴 굵기 */
-        }
+  /* 메뉴 아이템에 호버(마우스를 올렸을 때) 스타일 */
+  li:hover {
+      background-color: rgba(194, 194, 194, 0.314); /* 호버시 배경 색상 변경 */
+      color: #000000; /* 호버시 텍스트 색상 변경 */
+      /* font-weight: bold; 글꼴 굵기 */
+  }
 
 
 
