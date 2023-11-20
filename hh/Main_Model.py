@@ -5,6 +5,8 @@ import numpy as np
 import json
 import sys
 import re
+# MYSQL 연결
+import pymysql
 
 def chatbot(api_key, input_text):
     client = OpenAI(api_key=api_key,)
@@ -203,16 +205,28 @@ if __name__ == "__main__":
 
   line = sys.stdin.readline()
   request = json.loads(line)['chat']
+  
+  # MYSQL Connection 연결
+  con = pymysql.connect(host='localhost', user='judiai', password='mococo00.',db='mococodb', charset='utf8')
+  cur = con.cursor()
+
+  # request 데이터베이스 question 컬럼에 삽입
+  sql = "INSERT INTO qna(question) VALUES (%s)"
+  cur.execute(sql,request)
 
   # 요청 처리 및 결과 저장
   reply_text = chatbot(api_key, request)
-  df_similar_sentences = get_similar_sentences(api_key, file_path, reply_text, engine='text-embedding-ada-002')
+  df_similar_sentences = get_similar_sentences(api_key, data_path, reply_text, engine='text-embedding-ada-002')
   if (df_similar_sentences.empty):
       sentences = [line for line in df_similar_sentences['ruling']]
   else:
       sentences = []
   result_final = result_statistics(sentences)
   result_final['results'] = reply_text
+
+  # reply_text 데이터베이스 answer 컬럼에 삽입
+  sql = "INSERT INTO qna(answer) VALUES (%s)"
+  cur.execute(sql,reply_text)
 
   # 결과를 클라이언트로 전송
   sys.stdout.write(json.dumps(result_final, ensure_ascii=False))
