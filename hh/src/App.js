@@ -118,15 +118,6 @@ function Home() {
               <h1 className="m-0 mt-n2 text-white display-4">JudiAI</h1>
             </a>
             <p>JudiAI는 인공지능 법률 상담 서비스입니다.<br></br>여러분의 상황과 유사한 법률 판례를 분석하고, 대략적인 결과를 제공합니다.</p>
-            {/*              
-            <h6 className="text-uppercase text-white py-2">Follow Us</h6>
-            <div className="d-flex justify-content-start">
-              <a className="btn btn-lg btn-primary btn-lg-square mr-2" href="#"><i className="fab fa-twitter"></i></a>
-              <a className="btn btn-lg btn-primary btn-lg-square mr-2" href="#"><i className="fab fa-facebook-f"></i></a>
-              <a className="btn btn-lg btn-primary btn-lg-square mr-2" href="#"><i className="fab fa-linkedin-in"></i></a>
-              <a className="btn btn-lg btn-primary btn-lg-square" href="#"><i className="fab fa-instagram"></i></a>
-            </div>
-            */}
           </div>
           <div className="col-lg-3 col-md-6 mb-5">
             <h4 className="text-uppercase text-white mb-4">Get In Touch</h4>
@@ -175,7 +166,29 @@ function TryJudiAI() {
   const [answerState, setAnswerState] = useState(false);
   const navigate = useNavigate();
   // 그래프 시작
-  // const [graphdata, setGraphdata] = useState(null);
+  const [graphdata, setGraphdata] = useState({
+    '징역': {},
+    '금고': {},
+    '벌금': {'100만원':10, '10만원':7},
+    '집행유예': {},
+    '사회봉사': {},
+    '성폭력_치료프로그램': {},
+    '피고인_정보공개': {},
+    '아동_청소년_장애인복지시설_취업제한': {},
+    '준법운전강의': {},
+    results: '안녕하세요, 변호사입니다. 당신의 말씀을 모두 이해하기 어려워 몇 가지 추가적인 정보를 듣고 싶습니다.\n' +
+      '\n' +
+      '첫 번째로, 상대방 A와 B가 귀하에게 감금, 폭행, 협박이라는 범죄를 저질렀다고 말씀하셨는데, 범행 장소를 언급하신 건가요? 이것이 확실한 정보인가요?\n' +
+      '\n' +
+      '두 번째로, 이 사건에 연루된 C와 D는 누구인가요? 이들이 B와 어떤 관계가 있는지, 또 그들의 역할은 무엇인가요?\n' +
+      '\n' +
+      '세 번째로, 검찰에 상고하셨다고 말씀하신 부분에 대하여 좀 더 설명해주실 수 있나요? 검찰에 제출하신 증거나 관련 문서 등을 가지고 계신가요?\n' +
+      '\n' +
+      "마지막으로, '변호인을 구할 필요가 있다'는 부분이 조금 불분명합니다. 이미 변호인이 선임되어 있는 상황인가요? 아니면 변호인을 찾으셔야 하는 상황인가요?\n" +
+      '\n' +
+      '이러한 정보를 좀 더 명확히 설명해주시면, 사건에 대한 더 정확한 이해와 적절한 조언을 드릴 수 있을 것 같습니다.'
+  });
+
   //그래프 끝
 
   const messagesEndRef = useRef(null); // 새로운 ref. 채팅창 스크롤 자동 최신화 위함.
@@ -199,22 +212,16 @@ function TryJudiAI() {
       });
       const data = await response.json();
 
-      // 그래프 시작
-      // setGraphdata(data.graph) // 서버에서 받아온 데이터 중 'graph' 키의 값을 그래프 데이터로 설정
-      // 그래프 끝
-
-      console.log(messages);
-      console.log('진짜진짜 최종');
-      setMessages(prevMessages => [...prevMessages, { text: data, sender:'lawyer' }]);
-      console.log(messages);
+      setMessages(prevMessages => [...prevMessages, { text: data['results'], sender:'lawyer' }]);
       console.log('응답은');
       console.log(data);
       console.log('입력문은');
       console.log(userinput);
       setAnswerState(!answerState);
 
-      // const speech = new SpeechSynthesisUtterance(data);
-      // window.speechSynthesis.speak(speech);
+      // 그래프 시작
+      setGraphdata(data) // 서버에서 받아온 데이터 중 'graph' 키의 값을 그래프 데이터로 설정
+      // 그래프 끝
 
       setIsLoading(false); // 여기서 로딩 종료(성공적 응답 받을때)
     } catch (error) {
@@ -250,11 +257,7 @@ function TryJudiAI() {
       .filter(message => message.sender === 'lawyer')
       .map((message, index) => (
         <div key={index} className="bubble lawyer">
-          {isLoading ? (
-            <img src="/gifs/loading.gif" alt="로딩 중" /> // 로딩 이미지 표시
-          ) : (
-          message.text
-          )}
+          {message.text}
         </div>
       ));
   };
@@ -296,9 +299,6 @@ function TryJudiAI() {
     <div key={index} className={`message-container ${message.sender}-container`}>
       <div className={`bubble ${message.sender}`}>
         {message.text}
-        {/* <audio controls autoplay>
-          <source src='/answer.mp3' type='audio/mp3' />
-        </audio> */}
       </div>
     </div>
   );
@@ -349,12 +349,6 @@ function TryJudiAI() {
             alt="변호사"
             onClick={toggleChatbox} // 이벤트 핸들러
           />        
-          {/* // 변호사의 말 띄울 구역 */}
-          {/* {renderLawyerMessages()} */}
-          {/* <div className="bubble lawyer-bubble hidden">
-              여기에 변호사가 말하게 하려는 내용을 추가
-              안녕하세요 이건 샘플 문장 입니다.
-          </div> */}
 
         {/* // 챗 박스 관련 구역 */}
         <div id="chatbox" className={`chatbox ${isChatboxActive ? 'active' : 'hidden'}`}>
@@ -431,11 +425,9 @@ function TryJudiAI() {
       {listening && <div className="transcript">상담 내용 확인: {transcript}</div>}
 
       {/* 그래프 */}
-      {/* 
-      <div style={{height:'500px', width:'600px', marginLeft:'50px'}}>
-        <Graph1 data = {graphdata}/>
-      </div>
-                */}
+      {/* <div style={{height:'500px', width:'600px', marginLeft:'50px'}}>
+        <Graph1 graphdata={graphdata} />
+      </div> */}
     </div>
   
   );
