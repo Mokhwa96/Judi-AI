@@ -192,14 +192,12 @@ function TryJudiAI() {
   //그래프 끝
 
   const messagesEndRef = useRef(null); // 새로운 ref. 채팅창 스크롤 자동 최신화 위함.
-  const [isLoading, setIsLoading] = useState(false); // 채팅의 로딩 상태를 관리하는 새로운 state
 
   // 현호 작업구역
   // 검색 test
 
   // 서버로 데이터를 전송하고 받는 함수
   const chatbotChat = async (userinput) => {
-    setIsLoading(true); // 로딩 시작 문제가 생기면 이 줄을 되돌릴 것 (to 솔빈..sk wktls..)
     const chatdata = {'chat': userinput};
 
     try {
@@ -223,10 +221,8 @@ function TryJudiAI() {
       setGraphdata(data) // 서버에서 받아온 데이터 중 'graph' 키의 값을 그래프 데이터로 설정
       // 그래프 끝
 
-      setIsLoading(false); // 여기서 로딩 종료(성공적 응답 받을때)
     } catch (error) {
       console.error(error);
-       // 여기서 로딩 종료(에러 발생시 응답 받을때) 로딩 시작 문제가 생기면 이 줄을 되돌릴 것 (to 솔빈..sk wktls..)
     }
   };
 
@@ -250,30 +246,7 @@ function TryJudiAI() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]); // messages 배열이 변경될 때마다 실행
 
-
-  // 변호사 메시지만 렌더링하는 함수
-  const renderLawyerMessages = () => {
-    return messages
-      .filter(message => message.sender === 'lawyer')
-      .map((message, index) => (
-        <div key={index} className="bubble lawyer">
-          {message.text}
-        </div>
-      ));
-  };
-
-  // 사용자 메시지만 렌더링하는 함수
-  const renderUserMessages = () => {
-    return messages
-      .filter(message => message.sender === 'user')
-      .map((message, index) => (
-        <div key={index} className="bubble user">
-          {message.text}
-        </div>
-      ));
-  };
-
-
+  
   // 채팅 박스 활성화/비활성화 부분
   const toggleChatbox = () => {
     setIsChatboxActive(!isChatboxActive);
@@ -289,6 +262,7 @@ function TryJudiAI() {
     }
   };
 
+
   // input 값 변경 처리
   const handleInputChange = (e) => {
     setUserInput(e.target.value);
@@ -302,7 +276,6 @@ function TryJudiAI() {
       </div>
     </div>
   );
-  
 
   //저장 버튼을 누르면 저장되는 부분을 위한 수정.
   const saveChatHistory = () => {
