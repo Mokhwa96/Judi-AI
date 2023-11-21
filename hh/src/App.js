@@ -5,8 +5,8 @@ import './css/reset.css';
 import './css/bottom.css';
 import './css/top.css';
 import './css/center.css';
-// import './css/styles.css';
 import './css/judi_chat.css';
+import LookAhead from './gifs/judi_look_ahead_sample.gif'; // 애니매이션 gif를 임포트.
 import UserForm from "./components/UserForm";
 import Navigation from './components/Navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -179,12 +179,14 @@ function TryJudiAI() {
   //그래프 끝
 
   const messagesEndRef = useRef(null); // 새로운 ref. 채팅창 스크롤 자동 최신화 위함.
+  const [isLoading, setIsLoading] = useState(false); // 채팅의 로딩 상태를 관리하는 새로운 state
 
   // 현호 작업구역
   // 검색 test
 
   // 서버로 데이터를 전송하고 받는 함수
   const chatbotChat = async (userinput) => {
+    setIsLoading(true); // 로딩 시작 문제가 생기면 이 줄을 되돌릴 것 (to 솔빈..sk wktls..)
     const chatdata = {'chat': userinput};
 
     try {
@@ -213,8 +215,11 @@ function TryJudiAI() {
 
       // const speech = new SpeechSynthesisUtterance(data);
       // window.speechSynthesis.speak(speech);
+
+      setIsLoading(false); // 여기서 로딩 종료(성공적 응답 받을때)
     } catch (error) {
       console.error(error);
+       // 여기서 로딩 종료(에러 발생시 응답 받을때) 로딩 시작 문제가 생기면 이 줄을 되돌릴 것 (to 솔빈..sk wktls..)
     }
   };
 
@@ -232,22 +237,6 @@ function TryJudiAI() {
     };
   }, [answerState]);
 
-  // 솔빈: 변호사 이미지 위에 말풍선 추가하는 구역입니다.
-  // 변호사 메시지 표시 여부를 위한 새로운 state - setTimeout 관련
-  // const [showLawyerMessage, setShowLawyerMessage] = useState(true);
-  // useEffect(() => {
-  //   // 초기 변호사 메시지 설정
-  //   setMessages([
-  //     { text: "안녕하세요, 어떤 도움이 필요하신가요?", sender: 'lawyer' }
-  //   ]);  
-  //   // 3초 후에 변호사 메시지를 숨기는 로직  - setTimeout 관련 (사라지는 시간 조절)
-  //   // const timer = setTimeout(() => {
-  //   //   setShowLawyerMessage(false);
-  //   // }, 2000);
-  //   // // 컴포넌트가 언마운트될 때 타이머 클리어  - setTimeout 관련
-  //   // return () => clearTimeout(timer);
-  // }, []);
-
 
   // 메시지 배열이 변경될 때마다 스크롤을 맨 아래로 이동시키는 useEffect
   useEffect(() => {
@@ -261,7 +250,11 @@ function TryJudiAI() {
       .filter(message => message.sender === 'lawyer')
       .map((message, index) => (
         <div key={index} className="bubble lawyer">
-          {message.text}
+          {isLoading ? (
+            <img src="/gifs/loading.gif" alt="로딩 중" /> // 로딩 이미지 표시
+          ) : (
+          message.text
+          )}
         </div>
       ));
   };
@@ -309,6 +302,7 @@ function TryJudiAI() {
       </div>
     </div>
   );
+  
 
   //저장 버튼을 누르면 저장되는 부분을 위한 수정.
   const saveChatHistory = () => {
@@ -349,18 +343,18 @@ function TryJudiAI() {
       {/* Chat Simulator */}
       <div className={`chat-container ${isChatboxActive ? 'expanded' : ''}`}>
         {/* 주디 이미지 */}  
-        <img
-          className="lawyer-image"
-          src="/images/Judi_desk.png"
-          alt="변호사"
-          onClick={toggleChatbox} // 이벤트 핸들러
-        />
-        {/* // 변호사의 말 띄울 구역 */}
-        {/* {renderLawyerMessages()} */}
-        {/* <div className="bubble lawyer-bubble hidden">
-            여기에 변호사가 말하게 하려는 내용을 추가
-            안녕하세요 이건 샘플 문장 입니다.
-        </div> */}
+          <img
+            className="lawyer-image"
+            src={LookAhead}
+            alt="변호사"
+            onClick={toggleChatbox} // 이벤트 핸들러
+          />        
+          {/* // 변호사의 말 띄울 구역 */}
+          {/* {renderLawyerMessages()} */}
+          {/* <div className="bubble lawyer-bubble hidden">
+              여기에 변호사가 말하게 하려는 내용을 추가
+              안녕하세요 이건 샘플 문장 입니다.
+          </div> */}
 
         {/* // 챗 박스 관련 구역 */}
         <div id="chatbox" className={`chatbox ${isChatboxActive ? 'active' : 'hidden'}`}>
@@ -443,8 +437,7 @@ function TryJudiAI() {
       </div>
                 */}
     </div>
-
-
+  
   );
 }
 
@@ -461,5 +454,3 @@ function App() {
 }
 
 export default App;
-
-

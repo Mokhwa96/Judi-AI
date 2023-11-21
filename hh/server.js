@@ -13,9 +13,9 @@ const client = new textToSpeech.TextToSpeechClient();
 
 app.use(bodyParser.json());
 
-app.use(express.static(path.join('C:/Users/gh576/JudiAI/hh/', 'build')));
+app.use(express.static(path.join('C:/Users/kangs/Project_2th/hh/', 'build')));
 app.get('/', (req, res) => {
-    res.sendFile(path.join('C:/Users/gh576/JudiAI/hh/', 'build', 'index.html'));
+    res.sendFile(path.join('C:/Users/kangs/Project_2th/hh/', 'build', 'index.html'));
 });
 
 app.post('/chat', (req, res) => {
@@ -27,7 +27,7 @@ app.post('/chat', (req, res) => {
     console.log(JSON.stringify(clientRequest));
 
     // 파이썬 프로그램 실행
-    const pythonProcess = spawn('C:/Users/gh576/anaconda3/python', ['Main_Model.py']);
+    const pythonProcess = spawn('C:/Users/kangs/anaconda3/python', ['Main_Model.py']);
 
     const buffers = [];
 
