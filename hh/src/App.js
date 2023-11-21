@@ -13,6 +13,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowCircleDown } from '@fortawesome/free-solid-svg-icons';
 import { Howl } from 'howler';
 import Graph1 from './graph1'
+import Graph2 from './graph2'
 // import { ResponsiveBar } from '@nivo/bar'
 
 function Home() {
@@ -177,15 +178,15 @@ function TryJudiAI() {
   const navigate = useNavigate();
   // 그래프 시작
   const [graphdata, setGraphdata] = useState({
-    '징역': {},
-    '금고': {},
+    '징역': {'2년':10,'5년':15, '10년':20},
+    '금고': {'100만원':10, '10만원':7},
     '벌금': {'100만원':10, '10만원':7},
-    '집행유예': {},
-    '사회봉사': {},
-    '성폭력_치료프로그램': {},
-    '피고인_정보공개': {},
-    '아동_청소년_장애인복지시설_취업제한': {},
-    '준법운전강의': {},
+    '집행유예': {'2년':5, '1년':4},
+    '사회봉사': {'2년':5, '1년':4},
+    '성폭력_치료프로그램': {'2년':5, '1년':4},
+    '피고인_정보공개': {'2년':5, '1년':4},
+    '아동_청소년_장애인복지시설_취업제한': {'2년':5, '1년':4},
+    '준법운전강의': {'2년':5, '1년':4},
     results: '안녕하세요, 변호사입니다. 당신의 말씀을 모두 이해하기 어려워 몇 가지 추가적인 정보를 듣고 싶습니다.\n' +
       '\n' +
       '첫 번째로, 상대방 A와 B가 귀하에게 감금, 폭행, 협박이라는 범죄를 저질렀다고 말씀하셨는데, 범행 장소를 언급하신 건가요? 이것이 확실한 정보인가요?\n' +
@@ -198,6 +199,7 @@ function TryJudiAI() {
       '\n' +
       '이러한 정보를 좀 더 명확히 설명해주시면, 사건에 대한 더 정확한 이해와 적절한 조언을 드릴 수 있을 것 같습니다.'
   });
+
 
   //그래프 끝
 
@@ -231,7 +233,7 @@ function TryJudiAI() {
       setAnswerState(!answerState);
 
       // 그래프 시작
-      setGraphdata(data['벌금']) // 서버에서 받아온 데이터 중 'graph' 키의 값을 그래프 데이터로 설정
+      setGraphdata(data) // 서버에서 받아온 데이터 중 'graph' 키의 값을 그래프 데이터로 설정
       // 그래프 끝
 
       // const speech = new SpeechSynthesisUtterance(data);
@@ -358,6 +360,8 @@ function TryJudiAI() {
     setUserInput(transcript); // 음성 인식 결과를 userInput에 설정
   };
 
+
+
   // 리턴 영역
   return (
     <div>
@@ -460,8 +464,140 @@ function TryJudiAI() {
       {listening && <div className="transcript">상담 내용 확인: {transcript}</div>}
 
       {/* 그래프 */}
-      <div style={{height:'500px', width:'600px', marginLeft:'50px'}}>
-        <Graph1 graphdata={graphdata} />
+      <div className='graph_container'>
+        {/* 징역 그래프 */}
+        <div className='graph_content_container'>
+          징역
+          {graphdata['징역'] && Object.keys(graphdata['징역']).length > 0 && (
+            <>
+              <div style={{ height: '200px', width: '300px', marginLeft: '50px' }}>
+                <Graph1 graphdata={graphdata['징역']} graphType="징역" />
+              </div>
+              <div style={{ height: '200px', width: '300px', marginLeft: '50px' }}>
+                <Graph2 graphdata={graphdata['징역']} graphType="징역" />
+              </div>
+            </>
+          )}
+        </div>
+        {/* 금고 그래프 */}
+        <div className='graph_content_container'>
+        금고
+          {graphdata['금고'] && Object.keys(graphdata['금고']).length > 0 && (
+            <>
+              <div style={{ height: '200px', width: '300px', marginLeft: '50px' }}>
+                <Graph1 graphdata={graphdata['금고']} graphType="금고" />
+              </div>
+              <div style={{ height: '200px', width: '300px', marginLeft: '50px' }}>
+                <Graph2 graphdata={graphdata['금고']} graphType="금고" />
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* 벌금 그래프 */}
+        <div className='graph_content_container'>
+        벌금
+          {graphdata['벌금'] && Object.keys(graphdata['벌금']).length > 0 && (
+            <>
+              <div style={{ height: '200px', width: '300px', marginLeft: '50px' }}>
+                <Graph1 graphdata={graphdata['벌금']} graphType="벌금" />
+              </div>
+              <div style={{ height: '200px', width: '300px', marginLeft: '50px' }}>
+                <Graph2 graphdata={graphdata['벌금']} graphType="벌금" />
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* 집행유예 그래프 */}
+        <div className='graph_content_container'>
+        집행유예
+          {graphdata['집행유예'] && Object.keys(graphdata['집행유예']).length > 0 && (
+            <>
+              <div style={{ height: '200px', width: '300px', marginLeft: '50px' }}>
+                <Graph1 graphdata={graphdata['집행유예']} graphType="집행유예" />
+              </div>
+              <div style={{ height: '200px', width: '300px', marginLeft: '50px' }}>
+                <Graph2 graphdata={graphdata['집행유예']} graphType="집행유예" />
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* 사회봉사 그래프 */}
+        <div className='graph_content_container'>
+        사회봉사
+          {graphdata['사회봉사'] && Object.keys(graphdata['사회봉사']).length > 0 && (
+            <>
+              <div style={{ height: '200px', width: '300px', marginLeft: '50px' }}>
+                <Graph1 graphdata={graphdata['사회봉사']} graphType="사회봉사" />
+              </div>
+              <div style={{ height: '200px', width: '300px', marginLeft: '50px' }}>
+                <Graph2 graphdata={graphdata['사회봉사']} graphType="사회봉사" />
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* 성폭력_치료프로그램 그래프 */}
+        <div className='graph_content_container'>
+        성폭력_치료프로그램
+          {graphdata['성폭력_치료프로그램'] && Object.keys(graphdata['성폭력_치료프로그램']).length > 0 && (
+            <>
+              <div style={{ height: '200px', width: '300px', marginLeft: '50px' }}>
+                <Graph1 graphdata={graphdata['성폭력_치료프로그램']} graphType="성폭력" />
+              </div>
+              <div style={{ height: '200px', width: '300px', marginLeft: '50px' }}>
+                <Graph2 graphdata={graphdata['성폭력_치료프로그램']} graphType="성폭력" />
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* 피고인_정보공개 그래프 */}
+        <div className='graph_content_container'>
+        피고인_정보공개
+          {graphdata['피고인_정보공개'] && Object.keys(graphdata['피고인_정보공개']).length > 0 && (
+            <>
+              <div style={{ height: '200px', width: '300px', marginLeft: '50px' }}>
+                <Graph1 graphdata={graphdata['피고인_정보공개']} graphType="정보공개" />
+              </div>
+              <div style={{ height: '200px', width: '300px', marginLeft: '50px' }}>
+                <Graph2 graphdata={graphdata['피고인_정보공개']} graphType="정보공개" />
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* 아동_청소년_장애인복지시설_취업제한 그래프 */}
+        <div className='graph_content_container'>
+        아동_청소년_장애인복지시설_취업제한
+          {graphdata['아동_청소년_장애인복지시설_취업제한'] && Object.keys(graphdata['아동_청소년_장애인복지시설_취업제한']).length > 0 && (
+            <>
+              <div style={{ height: '200px', width: '300px', marginLeft: '50px' }}>
+                <Graph1 graphdata={graphdata['아동_청소년_장애인복지시설_취업제한']} graphType="취업제한" />
+              </div>
+              <div style={{ height: '200px', width: '300px', marginLeft: '50px' }}>
+                <Graph2 graphdata={graphdata['아동_청소년_장애인복지시설_취업제한']} graphType="취업제한" />
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* 준법운전강의 그래프 */}
+        <div className='graph_content_container'>
+        준법운전강의
+          {graphdata['준법운전강의'] && Object.keys(graphdata['준법운전강의']).length > 0 && (
+            <>
+              <div style={{ height: '200px', width: '300px', marginLeft: '50px' }}>
+                <Graph1 graphdata={graphdata['준법운전강의']} graphType="준법운전강의" />
+              </div>
+              <div style={{ height: '200px', width: '300px', marginLeft: '50px' }}>
+                <Graph2 graphdata={graphdata['준법운전강의']} graphType="준법운전강의" />
+              </div>
+            </>
+          )}
+        </div>   
       </div>
     </div>
   );
