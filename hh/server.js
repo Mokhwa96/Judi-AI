@@ -1,13 +1,13 @@
-const express = require('express');
-const path = require('path');
+const express = require("express");
+const path = require("path");
 const app = express();
 const port = process.env.PORT || 3001;
-const {spawn} = require('child_process');
-const bodyParser = require('body-parser');
-const iconv = require('iconv-lite');
-const textToSpeech = require('@google-cloud/text-to-speech');
-const fs = require('fs');
-const util = require('util');
+const { spawn } = require("child_process");
+const bodyParser = require("body-parser");
+const iconv = require("iconv-lite");
+const textToSpeech = require("@google-cloud/text-to-speech");
+const fs = require("fs");
+const util = require("util");
 const client = new textToSpeech.TextToSpeechClient();
 // 데이터베이스 연결
 const mysql      = require('mysql');
@@ -79,14 +79,14 @@ app.post('/chat', (req, res) => {
         pythonProcess.stdin.end();
     });
 
-    // 파이썬 프로세스의 표준 출력에서 데이터를 읽어옴
-    pythonProcess.stdout.on('data', async (data) => {
-        console.log('반환된 데이터는');
-        console.log(data);
-        buffers.push(data);
-        try {
-            // Buffer.concat()을 사용하여 모든 버퍼를 하나로 합침
-            const concatenatedBuffer = Buffer.concat(buffers);
+  // 파이썬 프로세스의 표준 출력에서 데이터를 읽어옴
+  pythonProcess.stdout.on("data", async (data) => {
+    console.log("반환된 데이터는");
+    console.log(data);
+    buffers.push(data);
+    try {
+      // Buffer.concat()을 사용하여 모든 버퍼를 하나로 합침
+      const concatenatedBuffer = Buffer.concat(buffers);
 
             // iconv-lite를 사용하여 UTF-8로 디코딩
             const decodedResult = iconv.decode(concatenatedBuffer, 'utf-8');
@@ -128,11 +128,11 @@ app.post('/chat', (req, res) => {
         }
     });
 
-    pythonProcess.stderr.on('data', (errorData) => {
-        console.error('파이썬 프로세스 표준 에러 출력 :', errorData.toString());
-    });
+  pythonProcess.stderr.on("data", (errorData) => {
+    console.error("파이썬 프로세스 표준 에러 출력 :", errorData.toString());
+  });
 });
 
 app.listen(port, () => {
-    console.log(`서버가 ${port} 포트에서 실행 중입니다.`);
+  console.log(`서버가 ${port} 포트에서 실행 중입니다.`);
 });
