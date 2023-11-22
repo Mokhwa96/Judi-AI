@@ -9,7 +9,7 @@ import re
 def chatbot(api_key, request):
     client = OpenAI(api_key=api_key,)
 
-    chat = client.chat.completions.create(model='gpt-4', messages=request)
+    chat = client.chat.completions.create(model='gpt-4-1106-preview', messages=request)
     reply = chat.choices[0].message.content
 
     return reply
@@ -188,7 +188,7 @@ def result_statistics(sentences):
     return casename_dict
 
 if __name__ == "__main__":
-  api_key = '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'
+  api_key = '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'
   file_path = "C:/Users/gh576/JudiAI/hh/"
 
   line = sys.stdin.buffer.readline().decode('utf-8')

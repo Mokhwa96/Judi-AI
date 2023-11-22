@@ -13,7 +13,8 @@ import "./css/bottom.css";
 import "./css/top.css";
 import "./css/center.css";
 import "./css/judi_chat.css";
-import LookAhead from "./gifs/judi_look_ahead_sample.gif"; // 애니매이션 gif를 임포트.
+import LookAhead from "./gifs/judi_look_ahead_sample.gif"; // 애니매이션 gif(정면 보기)
+import Loading from './gifs/loading.gif'; // 애니매이션 gif(채팅 로딩)
 import UserForm from "./components/UserForm";
 import Navigation from "./components/Navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -219,6 +220,7 @@ function TryJudiAI() {
   const [userInput, setUserInput] = useState("");
   const [answerState, setAnswerState] = useState(false);
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
   const [graphdata, setGraphdata] = useState({
     '징역': {},
     '금고': {},
@@ -237,6 +239,7 @@ function TryJudiAI() {
 
   // 서버로 데이터를 전송하고 받는 함수
   const chatbotChat = async (userinput) => {
+    setIsLoading(true); // 로딩 시작
     const chatdata = { chat: userinput };
 
     try {
@@ -256,8 +259,10 @@ function TryJudiAI() {
       console.log(data);
       setAnswerState(!answerState);
       setGraphdata(data);
+      setIsLoading(false); // 로딩 끝
     } catch (error) {
       console.error(error);
+      setIsLoading(false); // 로딩 끝
     }
   };
 
@@ -291,7 +296,7 @@ function TryJudiAI() {
       
       setMessages(prevMessages => [...prevMessages, { text: userInput, sender:'user' }]);
       chatbotChat(userInput)
-      setUserInput("".trim()); // 사용자 입력을 초기화
+      setUserInput("".replace('\n', '')); // 사용자 입력을 초기화
     }
   };
 
@@ -302,11 +307,10 @@ function TryJudiAI() {
 
   // 메시지 배열을 기반으로 UI 렌더링
   const renderMessages = messages.map((message, index) => (
-    <div
-      key={index}
-      className={`message-container ${message.sender}-container`}
-    >
-      <div className={`bubble ${message.sender}`}>{message.text.split('\n').map((line, index) => <React.Fragment key={index}>{line}<br /></React.Fragment>)}</div>
+    <div key={index} className={`message-container ${message.sender}-container`}>
+      <div className={`bubble ${message.sender}`}>
+        {message.text.split('\n').map((line, index) => <React.Fragment key={index}>{line}<br /></React.Fragment>)}
+      </div>
     </div>
   ));
 
@@ -399,6 +403,11 @@ function TryJudiAI() {
           {/* 채팅 메시지를 표시하는 부분 */}
           <div className="chat-messages">
             {renderMessages}
+            {isLoading ? (
+              <div className={'bubble lawyer'}>
+                <img className='loading-chat-image' src={Loading} alt='로딩이미지' />
+              </div>
+            ) : (<></>)}
             <div ref={messagesEndRef} /> {/* 스크롤 조정을 위한 빈 div 추가 */}
           </div>
 
