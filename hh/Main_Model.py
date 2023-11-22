@@ -34,7 +34,7 @@ def chatbot(api_key, input_text):
        last_paragraph = chat.choices[0].message.content
        messages.append({"role": 'assistant', 'content': last_paragraph})
        return last_paragraph
-    
+
     messages.append({"role":"user", "content":input_text})
     chat = client.chat.completions.create(model='gpt-4', messages=messages)
     reply = chat.choices[0].message.content
@@ -233,7 +233,6 @@ if __name__ == "__main__":
       sentences = [line for line in df_similar_sentences['ruling']]
   result_final = result_statistics(sentences)
   result_final['results'] = reply_text
-
   # 결과를 클라이언트로 전송
   sys.stdout.write(json.dumps(result_final, ensure_ascii=False))
   sys.stdout.flush()
