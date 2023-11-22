@@ -207,10 +207,10 @@ function TryJudiAI() {
       const data = await response.json();
 
       setMessages(prevMessages => [...prevMessages, { text: data['results'], sender:'lawyer' }]);
-      console.log('응답은');
-      console.log(data);
       console.log('입력문은');
       console.log(userinput);
+      console.log('응답은');
+      console.log(data);
       setAnswerState(!answerState);
 
       // 그래프 시작
@@ -252,7 +252,7 @@ function TryJudiAI() {
       
       setMessages(prevMessages => [...prevMessages, { text: userInput, sender:'user' }]);
       chatbotChat(userInput)
-      setUserInput(""); // 사용자 입력을 초기화
+      setUserInput("".trim()); // 사용자 입력을 초기화
     }
   };
 
@@ -295,6 +295,10 @@ function TryJudiAI() {
     setUserInput(transcript); // 음성 인식 결과를 userInput에 설정
   };
 
+  const resetMessages = () => {
+    setMessages([{ text: "안녕하세요, 어떤 도움이 필요하신가요?", sender: 'lawyer' }]);
+  };
+
   // 리턴 영역
   return (
     <div>
@@ -315,6 +319,31 @@ function TryJudiAI() {
           alt="변호사"
           onClick={toggleChatbox} // 이벤트 핸들러
         />
+        <img
+            id="open-chatbox-button"
+            onClick={toggleChatbox}
+            src="/images/chat_icon3.png"
+            alt="Chat Icon"
+            style={{ cursor: 'pointer', width: '60px', height: 'auto'  }}
+          />
+          {/* 음성 인식 & 전송 저장 버튼 */}
+          {listening ? (
+            <img
+              className='voice-button'
+              src="/images/stop_icon.png"
+              alt="녹음 중지"
+              onClick={stopListening}
+              style={{ width: '30px', height: '30px' }}
+            />
+            ) : (
+            <img
+              className='voice-button'
+              src="/images/record_icon.png"
+              alt="녹음 시작"
+              onClick={startListening}
+              style={{ width: '30px', height: '30px' }}
+            />
+          )}
 
         {/* // 챗 박스 관련 구역 */}
         <div id="chatbox" className={`chatbox ${isChatboxActive ? 'active' : 'hidden'}`}>
@@ -326,7 +355,8 @@ function TryJudiAI() {
 
           {/* 입력창 및 버튼 관련 구역 */}
           <div className="chat-input-area">
-            <input 
+            <textarea 
+              id = 'input-area'
               type="text" 
               value={userInput}
               onChange={handleInputChange}
@@ -336,29 +366,13 @@ function TryJudiAI() {
                   submitResponse();
                 }
               }} 
-            />
+            ></textarea>
 
-            {/* 음성 인식 & 전송 저장 버튼 */}
             <div className="voice-control-buttons">
-              {listening ? (
-                <img
-                src="/images/stop_icon.png"
-                alt="녹음 중지"
-                onClick={stopListening}
-                style={{ width: '30px', height: '30px' }}
-                />
-                ) : (
-                <img
-                  src="/images/record_icon.png"
-                  alt="녹음 시작"
-                  onClick={startListening}
-                  style={{ width: '30px', height: '30px' }}
-                />
-              )}
               <img
                 src="/images/reset_icon.png"
                 alt="리셋"
-                onClick={resetTranscript}
+                onClick={resetMessages}
                 className="voice-control-button"
               />
               <img
@@ -373,17 +387,8 @@ function TryJudiAI() {
                 onClick={submitResponse}
                 className="voice-control-button"
               />
-              </div>        
+            </div>        
           </div>
-        </div>
-                
-        {/* chat 아이콘을 눌렀을 때  chatbox가 열리는 영역 */}
-        <div id="open-chatbox-button" onClick={toggleChatbox}>
-          <img
-            src="/images/chat_icon3.png"
-            alt="Chat Icon"
-            style={{ cursor: 'pointer', width: '60px', height: 'auto'  }}
-          />
         </div>
       </div>
 
