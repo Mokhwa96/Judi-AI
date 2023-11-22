@@ -14,7 +14,7 @@ import { faArrowCircleDown } from '@fortawesome/free-solid-svg-icons';
 import { Howl } from 'howler';
 import Graph1 from './graph1'
 import Graph2 from './graph2'
-// import { ResponsiveBar } from '@nivo/bar'
+
 
 function Home() {
   const navigate = useNavigate(); // useNavigate 훅을 사용하여 navigate 함수를 가져옵니다
