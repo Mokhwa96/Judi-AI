@@ -6,15 +6,14 @@ import json
 import sys
 import re
 
-def chatbot(api_key, input_text):
+def chatbot(api_key, request):
     client = OpenAI(api_key=api_key,)
 
-    messages = [{"role": "system",
-                 "content": """너는 법률 문제에 대해 상담을 진행해주는 변호사야. 지금 나는 너에게 법률 문제에 대해 상담을 받으러 왔고,
-                 내가 처한 상황을 설명할거야. 너는 내가 하는 말에 공감해주면서 사실관계 파악을 위해 부족한 정보가 있다면 하나씩 친절하게 물어볼 수 있어.
-                 사실관계 파악을 위한 충분한 정보가 모였다면, 마지막에는 파악된 정보를 요약해서 알려줘"""}, ]
-    # messages = pd.read_csv('chat_messages.csv', index_col=0)
-    # messages = messages.to_dict(orient='records')
+    # messages = [{"role": "system",
+    #              "content": """너는 법률 문제에 대해 상담을 진행해주는 변호사야. 지금 나는 너에게 법률 문제에 대해 상담을 받으러 왔고,
+    #              내가 처한 상황을 설명할거야. 너는 내가 하는 말에 공감해주면서 사실관계 파악을 위해 부족한 정보가 있다면 하나씩 친절하게 물어볼 수 있어.
+    #              사실관계 파악을 위한 충분한 정보가 모였다면, 마지막에는 파악된 정보를 요약해서 알려줘"""}, ]
+
     # chat = client.chat.completions.create(model='gpt-4',
     #                                       messages=[{"role": "user","content": last_content + "\n위 글을\n" +
     #                                                  """피해자 B과 피고인 A은 과거 연인 사이였다. 피고인은 위 2021. 3. 7. 03:00경에서 같은 날
@@ -24,24 +23,19 @@ def chatbot(api_key, input_text):
     #                                                  7~8회 가량 침을 뱉고 생수를 머리에 붓는 등 폭행하였다. 이로써 피고인은 피해자를 폭행하여
     #                                                  우측 후이개, 하악, 협부의 부종과 잠깐의 의식소실 및 후두부 타박으로 인한 압통 등 약 2주간의 치료를 
     #                                                  필요로 하는 상해를 가하였다.""" + "\n와 같은 형식으로 바꿔줘"}])
-    if input_text == 'break':
-       last_content = messages[-1]['content']
+    if request == 'break':
+       last_content = request[-1]['content']
        chat = client.chat.completions.create(model='gpt-4',
                                              messages=[{"role":"user" , "content": last_content +
                                                         """\n위 글의 사건 상황을 정리해서 판례문 형식으로 바꿔주고 마지막에
                                                         '강제추행', '공무집행방해', '교통사고처리특례법위반(치상)', '도로교통법위반(음주운전)',
                                                         '사기', '상해','폭행'중 가장 근접한 한가지를 했다고 적어줘"""}])
        last_paragraph = chat.choices[0].message.content
-       messages.append({"role": 'assistant', 'content': last_paragraph})
        return last_paragraph
 
-    messages.append({"role":"user", "content":input_text})
-    chat = client.chat.completions.create(model='gpt-4', messages=messages)
+    chat = client.chat.completions.create(model='gpt-4', messages=request)
     reply = chat.choices[0].message.content
-    messages.append({"role":'assistant', 'content':reply})
 
-    # df_messages = pd.DataFrame(messages)
-    # df_messages.to_csv('chat_messages.csv', encoding='utf-8')
     return reply
 
 def casename_find(sentence):
@@ -218,11 +212,12 @@ def result_statistics(sentences):
     return casename_dict
 
 if __name__ == "__main__":
-  api_key = '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'
+  api_key = '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'
   file_path = "C:/Users/gh576/JudiAI/hh/"
 
-  line = sys.stdin.readline()
-  request = json.loads(line)['chat']
+  line = sys.stdin.buffer.readline().decode('utf-8')
+#   line = line_data.encode('utf-8').decode('utf-8')
+  request = json.loads(line)
 
   # 요청 처리 및 결과 저장
   reply_text = chatbot(api_key, request)
@@ -233,6 +228,9 @@ if __name__ == "__main__":
       sentences = [line for line in df_similar_sentences['ruling']]
   result_final = result_statistics(sentences)
   result_final['results'] = reply_text
+  result_final['request'] = request
   # 결과를 클라이언트로 전송
+  sys.stdout.reconfigure(encoding='utf-8')
   sys.stdout.write(json.dumps(result_final, ensure_ascii=False))
+#   sys.stdout.write(json.dumps(request, ensure_ascii=False))
   sys.stdout.flush()

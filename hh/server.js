@@ -10,21 +10,21 @@ const fs = require('fs');
 const util = require('util');
 const client = new textToSpeech.TextToSpeechClient();
 // 데이터베이스 연결
-var mysql      = require('mysql');
-var connection = mysql.createConnection({
-host     : 'localhost',
-user     : 'judiai',
-password : 'mococo00.',
-database : 'mococodb'
+const mysql      = require('mysql');
+const connection = mysql.createConnection({
+    host     : 'localhost',
+    user     : 'judiai',
+    password : 'mococo00.',
+    database : 'mococodb'
 });
 connection.connect();
 
 
 app.use(bodyParser.json());
 
-app.use(express.static(path.join('C:/Users/kangs/Project_2th/hh/', 'build')));
+app.use(express.static(path.join('C:/Users/gh576/JudiAI/hh/', 'build')));
 app.get('/', (req, res) => {
-    res.sendFile(path.join('C:/Users/kangs/Project_2th/hh/', 'build', 'index.html'));
+    res.sendFile(path.join('C:/Users/gh576/JudiAI/hh/', 'build', 'index.html'));
 });
 app.post('/chat', (req, res) => {
     // 클라이언트 요청
@@ -33,52 +33,51 @@ app.post('/chat', (req, res) => {
     console.log(clientRequest);
     console.log('제이슨으로 변환하면');
     console.log(JSON.stringify(clientRequest));
-    console.log(clientRequest['chat']);
+
     // 데이터베이스 질문 삽입
-    var sql = "INSERT INTO question(text) VALUES (?)";
+    const sql = "INSERT INTO question(text) VALUES (?)";
     connection.query(sql,clientRequest['chat'], function (error, results, fields) {
         if (error) throw error;
         console.log('qustion inserted: ', results.affectedRows);
     });
-    // connection.end();
 
     // 파이썬 프로그램 실행
-    const pythonProcess = spawn('C:/Users/kangs/anaconda3/python', ['Main_Model.py']);
+    const pythonProcess = spawn('C:/Users/gh576/anaconda3/python', ['Main_Model.py']);
 
     const buffers = [];
+
+    var dictionaries = [];  // 딕셔너리들을 저장할 배열
 
     // 데이터베이스에서 데이터 불러오기
     const sqlQuery = "SELECT id, text, 'user' AS role FROM question UNION ALL SELECT id, text, 'assistant' AS role FROM answer ORDER BY id";
     connection.query(sqlQuery, function (error, results, fields) {
         if (error) {
-        console.error('Error retrieving data:', error);
-        connection.end();
-        return;
-    }
-    const dictionaries = [];  // 딕셔너리들을 저장할 배열
-    dictionaries.push({"role": "system", "content": "너는 법률 문제에 대해 상담을 진행해주는 변호사야. 지금 나는 너에게 법률 문제에 대해 상담을 받으러 왔고, 내가 처한 상황을 설명할거야. 너는 내가 하는 말에 공감해주면서 사실관계 파악을 위해 부족한 정보가 있다면 하나씩 친절하게 물어볼 수 있어. 사실관계 파악을 위한 충분한 정보가 모였다면, 마지막에는 파악된 정보를 요약해서 알려줘"});
-    results.forEach(row => {
-        const id = row.id;
-        const role = row.role;
-        const text = row.text;
+            console.error('Error retrieving data:', error);
+            connection.end();
+            return;
+        }
+    
+        dictionaries.push({"role": "system", "content": "너는 법률 문제에 대해 상담을 진행해주는 변호사야. 지금 나는 너에게 법률 문제에 대해 상담을 받으러 왔고, 내가 처한 상황을 설명할거야. 너는 내가 하는 말에 공감해주면서 사실관계 파악을 위해 부족한 정보가 있다면 하나씩 친절하게 물어볼 수 있어. 사실관계 파악을 위한 충분한 정보가 모였다면, 마지막에는 파악된 정보를 요약해서 알려줘"});
+        results.forEach(row => {
+            const id = row.id;
+            const role = row.role;
+            const text = row.text;
 
-        if (role == 'user' || role == 'assistant') {
-            dictionaries.push({
-                role: role,
-                content: text
-            });
-        } 
-            });
+            if (role == 'user' || role == 'assistant') {
+                dictionaries.push({
+                    role: role,
+                    content: text
+                });
+            } 
+        });
         
-    console.log('딕셔너리 확인')
-    console.log(dictionaries);
-    console.log(JSON.stringify(dictionaries));
-    //connection.end(); //여기서 끊으면 이후 코드에서 데이터베이스에 연결이 안됨.
-});
+        console.log('딕셔너리 확인')
+        console.log(dictionaries);
 
-    // 클라이언트 요청 전송
-    pythonProcess.stdin.write(JSON.stringify(clientRequest));
-    pythonProcess.stdin.end();
+        // 클라이언트 요청 전송
+        pythonProcess.stdin.write(JSON.stringify(dictionaries));
+        pythonProcess.stdin.end();
+    });
 
     // 파이썬 프로세스의 표준 출력에서 데이터를 읽어옴
     pythonProcess.stdout.on('data', async (data) => {
@@ -90,23 +89,26 @@ app.post('/chat', (req, res) => {
             const concatenatedBuffer = Buffer.concat(buffers);
 
             // iconv-lite를 사용하여 UTF-8로 디코딩
-            const decodedResult = iconv.decode(concatenatedBuffer, 'euc-kr');
+            const decodedResult = iconv.decode(concatenatedBuffer, 'utf-8');
+            console.log('decodedResult :');
             console.log(decodedResult);
 
             // JSON 문자열을 파싱하여 JavaScript 객체로 변환
             const resultData = JSON.parse(decodedResult);
+            console.log('resultData :');
+            console.log(resultData);
 
             // 응답을 TTS를 이용하여 변환 (현호계정으로만 가능)
-            // const request_speech = {
-            //     input: { text: resultData['results']},
-            //     voice: { languageCode: 'ko-KR', name: 'ko-KR-Wavenet-B', ssmlGender: 'FEMALE'},
-            //     audioConfig: { audioEncoding: 'MP3', pitch: 0.4, speakingRate: 1.1}, 
-            // };
+            const request_speech = {
+                input: { text: resultData['results']},
+                voice: { languageCode: 'ko-KR', name: 'ko-KR-Wavenet-B', ssmlGender: 'FEMALE'},
+                audioConfig: { audioEncoding: 'MP3', pitch: 0.4, speakingRate: 1.1}, 
+            };
 
-            // const [response_speech] = await client.synthesizeSpeech(request_speech);
+            const [response_speech] = await client.synthesizeSpeech(request_speech);
 
-            // const writeFile = util.promisify(fs.writeFile);
-            // await writeFile('public/answer.mp3', response_speech.audioContent, 'binary')
+            const writeFile = util.promisify(fs.writeFile);
+            await writeFile('public/answer.mp3', response_speech.audioContent, 'binary')
 
             console.log('res :');
             console.log(resultData);
