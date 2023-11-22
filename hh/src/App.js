@@ -6,7 +6,8 @@ import './css/bottom.css';
 import './css/top.css';
 import './css/center.css';
 import './css/judi_chat.css';
-import LookAhead from './gifs/judi_look_ahead_sample.gif'; // 애니매이션 gif를 임포트.
+import LookAhead from './gifs/judi_look_ahead_sample.gif'; // 애니매이션 gif(정면보기)
+import Loading from './gifs/loading.gif'; // 애니매이션 gif(채팅 로딩)
 import UserForm from "./components/UserForm";
 import Navigation from './components/Navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -188,18 +189,19 @@ function TryJudiAI() {
       '\n' +
       '이러한 정보를 좀 더 명확히 설명해주시면, 사건에 대한 더 정확한 이해와 적절한 조언을 드릴 수 있을 것 같습니다.'
   });
-
   //그래프 끝
 
   const messagesEndRef = useRef(null); // 새로운 ref. 채팅창 스크롤 자동 최신화 위함.
+  const [isLoading, setIsLoading] = useState(false); // 로딩 상태 추가
 
   // 현호 작업구역
   // 검색 test
 
   // 서버로 데이터를 전송하고 받는 함수
   const chatbotChat = async (userinput) => {
+    setIsLoading(true); // (주의) 로딩 표시 관련 기능 시작
     const chatdata = {'chat': userinput};
-
+    
     try {
       const response = await fetch('/chat', {
         method: 'POST',
@@ -221,8 +223,10 @@ function TryJudiAI() {
       setGraphdata(data) // 서버에서 받아온 데이터 중 'graph' 키의 값을 그래프 데이터로 설정
       // 그래프 끝
 
+      setIsLoading(false); // (주의) 로딩 표시 관련 기능, 로딩 종료
     } catch (error) {
       console.error(error);
+      setIsLoading(false); // (주의) 로딩 표시 관련 기능, 에러 시 로딩 종료
     }
   };
 
@@ -272,7 +276,15 @@ function TryJudiAI() {
   const renderMessages = messages.map((message, index) =>
     <div key={index} className={`message-container ${message.sender}-container`}>
       <div className={`bubble ${message.sender}`}>
-        {message.text}
+        {message.sender === 'lawyer' && isLoading ? (
+          <img
+              className="loading-chat_image"
+              src={Loading}
+              alt="로딩이미지"
+            />
+          ) : (
+          message.text
+          )}
       </div>
     </div>
   );
