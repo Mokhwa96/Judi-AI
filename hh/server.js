@@ -12,9 +12,9 @@ const client = new textToSpeech.TextToSpeechClient();
 
 app.use(bodyParser.json());
 
-app.use(express.static(path.join('C:/Users/gh576/JudiAI/hh/', 'build')));
+app.use(express.static(path.join('C:/Users/kangs/Project_2th/hh/', 'build')));
 app.get('/', (req, res) => {
-    res.sendFile(path.join('C:/Users/gh576/JudiAI/hh/', 'build', 'index.html'));
+    res.sendFile(path.join('C:/Users/kangs/Project_2th/hh/', 'build', 'index.html'));
 });
 
 app.post('/chat', (req, res) => {
@@ -26,7 +26,7 @@ app.post('/chat', (req, res) => {
     console.log(JSON.stringify(clientRequest));
 
     // 파이썬 프로그램 실행
-    const pythonProcess = spawn('C:/Users/gh576/anaconda3/python', ['Main_Model.py']);
+    const pythonProcess = spawn('C:/Users/kangs/anaconda3/python', ['Main_Model.py']);
 
     const buffers = [];
 
@@ -50,17 +50,17 @@ app.post('/chat', (req, res) => {
             // JSON 문자열을 파싱하여 JavaScript 객체로 변환
             const resultData = JSON.parse(decodedResult);
 
-            // 응답을 TTS를 이용하여 변환
-            const request_speech = {
-                input: { text: resultData['results']},
-                voice: { languageCode: 'ko-KR', name: 'ko-KR-Wavenet-B', ssmlGender: 'FEMALE'},
-                audioConfig: { audioEncoding: 'MP3', pitch: 0.4, speakingRate: 1.1}, 
-            };
+            // 응답을 TTS를 이용하여 변환 (현호계정으로만 가능)
+            // const request_speech = {
+            //     input: { text: resultData['results']},
+            //     voice: { languageCode: 'ko-KR', name: 'ko-KR-Wavenet-B', ssmlGender: 'FEMALE'},
+            //     audioConfig: { audioEncoding: 'MP3', pitch: 0.4, speakingRate: 1.1}, 
+            // };
 
-            const [response_speech] = await client.synthesizeSpeech(request_speech);
+            // const [response_speech] = await client.synthesizeSpeech(request_speech);
 
-            const writeFile = util.promisify(fs.writeFile);
-            await writeFile('public/answer.mp3', response_speech.audioContent, 'binary')
+            // const writeFile = util.promisify(fs.writeFile);
+            // await writeFile('public/answer.mp3', response_speech.audioContent, 'binary')
 
             console.log('res :');
             console.log(resultData);

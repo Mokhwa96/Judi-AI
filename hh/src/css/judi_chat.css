@@ -26,13 +26,23 @@
 }
 
 /* 주디 이미지를 관리하는 클래스 */
+
 .lawyer-image {
   width: auto;
   height: 500px;
   border: 1px solid #ffffff;
   display: inline;
-  border-radius: 10px 10px 10px 10px; /* 모서리 둥글게 */ 
+  border-radius: 10px 10px 10px 10px; /* 모서리 둥글게 */
 }
+
+.eye-blink-image {
+  width: auto;
+  height: 500px;
+  border: 1px solid #ffffff;
+  display: inline;
+  border-radius: 10px 10px 10px 10px; /* 모서리 둥글게 */
+}
+
 
 /* 챗박스 스타일, 말풍선을 여기서 조정합니다. */
 /* 챗박스 구역입니다. */

@@ -6,6 +6,7 @@ import './css/bottom.css';
 import './css/top.css';
 import './css/center.css';
 import './css/judi_chat.css';
+import LookAhead from './gifs/judi_look_ahead_sample.gif'; // 애니매이션 gif를 임포트.
 import UserForm from "./components/UserForm";
 import Navigation from './components/Navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -192,6 +193,9 @@ function TryJudiAI() {
 
   const messagesEndRef = useRef(null); // 새로운 ref. 채팅창 스크롤 자동 최신화 위함.
 
+  // 현호 작업구역
+  // 검색 test
+
   // 서버로 데이터를 전송하고 받는 함수
   const chatbotChat = async (userinput) => {
     const chatdata = {'chat': userinput};
@@ -236,11 +240,13 @@ function TryJudiAI() {
     };
   }, [answerState]);
 
+
   // 메시지 배열이 변경될 때마다 스크롤을 맨 아래로 이동시키는 useEffect
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]); // messages 배열이 변경될 때마다 실행
 
+  
   // 채팅 박스 활성화/비활성화 부분
   const toggleChatbox = () => {
     setIsChatboxActive(!isChatboxActive);
@@ -255,6 +261,7 @@ function TryJudiAI() {
       setUserInput("".trim()); // 사용자 입력을 초기화
     }
   };
+
 
   // input 값 변경 처리
   const handleInputChange = (e) => {
@@ -315,7 +322,7 @@ function TryJudiAI() {
         {/* 주디 이미지 */}  
         <img
           className="lawyer-image"
-          src="/images/Judi_desk.png"
+          src={LookAhead}
           alt="변호사"
           onClick={toggleChatbox} // 이벤트 핸들러
         />
@@ -400,6 +407,7 @@ function TryJudiAI() {
         <Graph1 graphdata={graphdata} />
       </div> */}
     </div>
+  
   );
 }
 
@@ -416,5 +424,3 @@ function App() {
 }
 
 export default App;
-
-
