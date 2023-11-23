@@ -5,6 +5,7 @@ import numpy as np
 import json
 import sys
 import re
+from sqlalchemy import create_engine
 
 def chatbot(api_key, request):
     client = OpenAI(api_key=api_key,)
@@ -39,8 +40,12 @@ def get_similar_sentences(api_key, file_path, input_sentence, threshold=0.9, eng
     # API 키 설정
     client = OpenAI(api_key=api_key)
 
-    # 데이터 불러오기
-    data = pd.read_csv(file_path + "data.csv")
+    # 데이터 불러오기(데이터베이스에서)
+    conn = create_engine('mysql+pymysql://judiai:mococo00.@localhost/mococodb')
+    query = 'SELECT * FROM mococodb.data'
+    data = pd.read_sql_query(query, conn)
+
+    # data = pd.read_csv(file_path + "data.csv")  # 원래 데이터 불러오던 코드
     # print(f'data.head :\n{data.head()}')
     array = np.load(file_path +'embedding.npy')
     # print(f'array : {array[0]}')
@@ -242,8 +247,8 @@ def result_statistics(sentences):
     return casename_dict
 
 if __name__ == "__main__":
-  api_key = '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'
-  file_path = "C:/Users/gh576/JudiAI/hh/"
+  api_key = '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'
+  file_path = "C:/Users/gjaischool1/.vscode/react-app/hh/Judi-AI-1/hh/"
 
   line = sys.stdin.buffer.readline().decode('utf-8')
   request = json.loads(line)
