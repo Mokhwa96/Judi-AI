@@ -70,37 +70,62 @@ def get_similar_sentences(api_key, file_path, input_sentence, threshold=0.9, eng
 
 def result_statistics(sentences):
 
-    징역 = {}
-    금고 = {}
+    징역 = {'실형':{}, '집행유예':{}, '선고유예':{}}
+    금고 = {'실형':{}, '집행유예':{}, '선고유예':{}}
     벌금 = {}
-    집행유예 = {}
     사회봉사 = {}
     성폭력_치료프로그램 = {}
     피고인_정보공개 = {}
     아동_청소년_장애인복지시설_취업제한 = {}
     준법운전강의 = {}
+    보호관찰 = {}
 
     for text in sentences:
         text = re.sub(r'\d\.', '', text)
 
-        if '징역' in text:
-            pattern = r'징역 (.*?)에'
-            if bool(re.search(pattern, text)):
-                if re.search(pattern, text).group(1).replace('개','') in 징역:
-                    징역[re.search(pattern, text).group(1).replace('개','')] += 1
-                else:
-                    징역[re.search(pattern, text).group(1).replace('개','')] = 1
+        pattern1 = r'징역 ?(.*[년월]).*[정처 ]한다.*집행.*유예'
+        pattern2 = r'징역 ?(.*[년월]).*[정처 ]한다.*선고.*유예'
+        pattern3 = r'징역 ?(.*[년월]).*[정처 ]한다'
+        if re.search(pattern1, text):
+            if re.search(pattern1, text).group(1).replace(' 징역','').replace('개','') in 징역['집행유예']:
+                징역['집행유예'][re.search(pattern1, text).group(1).replace(' 징역','').replace('개','')] += 1
+            else:
+                징역['집행유예'][re.search(pattern1, text).group(1).replace(' 징역','').replace('개','')] = 1
 
-        if '금고' in text:
-            pattern = r'금고 (.*?)에'
-            if bool(re.search(pattern, text)):
-                if re.search(pattern, text).group(1).replace('개','') in 금고:
-                    금고[re.search(pattern, text).group(1).replace('개','')] += 1
+        elif re.search(pattern2, text):
+            if re.search(pattern2, text).group(1).replace(' 징역','').replace('개','') in 징역['선고유예']:
+                징역['선고유예'][re.search(pattern2, text).group(1).replace(' 징역','').replace('개','')] += 1
+            else:
+                징역['선고유예'][re.search(pattern2, text).group(1).replace(' 징역','').replace('개','')] = 1
+
+        elif re.search(pattern3, text):
+            if re.search(pattern3, text).group(1).replace(' 징역','').replace('개','') in 징역['실형']:
+                징역['실형'][re.search(pattern3, text).group(1).replace(' 징역','').replace('개','')] += 1
+            else:
+                징역['실형'][re.search(pattern3, text).group(1).replace(' 징역','').replace('개','')] = 1
+
+        pattern = r'금고 ?(.*[년월]).*[정처 ]한다'
+        if re.search(pattern, text) and '금고' in text:
+            if re.search(r'집행.*유예', text):
+                if re.search(pattern, text).group(1) in 금고['집행유예']:
+                    금고['집행유예'][re.search(pattern, text).group(1).replace(' 징역','').replace('개','')] += 1
                 else:
-                    금고[re.search(pattern, text).group(1).replace('개','')] = 1
+                    금고['집행유예'][re.search(pattern, text).group(1).replace(' 징역','').replace('개','')] = 1
+
+            elif re.search(r'선고.*유예', text):
+                if re.search(pattern, text) in 금고:
+                    금고['선고유예'][re.search(pattern, text).group(1).replace(' 징역','').replace('개','')] += 1
+                else:
+                    금고['선고유예'][re.search(pattern, text).group(1).replace(' 징역','').replace('개','')] = 1
+
+            else:
+                if re.search(pattern, text) in 금고:
+                    금고['실형'][re.search(pattern, text).group(1).replace(' 징역','').replace('개','')] += 1
+                else:
+                    금고['실형'][re.search(pattern, text).group(1).replace(' 징역','').replace('개','')] = 1
 
         if '벌금' in text:
-            pattern = r'벌금 (.*?)에 처한다'
+            pattern = r'벌금 (.*)에 처한다'
             if bool(re.search(pattern, text)):
                 money = re.search(pattern, text).group(1).replace(',','').replace(' ','').replace('(백만)','')
 
@@ -117,19 +142,12 @@ def result_statistics(sentences):
                     else:
                         벌금[money] = 1
 
-        if '유예' in text:
-            pattern = r'(\d+년).*집행.*유예'
-            if bool(re.search(pattern, text)):
-                if re.search(pattern, text).group(1) in 집행유예:
-                    집행유예[re.search(pattern, text).group(1)] += 1
-                else:
-                    집행유예[re.search(pattern, text).group(1)] = 1
-            pattern1 = r'(\d+년).*선고.*유예'
-            if bool(re.search(pattern1, text)):
-                if re.search(pattern1, text).group(1) in 집행유예:
-                    집행유예['선고유예'] += 1
-                else:
-                    집행유예['선고유예'] = 1
+
+        if '보호관찰' in text:
+              if '전체' in 보호관찰:
+                  보호관찰['전체'] += 1
+              else:
+                  보호관찰['전체'] = 1
 
         if '사회봉사' in text:
             pattern = r'(\d+시간)의 사회봉사'
@@ -171,17 +189,53 @@ def result_statistics(sentences):
                 else:
                     준법운전강의[re.search(pattern, text).group(1)] = 1
 
-    징역 = dict(sorted(징역.items(), key=lambda x:x[1], reverse=True))
-    금고 = dict(sorted(금고.items(), key=lambda x:x[1], reverse=True))
     벌금 = dict(sorted(벌금.items(), key=lambda x:x[1], reverse=True))
-    집행유예 = dict(sorted(집행유예.items(), key=lambda x:x[1], reverse=True))
+    보호관찰 = dict(sorted(보호관찰.items(), key=lambda x:x[1], reverse=True))
     사회봉사 = dict(sorted(사회봉사.items(), key=lambda x:x[1], reverse=True))
     성폭력_치료프로그램 = dict(sorted(성폭력_치료프로그램.items(), key=lambda x:x[1], reverse=True))
     피고인_정보공개 = dict(sorted(피고인_정보공개.items(), key=lambda x:x[1], reverse=True))
     아동_청소년_장애인복지시설_취업제한 = dict(sorted(아동_청소년_장애인복지시설_취업제한.items(), key=lambda x:x[1], reverse=True))
     준법운전강의 = dict(sorted(준법운전강의.items(), key=lambda x:x[1], reverse=True))
+    전체 = {}
 
-    casename_dict = {'징역': 징역, '금고': 금고, '벌금': 벌금, '집행유예': 집행유예, '사회봉사': 사회봉사, '성폭력_치료프로그램': 성폭력_치료프로그램,
+    if 징역['실형']:
+      전체['징역_실형'] = sum(징역['실형'].values())
+    if 징역['집행유예']:
+      전체['징역_집행유예'] = sum(징역['집행유예'].values())
+    if 징역['선고유예']:
+      전체['징역_선고유예'] = sum(징역['선고유예'].values())
+    전체['징역_전체'] =  sum([sum(징역[key].values()) for key in 징역.keys() if 징역[key]])
+
+    if 금고['실형']:
+      전체['금고_실형'] = sum(금고['실형'].values())
+    if 금고['집행유예']:
+      전체['금고_집행유예'] = sum(금고['집행유예'].values())
+    if 금고['선고유예']:
+      전체['금고_선고유예'] = sum(금고['선고유예'].values())
+    전체['금고_전체'] =  sum([sum(금고[key].values()) for key in 금고.keys() if 금고[key]])
+
+    if 벌금:
+      전체['벌금'] = sum(벌금.values())
+
+    if 보호관찰:
+      전체['보호관찰'] = sum(보호관찰.values())
+
+    if 사회봉사:
+      전체['사회봉사'] = sum(사회봉사.values())
+
+    if 성폭력_치료프로그램:
+      전체['성폭력_치료프로그램'] = sum(성폭력_치료프로그램.values())
+
+    if 피고인_정보공개:
+      전체['피고인_정보공개'] = sum(피고인_정보공개.values())
+
+    if 아동_청소년_장애인복지시설_취업제한:
+      전체['아동_청소년_장애인복지시설_취업제한'] = sum(아동_청소년_장애인복지시설_취업제한.values())
+
+    if 준법운전강의:
+      전체['준법운전강의'] = sum(준법운전강의.values())
+
+    casename_dict = {'전체': 전체, '징역': 징역, '금고': 금고, '벌금': 벌금, '보호관찰': 보호관찰, '사회봉사': 사회봉사, '성폭력_치료프로그램': 성폭력_치료프로그램,
                      '피고인_정보공개': 피고인_정보공개, '아동_청소년_장애인복지시설_취업제한': 아동_청소년_장애인복지시설_취업제한,
                      '준법운전강의': 준법운전강의}
 
