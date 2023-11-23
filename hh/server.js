@@ -22,9 +22,9 @@ connection.connect();
 
 app.use(bodyParser.json());
 
-app.use(express.static(path.join('C:/Users/gh576/JudiAI/hh/', 'build')));
+app.use(express.static('build'));
 app.get('/', (req, res) => {
-    res.sendFile(path.join('C:/Users/gh576/JudiAI/hh/', 'build', 'index.html'));
+    res.sendFile(path.join('build', 'index.html'));
 });
 app.post('/chat', (req, res) => {
     // 클라이언트 요청
@@ -108,7 +108,7 @@ app.post('/chat', (req, res) => {
             const [response_speech] = await client.synthesizeSpeech(request_speech);
 
             const writeFile = util.promisify(fs.writeFile);
-            await writeFile('public/answer.mp3', response_speech.audioContent, 'binary')
+            await writeFile('build/answer.mp3', response_speech.audioContent, 'binary')
 
             console.log('res :');
             console.log(resultData);
