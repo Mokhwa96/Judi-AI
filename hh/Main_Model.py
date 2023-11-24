@@ -204,7 +204,7 @@ def result_statistics(sentences):
     return casename_dict
 
 if __name__ == "__main__":
-  api_key = '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'
+  api_key = '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'
   file_path = "C:/Users/gjaischool1/.vscode/react-app/hh/Judi-AI-1/hh/"
 
   line = sys.stdin.readline()
