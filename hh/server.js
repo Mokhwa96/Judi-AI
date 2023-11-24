@@ -98,17 +98,17 @@ app.post('/chat', (req, res) => {
             console.log('resultData :');
             console.log(resultData);
 
-            // 응답을 TTS를 이용하여 변환 (현호계정으로만 가능)
-            const request_speech = {
-                input: { text: resultData['results']},
-                voice: { languageCode: 'ko-KR', name: 'ko-KR-Wavenet-B', ssmlGender: 'FEMALE'},
-                audioConfig: { audioEncoding: 'MP3', pitch: 0.4, speakingRate: 1.1}, 
-            };
+            // // 응답을 TTS를 이용하여 변환 (현호계정으로만 가능)
+            // const request_speech = {
+            //     input: { text: resultData['results']},
+            //     voice: { languageCode: 'ko-KR', name: 'ko-KR-Wavenet-B', ssmlGender: 'FEMALE'},
+            //     audioConfig: { audioEncoding: 'MP3', pitch: 0.4, speakingRate: 1.1}, 
+            // };
 
-            const [response_speech] = await client.synthesizeSpeech(request_speech);
+            // const [response_speech] = await client.synthesizeSpeech(request_speech);
 
-            const writeFile = util.promisify(fs.writeFile);
-            await writeFile('public/answer.mp3', response_speech.audioContent, 'binary')
+            // const writeFile = util.promisify(fs.writeFile);
+            // await writeFile('public/answer.mp3', response_speech.audioContent, 'binary')
 
             console.log('res :');
             console.log(resultData);
