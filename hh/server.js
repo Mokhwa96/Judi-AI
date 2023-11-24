@@ -22,9 +22,9 @@ connection.connect();
 
 app.use(bodyParser.json());
 
-app.use(express.static(path.join('C:/Users/gh576/JudiAI/hh/', 'build')));
+app.use(express.static('build'));
 app.get('/', (req, res) => {
-    res.sendFile(path.join('C:/Users/gh576/JudiAI/hh/', 'build', 'index.html'));
+    res.sendFile(path.join('build', 'index.html'));
 });
 app.post('/chat', (req, res) => {
     // 클라이언트 요청

@@ -173,6 +173,10 @@
   max-width: 90%; /* 최대 너비를 설정하여 너무 길어지지 않도록 함 */
 }
 
+.loading-chat-image {
+  height: 40px;
+}
+
 /* 음성 녹음된 transcrip를 조절하는 부분입니다*/
 .transcript {
   margin-top: 10px; /* chat-container와의 간격 */
