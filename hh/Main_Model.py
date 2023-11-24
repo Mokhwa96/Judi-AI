@@ -7,22 +7,11 @@ import sys
 import re
 from sqlalchemy import create_engine
 
-def chatbot(api_key, input_text):
+def chatbot(api_key, request):
     client = OpenAI(api_key=api_key,)
 
-    messages = [{"role": "system", "content": "너는 법률 문제에 대해 상담을 진행해주는 변호사야. 지금 나는 너에게 법률 문제에 대해 상담을 받으러 왔고, 내가 처한 상황을 설명할거야. 너는 내가 하는 말에 공감해주면서 사실관계 파악을 위해 부족한 정보가 있다면 하나씩 친절하게 물어볼 수 있어. 사실관계 파악을 위한 충분한 정보가 모였다면, 마지막에는 파악된 정보를 요약해서 알려줘"}, ]
-    # chat = client.chat.completions.create(model='gpt-4', messages=[{"role": "user","content": last_content + "\n위 글을\n" + "피해자 B과 피고인 A은 과거 연인 사이였다. 피고인은 위 2021. 3. 7. 03:00경에서 같은 날 04:30경 사이 광주 서구 C, 3층에 있는 D주점 내 불상의 방에서 피해자 B이 자신을 폭행하였다는 이유로 피해자의 머리채를 잡아 바닥에 밀쳐놓고 피해자의 얼굴과 머리, 팔, 어깨 등을 손으로 수회 때리거나 발로 밟아 폭행하고, 다른 방으로 도망한 피해자를 찾아가 또다시 주먹으로 피해자의 얼굴을 2회 때리고 7~8회 가량 침을 뱉고 생수를 머리에 붓는 등 폭행하였다. 이로써 피고인은 피해자를 폭행하여 우측 후이개, 하악, 협부의 부종과 잠깐의 의식소실 및 후두부 타박으로 인한 압통 등 약 2주간의 치료를 필요로 하는 상해를 가하였다." + "\n와 같은 형식으로 바꿔줘"}])
-    if input_text == 'break':
-       last_content = messages[-1]['content']
-       chat = client.chat.completions.create(model='gpt-4', messages=[{"role":"user" , "content": last_content + "\n위 글의 사건 상황을 정리해서 판례문 형식으로 바꿔주고 마지막에 '강제추행', '공무집행방해', '교통사고처리특례법위반(치상)', '도로교통법위반(음주운전)', '사기', '상해','폭행'중 가장 근접한 한가지를 했다고 적어줘"}])
-       last_paragraph = chat.choices[0].message.content
-       messages.append({"role": 'assistant', 'content': last_paragraph})
-       return last_paragraph
-
-    messages.append({"role":"user", "content":input_text})
-    chat = client.chat.completions.create(model='gpt-4', messages=messages)
+    chat = client.chat.completions.create(model='gpt-4-1106-preview', messages=request)
     reply = chat.choices[0].message.content
-    messages.append({"role":'assistant', 'content':reply})
 
     return reply
 
@@ -86,37 +75,62 @@ def get_similar_sentences(api_key, file_path, input_sentence, threshold=0.9, eng
 
 def result_statistics(sentences):
 
-    징역 = {}
-    금고 = {}
+    징역 = {'실형':{}, '집행유예':{}, '선고유예':{}}
+    금고 = {'실형':{}, '집행유예':{}, '선고유예':{}}
     벌금 = {}
-    집행유예 = {}
     사회봉사 = {}
     성폭력_치료프로그램 = {}
     피고인_정보공개 = {}
     아동_청소년_장애인복지시설_취업제한 = {}
     준법운전강의 = {}
+    보호관찰 = {}
 
     for text in sentences:
         text = re.sub(r'\d\.', '', text)
 
-        if '징역' in text:
-            pattern = r'징역 (.*?)에'
-            if bool(re.search(pattern, text)):
-                if re.search(pattern, text).group(1).replace('개','') in 징역:
-                    징역[re.search(pattern, text).group(1).replace('개','')] += 1
-                else:
-                    징역[re.search(pattern, text).group(1).replace('개','')] = 1
+        pattern1 = r'징역 ?(.*[년월]).*[정처 ]한다.*집행.*유예'
+        pattern2 = r'징역 ?(.*[년월]).*[정처 ]한다.*선고.*유예'
+        pattern3 = r'징역 ?(.*[년월]).*[정처 ]한다'
+        if re.search(pattern1, text):
+            if re.search(pattern1, text).group(1).replace(' 징역','').replace('개','') in 징역['집행유예']:
+                징역['집행유예'][re.search(pattern1, text).group(1).replace(' 징역','').replace('개','')] += 1
+            else:
+                징역['집행유예'][re.search(pattern1, text).group(1).replace(' 징역','').replace('개','')] = 1
 
-        if '금고' in text:
-            pattern = r'금고 (.*?)에'
-            if bool(re.search(pattern, text)):
-                if re.search(pattern, text).group(1).replace('개','') in 금고:
-                    금고[re.search(pattern, text).group(1).replace('개','')] += 1
+        elif re.search(pattern2, text):
+            if re.search(pattern2, text).group(1).replace(' 징역','').replace('개','') in 징역['선고유예']:
+                징역['선고유예'][re.search(pattern2, text).group(1).replace(' 징역','').replace('개','')] += 1
+            else:
+                징역['선고유예'][re.search(pattern2, text).group(1).replace(' 징역','').replace('개','')] = 1
+
+        elif re.search(pattern3, text):
+            if re.search(pattern3, text).group(1).replace(' 징역','').replace('개','') in 징역['실형']:
+                징역['실형'][re.search(pattern3, text).group(1).replace(' 징역','').replace('개','')] += 1
+            else:
+                징역['실형'][re.search(pattern3, text).group(1).replace(' 징역','').replace('개','')] = 1
+
+        pattern = r'금고 ?(.*[년월]).*[정처 ]한다'
+        if re.search(pattern, text) and '금고' in text:
+            if re.search(r'집행.*유예', text):
+                if re.search(pattern, text).group(1) in 금고['집행유예']:
+                    금고['집행유예'][re.search(pattern, text).group(1).replace(' 징역','').replace('개','')] += 1
                 else:
-                    금고[re.search(pattern, text).group(1).replace('개','')] = 1
+                    금고['집행유예'][re.search(pattern, text).group(1).replace(' 징역','').replace('개','')] = 1
+
+            elif re.search(r'선고.*유예', text):
+                if re.search(pattern, text) in 금고:
+                    금고['선고유예'][re.search(pattern, text).group(1).replace(' 징역','').replace('개','')] += 1
+                else:
+                    금고['선고유예'][re.search(pattern, text).group(1).replace(' 징역','').replace('개','')] = 1
+
+            else:
+                if re.search(pattern, text) in 금고:
+                    금고['실형'][re.search(pattern, text).group(1).replace(' 징역','').replace('개','')] += 1
+                else:
+                    금고['실형'][re.search(pattern, text).group(1).replace(' 징역','').replace('개','')] = 1
 
         if '벌금' in text:
-            pattern = r'벌금 (.*?)에 처한다'
+            pattern = r'벌금 (.*)에 처한다'
             if bool(re.search(pattern, text)):
                 money = re.search(pattern, text).group(1).replace(',','').replace(' ','').replace('(백만)','')
 
@@ -133,19 +147,12 @@ def result_statistics(sentences):
                     else:
                         벌금[money] = 1
 
-        if '유예' in text:
-            pattern = r'(\d+년).*집행.*유예'
-            if bool(re.search(pattern, text)):
-                if re.search(pattern, text).group(1) in 집행유예:
-                    집행유예[re.search(pattern, text).group(1)] += 1
-                else:
-                    집행유예[re.search(pattern, text).group(1)] = 1
-            pattern1 = r'(\d+년).*선고.*유예'
-            if bool(re.search(pattern1, text)):
-                if re.search(pattern1, text).group(1) in 집행유예:
-                    집행유예['선고유예'] += 1
-                else:
-                    집행유예['선고유예'] = 1
+
+        if '보호관찰' in text:
+              if '전체' in 보호관찰:
+                  보호관찰['전체'] += 1
+              else:
+                  보호관찰['전체'] = 1
 
         if '사회봉사' in text:
             pattern = r'(\d+시간)의 사회봉사'
@@ -187,17 +194,53 @@ def result_statistics(sentences):
                 else:
                     준법운전강의[re.search(pattern, text).group(1)] = 1
 
-    징역 = dict(sorted(징역.items(), key=lambda x:x[1], reverse=True))
-    금고 = dict(sorted(금고.items(), key=lambda x:x[1], reverse=True))
     벌금 = dict(sorted(벌금.items(), key=lambda x:x[1], reverse=True))
-    집행유예 = dict(sorted(집행유예.items(), key=lambda x:x[1], reverse=True))
+    보호관찰 = dict(sorted(보호관찰.items(), key=lambda x:x[1], reverse=True))
     사회봉사 = dict(sorted(사회봉사.items(), key=lambda x:x[1], reverse=True))
     성폭력_치료프로그램 = dict(sorted(성폭력_치료프로그램.items(), key=lambda x:x[1], reverse=True))
     피고인_정보공개 = dict(sorted(피고인_정보공개.items(), key=lambda x:x[1], reverse=True))
     아동_청소년_장애인복지시설_취업제한 = dict(sorted(아동_청소년_장애인복지시설_취업제한.items(), key=lambda x:x[1], reverse=True))
     준법운전강의 = dict(sorted(준법운전강의.items(), key=lambda x:x[1], reverse=True))
+    전체 = {}
 
-    casename_dict = {'징역': 징역, '금고': 금고, '벌금': 벌금, '집행유예': 집행유예, '사회봉사': 사회봉사, '성폭력_치료프로그램': 성폭력_치료프로그램,
+    if 징역['실형']:
+      전체['징역_실형'] = sum(징역['실형'].values())
+    if 징역['집행유예']:
+      전체['징역_집행유예'] = sum(징역['집행유예'].values())
+    if 징역['선고유예']:
+      전체['징역_선고유예'] = sum(징역['선고유예'].values())
+    전체['징역_전체'] =  sum([sum(징역[key].values()) for key in 징역.keys() if 징역[key]])
+
+    if 금고['실형']:
+      전체['금고_실형'] = sum(금고['실형'].values())
+    if 금고['집행유예']:
+      전체['금고_집행유예'] = sum(금고['집행유예'].values())
+    if 금고['선고유예']:
+      전체['금고_선고유예'] = sum(금고['선고유예'].values())
+    전체['금고_전체'] =  sum([sum(금고[key].values()) for key in 금고.keys() if 금고[key]])
+
+    if 벌금:
+      전체['벌금'] = sum(벌금.values())
+
+    if 보호관찰:
+      전체['보호관찰'] = sum(보호관찰.values())
+
+    if 사회봉사:
+      전체['사회봉사'] = sum(사회봉사.values())
+
+    if 성폭력_치료프로그램:
+      전체['성폭력_치료프로그램'] = sum(성폭력_치료프로그램.values())
+
+    if 피고인_정보공개:
+      전체['피고인_정보공개'] = sum(피고인_정보공개.values())
+
+    if 아동_청소년_장애인복지시설_취업제한:
+      전체['아동_청소년_장애인복지시설_취업제한'] = sum(아동_청소년_장애인복지시설_취업제한.values())
+
+    if 준법운전강의:
+      전체['준법운전강의'] = sum(준법운전강의.values())
+
+    casename_dict = {'전체': 전체, '징역': 징역, '금고': 금고, '벌금': 벌금, '보호관찰': 보호관찰, '사회봉사': 사회봉사, '성폭력_치료프로그램': 성폭력_치료프로그램,
                      '피고인_정보공개': 피고인_정보공개, '아동_청소년_장애인복지시설_취업제한': 아동_청소년_장애인복지시설_취업제한,
                      '준법운전강의': 준법운전강의}
 
@@ -207,8 +250,8 @@ if __name__ == "__main__":
   api_key = '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'
   file_path = "C:/Users/gjaischool1/.vscode/react-app/hh/Judi-AI-1/hh/"
 
-  line = sys.stdin.readline()
-  request = json.loads(line)['chat']
+  line = sys.stdin.buffer.readline().decode('utf-8')
+  request = json.loads(line)
 
   # 요청 처리 및 결과 저장
   reply_text = chatbot(api_key, request)
@@ -220,5 +263,6 @@ if __name__ == "__main__":
   result_final = result_statistics(sentences)
   result_final['results'] = reply_text
   # 결과를 클라이언트로 전송
+  sys.stdout.reconfigure(encoding='utf-8')
   sys.stdout.write(json.dumps(result_final, ensure_ascii=False))
   sys.stdout.flush()

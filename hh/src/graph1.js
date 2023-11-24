@@ -7,96 +7,96 @@ import { ResponsiveBar } from '@nivo/bar'
 // no chart will be rendered.
 // website examples showcase many properties,
 // you'll often use just a few of them.
-const Graph1 = ({ graphdata /* see data tab */ }) => {
-    // 데이터의 키 배열 추출
-    const dataKeys = Object.keys(graphdata);
-
+const Graph1 = ({ graphdata , graphType }) => {
+    // 데이터의 키 배열 추출 (results를 제외하고 추출)
+    const dataKeys = Object.keys(graphdata).filter(key => key !== 'results');
+    
     // 데이터를 배열로 변환
     const dataArray = dataKeys.map((key) => {
         const value = graphdata[key];
+        
         const totalValue = typeof value === 'object' ? Object.values(value).reduce((acc, cur) => acc + cur, 0) : value;
         return {
-            country : key,
+            id : key,
             [key]: totalValue || 0,
         };
+        
     });
+    // console.log(dataArray)
+    // 그래프 눈금 조절
+    const tickvalues = (totalValue, numTicks) => {
+        const tickValues = [];
+        const tickInterval = Math.floor(totalValue / (numTicks - 1));
+
+        for (let i = 0; i < numTicks; i++) {
+            tickValues.push(i*tickInterval);
+        }
+        return tickValues;
+    };
+    // 전체 건수 예시
+    const totalValue = 20
+
+    // 눈금 수 설정
+    const numofTick = 5;
+
+    // 각 그래프마다 라벨 붙임
+    // let xAxisLabel = '';
+    // if (graphType === '징역') {
+    //     xAxisLabel = '징역';
+    // } else if (graphType === '금고') {
+    //     xAxisLabel = '금고';
+    // } else if (graphType === '벌금') {
+    //     xAxisLabel = '벌금';
+    // } else if (graphType === '집행유예') {
+    //     xAxisLabel = '집행유예';
+    // } else if (graphType === '사회봉사') {
+    //     xAxisLabel = '사회봉사';
+    // } else if (graphType === '성폭력') {
+    //     xAxisLabel = '성폭력';
+    // } else if (graphType === '정보공개') {
+    //     xAxisLabel = '정보공개';
+    // } else if (graphType === '취업제한') {
+    //     xAxisLabel = '취업제한';
+    // } else if (graphType === '준법운전강의') {
+    //     xAxisLabel = '준법운전강의';
+    // }
+    
 
     return (
         <ResponsiveBar
             data={dataArray}
             keys={dataKeys}
-            indexBy="country"
-            margin={{ top: 50, right: 130, bottom: 50, left: 80 }}
+
+            margin={{ right: 90, bottom: 50, left: 80 }}
             padding={0.3}
             layout="horizontal"
-            valueScale={{ type: 'linear' }}
-            indexScale={{ type: 'band', round: true }}
             colors={{ scheme: 'nivo' }}
-            defs={[
-                {
-                    id: 'dots',
-                    type: 'patternDots',
-                    background: 'inherit',
-                    color: '#38bcb2',
-                    size: 4,
-                    padding: 1,
-                    stagger: true
-                },
-                {
-                    id: 'lines',
-                    type: 'patternLines',
-                    background: 'inherit',
-                    color: '#eed312',
-                    rotation: -45,
-                    lineWidth: 6,
-                    spacing: 10
-                }
-            ]}
-            fill={[
-                {
-                    match: {
-                        id: 'fries'
-                    },
-                    id: 'dots'
-                },
-                {
-                    match: {
-                        id: 'sandwich'
-                    },
-                    id: 'lines'
-                }
-            ]}
-            borderColor={{
-                from: 'color',
-                modifiers: [
-                    [
-                        'darker',
-                        1.6
-                    ]
-                ]
-            }}
+
             axisTop={null}
             axisRight={null}
             axisBottom={{
                 tickSize: 5,
                 tickPadding: 5,
                 tickRotation: 0,
-                legend: 'country',
+                /*legend: xAxisLabel,*/
+                legend: '',
                 legendPosition: 'middle',
                 legendOffset: 32,
-                truncateTickAt: 0
+                truncateTickAt: 0,
+                tickValues: tickvalues(totalValue, numofTick), // 원하는 눈금의 수로 조절
+                
             }}
             axisLeft={{
                 tickSize: 5,
                 tickPadding: 10,
                 tickRotation: 0,
-                legend: '액수',
+                legend: '',
                 legendPosition: 'middle',
                 legendOffset: -70,
                 truncateTickAt: 0
             }}
-            labelSkipWidth={12}
-            labelSkipHeight={12}
+            // labelSkipWidth={12}
+            // labelSkipHeight={12}
             labelTextColor={{
                 from: 'color',
                 modifiers: [
@@ -132,7 +132,8 @@ const Graph1 = ({ graphdata /* see data tab */ }) => {
             ]}
             role="application"
             ariaLabel="Nivo bar chart demo"
-            barAriaLabel={(e)=>e.id+": "+e.formattedValue+" in country: "+e.indexValue}
+            barAriaLabel={e => `${e.formattedValue}`}
+
         />
     );
 };
