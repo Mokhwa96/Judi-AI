@@ -173,6 +173,10 @@
   max-width: 90%; /* 최대 너비를 설정하여 너무 길어지지 않도록 함 */
 }
 
+.loading-chat-image {
+  height: 40px;
+}
+
 /* 음성 녹음된 transcrip를 조절하는 부분입니다*/
 .transcript {
   margin-top: 10px; /* chat-container와의 간격 */
@@ -186,3 +190,27 @@
 .chat-container:not(.expanded) #chatbox .chat-input-area {
   display: none; /* 숨김 처리 */
 }
+
+
+/* 주디의 그래프 내용을 담는 영역입니다. */
+/* 각 그래프 컨테이너 스타일링 */
+.graph_container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 50px;
+  font-family: 'GmarketSansMedium';
+  
+  
+}
+
+.graph_content_container {
+  text-align: center;
+  padding-bottom: 100px;
+  justify-content: center;
+  
+}/*
+.graph_content {
+  text-align: center;
+
+}*/

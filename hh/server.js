@@ -21,9 +21,9 @@ connection.connect();
 
 app.use(bodyParser.json());
 
-app.use(express.static(path.join("C:/Users/gh576/JudiAI/hh/", "build")));
+app.use(express.static("build"));
 app.get("/", (req, res) => {
-  res.sendFile(path.join("C:/Users/gh576/JudiAI/hh/", "build", "index.html"));
+  res.sendFile(path.join("build", "index.html"));
 });
 app.post("/chat", (req, res) => {
   // 클라이언트 요청
@@ -108,7 +108,7 @@ app.post("/chat", (req, res) => {
       console.log("resultData :");
       console.log(resultData);
 
-      // 응답을 TTS를 이용하여 변환 (현호계정으로만 가능)
+      // // 응답을 TTS를 이용하여 변환 (현호계정으로만 가능)
       // const request_speech = {
       //     input: { text: resultData['results']},
       //     voice: { languageCode: 'ko-KR', name: 'ko-KR-Wavenet-B', ssmlGender: 'FEMALE'},
