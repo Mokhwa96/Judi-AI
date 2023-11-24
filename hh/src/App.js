@@ -90,7 +90,9 @@ function Home() {
               </span>
             </div>
             <div className="chat_info2">
-              <span className="chatbubble2">어쩌구 저쩌구한 내용</span>
+              <span className="chatbubble2">
+                저의 사례에서 판결 결과는 어떻게 될까요?
+              </span>
             </div>
             <div className="chat_info3">
               <span className="chatbubble3">
@@ -220,18 +222,23 @@ function TryJudiAI() {
   const [answerState, setAnswerState] = useState(false);
   const navigate = useNavigate();
   const [graphdata, setGraphdata] = useState({
-    '징역': {},
-    '금고': {},
-    '벌금': {},
-    '집행유예': {},
-    '사회봉사': {},
-    '성폭력_치료프로그램': {},
-    '피고인_정보공개': {},
-    '아동_청소년_장애인복지시설_취업제한': {},
-    '준법운전강의': {},
-    results: '',
+    징역: {
+      "2년": 10,
+      "5년": 20,
+      "3년": 10,
+      "4년": 20,
+      "6년": 22,
+    },
+    금고: { "2년": 10, "5년": 20 },
+    벌금: {},
+    집행유예: {},
+    사회봉사: {},
+    성폭력_치료프로그램: {},
+    피고인_정보공개: {},
+    아동_청소년_장애인복지시설_취업제한: {},
+    준법운전강의: {},
+    results: "",
   });
-
 
   const messagesEndRef = useRef(null); // 새로운 ref. 채팅창 스크롤 자동 최신화 위함.
 
@@ -249,10 +256,13 @@ function TryJudiAI() {
       });
       const data = await response.json();
 
-      setMessages(prevMessages => [...prevMessages, { text: data['results'], sender:'lawyer' }]);
-      console.log('입력문은');
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { text: data["results"], sender: "lawyer" },
+      ]);
+      console.log("입력문은");
       console.log(userinput);
-      console.log('응답은');
+      console.log("응답은");
       console.log(data);
       setAnswerState(!answerState);
       setGraphdata(data);
@@ -288,9 +298,11 @@ function TryJudiAI() {
   // 채팅의 응답을 제출하는 부분. 이곳을 변경해서 변호사의 응답 부분을 화면에 표시되게 했습니다.
   const submitResponse = () => {
     if (userInput.trim() !== "") {
-      
-      setMessages(prevMessages => [...prevMessages, { text: userInput, sender:'user' }]);
-      chatbotChat(userInput)
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { text: userInput, sender: "user" },
+      ]);
+      chatbotChat(userInput);
       setUserInput("".trim()); // 사용자 입력을 초기화
     }
   };
@@ -306,7 +318,14 @@ function TryJudiAI() {
       key={index}
       className={`message-container ${message.sender}-container`}
     >
-      <div className={`bubble ${message.sender}`}>{message.text.split('\n').map((line, index) => <React.Fragment key={index}>{line}<br /></React.Fragment>)}</div>
+      <div className={`bubble ${message.sender}`}>
+        {message.text.split("\n").map((line, index) => (
+          <React.Fragment key={index}>
+            {line}
+            <br />
+          </React.Fragment>
+        ))}
+      </div>
     </div>
   ));
 
@@ -343,7 +362,9 @@ function TryJudiAI() {
   };
 
   const resetMessages = () => {
-    setMessages([{ text: "안녕하세요, 어떤 도움이 필요하신가요?", sender: 'lawyer' }]);
+    setMessages([
+      { text: "안녕하세요, 어떤 도움이 필요하신가요?", sender: "lawyer" },
+    ]);
   };
 
   // 리턴 영역
@@ -357,8 +378,8 @@ function TryJudiAI() {
       </div>
 
       {/* Chat Simulator */}
-      <div className={`chat-container ${isChatboxActive ? 'expanded' : ''}`}>
-        {/* 주디 이미지 */}  
+      <div className={`chat-container ${isChatboxActive ? "expanded" : ""}`}>
+        {/* 주디 이미지 */}
         <img
           className="lawyer-image"
           src={LookAhead}
@@ -366,30 +387,30 @@ function TryJudiAI() {
           onClick={toggleChatbox} // 이벤트 핸들러
         />
         <img
-            id="open-chatbox-button"
-            onClick={toggleChatbox}
-            src="/images/chat_icon3.png"
-            alt="Chat Icon"
-            style={{ cursor: 'pointer', width: '60px', height: 'auto'  }}
+          id="open-chatbox-button"
+          onClick={toggleChatbox}
+          src="/images/chat_icon3.png"
+          alt="Chat Icon"
+          style={{ cursor: "pointer", width: "60px", height: "auto" }}
+        />
+        {/* 음성 인식 & 전송 저장 버튼 */}
+        {listening ? (
+          <img
+            className="voice-button"
+            src="/images/stop_icon.png"
+            alt="녹음 중지"
+            onClick={stopListening}
+            style={{ width: "30px", height: "30px" }}
           />
-          {/* 음성 인식 & 전송 저장 버튼 */}
-          {listening ? (
-            <img
-              className='voice-button'
-              src="/images/stop_icon.png"
-              alt="녹음 중지"
-              onClick={stopListening}
-              style={{ width: '30px', height: '30px' }}
-            />
-            ) : (
-            <img
-              className='voice-button'
-              src="/images/record_icon.png"
-              alt="녹음 시작"
-              onClick={startListening}
-              style={{ width: '30px', height: '30px' }}
-            />
-          )}
+        ) : (
+          <img
+            className="voice-button"
+            src="/images/record_icon.png"
+            alt="녹음 시작"
+            onClick={startListening}
+            style={{ width: "30px", height: "30px" }}
+          />
+        )}
 
         {/* // 챗 박스 관련 구역 */}
         <div
@@ -404,9 +425,9 @@ function TryJudiAI() {
 
           {/* 입력창 및 버튼 관련 구역 */}
           <div className="chat-input-area">
-            <textarea 
-              id = 'input-area'
-              type="text" 
+            <textarea
+              id="input-area"
+              type="text"
               value={userInput}
               onChange={handleInputChange}
               placeholder="여기에 상담 내용을 입력해주세요."
@@ -414,7 +435,7 @@ function TryJudiAI() {
                 if (event.key === "Enter") {
                   submitResponse();
                 }
-              }} 
+              }}
             ></textarea>
 
             <div className="voice-control-buttons">
@@ -436,7 +457,7 @@ function TryJudiAI() {
                 onClick={submitResponse}
                 className="voice-control-button"
               />
-            </div>        
+            </div>
           </div>
         </div>
       </div>
@@ -450,54 +471,42 @@ function TryJudiAI() {
       <div className="graph_container">
         {/* 징역 그래프 */}
         <div className="graph_content_container">
-          징역
           {graphdata["징역"] && Object.keys(graphdata["징역"]).length > 0 && (
-            <>
-              <div
-                style={{ height: "200px", width: "300px", marginLeft: "50px" }}
-              >
+            <div className="graph">
+              징역
+              <div className="test" style={{ height: "200px", width: "300px" }}>
                 <Graph1 graphdata={graphdata["징역"]} graphType="징역" />
               </div>
-              <div
-                style={{ height: "200px", width: "300px", marginLeft: "50px" }}
-              >
+              <div className="test" style={{ height: "200px", width: "300px" }}>
                 <Graph2 graphdata={graphdata["징역"]} graphType="징역" />
               </div>
-            </>
+            </div>
           )}
         </div>
         {/* 금고 그래프 */}
         <div className="graph_content_container">
-          금고
           {graphdata["금고"] && Object.keys(graphdata["금고"]).length > 0 && (
-            <>
-              <div
-                style={{ height: "200px", width: "300px", marginLeft: "50px" }}
-              >
+            <div className="graph">
+              금고
+              <div className="test" style={{ height: "200px", width: "300px" }}>
                 <Graph1 graphdata={graphdata["금고"]} graphType="금고" />
               </div>
-              <div
-                style={{ height: "200px", width: "300px", marginLeft: "50px" }}
-              >
+              <div className="test" style={{ height: "200px", width: "300px" }}>
                 <Graph2 graphdata={graphdata["금고"]} graphType="금고" />
               </div>
-            </>
+            </div>
           )}
         </div>
 
         {/* 벌금 그래프 */}
         <div className="graph_content_container">
-          벌금
           {graphdata["벌금"] && Object.keys(graphdata["벌금"]).length > 0 && (
             <>
-              <div
-                style={{ height: "200px", width: "300px", marginLeft: "50px" }}
-              >
+              벌금
+              <div className="test" style={{ height: "200px", width: "300px" }}>
                 <Graph1 graphdata={graphdata["벌금"]} graphType="벌금" />
               </div>
-              <div
-                style={{ height: "200px", width: "300px", marginLeft: "50px" }}
-              >
+              <div className="test" style={{ height: "200px", width: "300px" }}>
                 <Graph2 graphdata={graphdata["벌금"]} graphType="벌금" />
               </div>
             </>
@@ -506,11 +515,12 @@ function TryJudiAI() {
 
         {/* 집행유예 그래프 */}
         <div className="graph_content_container">
-          집행유예
           {graphdata["집행유예"] &&
             Object.keys(graphdata["집행유예"]).length > 0 && (
               <>
+                집행유예
                 <div
+                  className="test"
                   style={{
                     height: "200px",
                     width: "300px",
@@ -523,6 +533,7 @@ function TryJudiAI() {
                   />
                 </div>
                 <div
+                  className="test"
                   style={{
                     height: "200px",
                     width: "300px",
@@ -540,11 +551,12 @@ function TryJudiAI() {
 
         {/* 사회봉사 그래프 */}
         <div className="graph_content_container">
-          사회봉사
           {graphdata["사회봉사"] &&
             Object.keys(graphdata["사회봉사"]).length > 0 && (
               <>
+                사회봉사
                 <div
+                  className="test"
                   style={{
                     height: "200px",
                     width: "300px",
@@ -557,6 +569,7 @@ function TryJudiAI() {
                   />
                 </div>
                 <div
+                  className="test"
                   style={{
                     height: "200px",
                     width: "300px",
@@ -574,11 +587,12 @@ function TryJudiAI() {
 
         {/* 성폭력_치료프로그램 그래프 */}
         <div className="graph_content_container">
-          성폭력_치료프로그램
           {graphdata["성폭력_치료프로그램"] &&
             Object.keys(graphdata["성폭력_치료프로그램"]).length > 0 && (
               <>
+                성폭력_치료프로그램
                 <div
+                  className="test"
                   style={{
                     height: "200px",
                     width: "300px",
@@ -591,6 +605,7 @@ function TryJudiAI() {
                   />
                 </div>
                 <div
+                  className="test"
                   style={{
                     height: "200px",
                     width: "300px",
@@ -608,11 +623,12 @@ function TryJudiAI() {
 
         {/* 피고인_정보공개 그래프 */}
         <div className="graph_content_container">
-          피고인_정보공개
           {graphdata["피고인_정보공개"] &&
             Object.keys(graphdata["피고인_정보공개"]).length > 0 && (
               <>
+                피고인_정보공개
                 <div
+                  className="test"
                   style={{
                     height: "200px",
                     width: "300px",
@@ -625,6 +641,7 @@ function TryJudiAI() {
                   />
                 </div>
                 <div
+                  className="test"
                   style={{
                     height: "200px",
                     width: "300px",
@@ -642,12 +659,13 @@ function TryJudiAI() {
 
         {/* 아동_청소년_장애인복지시설_취업제한 그래프 */}
         <div className="graph_content_container">
-          아동_청소년_장애인복지시설_취업제한
           {graphdata["아동_청소년_장애인복지시설_취업제한"] &&
             Object.keys(graphdata["아동_청소년_장애인복지시설_취업제한"])
               .length > 0 && (
               <>
+                아동_청소년_장애인복지시설_취업제한
                 <div
+                  className="test"
                   style={{
                     height: "200px",
                     width: "300px",
@@ -660,6 +678,7 @@ function TryJudiAI() {
                   />
                 </div>
                 <div
+                  className="test"
                   style={{
                     height: "200px",
                     width: "300px",
@@ -677,11 +696,12 @@ function TryJudiAI() {
 
         {/* 준법운전강의 그래프 */}
         <div className="graph_content_container">
-          준법운전강의
           {graphdata["준법운전강의"] &&
             Object.keys(graphdata["준법운전강의"]).length > 0 && (
               <>
+                준법운전강의
                 <div
+                  className="test"
                   style={{
                     height: "200px",
                     width: "300px",
@@ -694,6 +714,7 @@ function TryJudiAI() {
                   />
                 </div>
                 <div
+                  className="test"
                   style={{
                     height: "200px",
                     width: "300px",
