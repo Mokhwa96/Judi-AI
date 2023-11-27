@@ -459,9 +459,8 @@ function TryJudiAI() {
       <div className="graph_container">
         {/* 징역 그래프 */}
         <div className="graph_content_container">
-          징역
           {graphdata["징역"] && Object.keys(graphdata["징역"]).length > 0 && (
-            <>
+            <>징역
               <div
                 style={{ height: "200px", width: "300px", marginLeft: "50px" }}
               >
@@ -477,9 +476,8 @@ function TryJudiAI() {
         </div>
         {/* 금고 그래프 */}
         <div className="graph_content_container">
-          금고
           {graphdata["금고"] && Object.keys(graphdata["금고"]).length > 0 && (
-            <>
+            <>금고
               <div
                 style={{ height: "200px", width: "300px", marginLeft: "50px" }}
               >
@@ -496,9 +494,8 @@ function TryJudiAI() {
 
         {/* 벌금 그래프 */}
         <div className="graph_content_container">
-          벌금
           {graphdata["벌금"] && Object.keys(graphdata["벌금"]).length > 0 && (
-            <>
+            <>벌금
               <div
                 style={{ height: "200px", width: "300px", marginLeft: "50px" }}
               >
@@ -515,10 +512,9 @@ function TryJudiAI() {
 
         {/* 집행유예 그래프 */}
         <div className="graph_content_container">
-          집행유예
           {graphdata["집행유예"] &&
             Object.keys(graphdata["집행유예"]).length > 0 && (
-              <>
+              <>집행유예
                 <div
                   style={{
                     height: "200px",
@@ -549,10 +545,9 @@ function TryJudiAI() {
 
         {/* 사회봉사 그래프 */}
         <div className="graph_content_container">
-          사회봉사
           {graphdata["사회봉사"] &&
             Object.keys(graphdata["사회봉사"]).length > 0 && (
-              <>
+              <>사회봉사
                 <div
                   style={{
                     height: "200px",
@@ -583,10 +578,9 @@ function TryJudiAI() {
 
         {/* 성폭력_치료프로그램 그래프 */}
         <div className="graph_content_container">
-          성폭력_치료프로그램
           {graphdata["성폭력_치료프로그램"] &&
             Object.keys(graphdata["성폭력_치료프로그램"]).length > 0 && (
-              <>
+              <>성폭력_치료프로그램
                 <div
                   style={{
                     height: "200px",
@@ -617,10 +611,9 @@ function TryJudiAI() {
 
         {/* 피고인_정보공개 그래프 */}
         <div className="graph_content_container">
-          피고인_정보공개
           {graphdata["피고인_정보공개"] &&
             Object.keys(graphdata["피고인_정보공개"]).length > 0 && (
-              <>
+              <>피고인_정보공개
                 <div
                   style={{
                     height: "200px",
@@ -651,11 +644,10 @@ function TryJudiAI() {
 
         {/* 아동_청소년_장애인복지시설_취업제한 그래프 */}
         <div className="graph_content_container">
-          아동_청소년_장애인복지시설_취업제한
           {graphdata["아동_청소년_장애인복지시설_취업제한"] &&
             Object.keys(graphdata["아동_청소년_장애인복지시설_취업제한"])
               .length > 0 && (
-              <>
+              <>아동_청소년_장애인복지시설_취업제한
                 <div
                   style={{
                     height: "200px",
@@ -686,10 +678,9 @@ function TryJudiAI() {
 
         {/* 준법운전강의 그래프 */}
         <div className="graph_content_container">
-          준법운전강의
           {graphdata["준법운전강의"] &&
             Object.keys(graphdata["준법운전강의"]).length > 0 && (
-              <>
+              <>준법운전강의
                 <div
                   style={{
                     height: "200px",

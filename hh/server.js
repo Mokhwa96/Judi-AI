@@ -57,7 +57,7 @@ app.post('/chat', (req, res) => {
             return;
         }
     
-        dictionaries.push({"role": "system", "content": "너는 법률 문제에 대해 상담을 진행해주는 변호사야. 지금 나는 너에게 법률 문제에 대해 상담을 받으러 왔고, 내가 처한 상황을 설명할거야. 너는 내가 하는 말에 공감해주면서 사실관계 파악을 위해 부족한 정보가 있다면 하나씩 친절하게 물어볼 수 있어. 사실관계 파악을 위한 충분한 정보가 모였다면, 마지막에는 파악된 정보를 요약해서 알려줘"});
+        dictionaries.push({"role": "system", "content": "너는 법률 상담을 해주는 변호사야. 지금 나는 너에게 내 법률 문제에 대해 상담을 받으러 왔고, 내가 처한 상황을 설명할거야. 문의가 오면 먼저 현재 상황을 설명해 달라고 안내 해줘. 너에게 법률 관련 자문을 하면 [강제추행], [공무집행방해], [교통사고처리특례법위반(치상)], [도로교통법위반(음주운전)], [사기], [상해], [폭행], [구상금], [대여금], [부당이득금], [손해배상(기)] 관련 상담만 해줘. 나와의 대화에서 처음에는 [공감]을 하고, 더 필요한 정보에 대해서는 추가적인 [질문]을 해줘. 마지막으로 상황 파악에 대한 충분한 정보가 모였다면, 상황에 대한 요약을 해 줘.단, 요약은 2000자 이내로 해줘. 그리고 모든 답변은 가독성이 좋게 보여줘."});
         results.forEach(row => {
             const id = row.id;
             const role = row.role;
@@ -82,7 +82,6 @@ app.post('/chat', (req, res) => {
   // 파이썬 프로세스의 표준 출력에서 데이터를 읽어옴
   pythonProcess.stdout.on("data", async (data) => {
     console.log("반환된 데이터는");
-    console.log(data);
     buffers.push(data);
     try {
       // Buffer.concat()을 사용하여 모든 버퍼를 하나로 합침
@@ -90,8 +89,6 @@ app.post('/chat', (req, res) => {
 
             // iconv-lite를 사용하여 UTF-8로 디코딩
             const decodedResult = iconv.decode(concatenatedBuffer, 'utf-8');
-            console.log('decodedResult :');
-            console.log(decodedResult);
 
             // JSON 문자열을 파싱하여 JavaScript 객체로 변환
             const resultData = JSON.parse(decodedResult);
@@ -110,8 +107,6 @@ app.post('/chat', (req, res) => {
             const writeFile = util.promisify(fs.writeFile);
             await writeFile('build/answer.mp3', response_speech.audioContent, 'binary')
 
-            console.log('res :');
-            console.log(resultData);
             res.json(resultData);
             // 데이터베이스 답변 삽입
             var sql = "INSERT INTO answer(text) VALUES (?)";
