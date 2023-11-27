@@ -1,62 +1,77 @@
 :root {
-  --palettes-color1:#0D1321;
-  --palettes-color2:#1D2D44;
-  --palettes-color3:#3E5C76;
-  --palettes-color4:#F0EBD8;
-  --primary-color:#748CAB;
+  --palettes-color1: #0d1321;
+  --palettes-color2: #1d2d44;
+  --palettes-color3: #3e5c76;
+  --palettes-color4: #f0ebd8;
+  --primary-color: #748cab;
   --text-color: rgb(255, 255, 255);
   --button-background-color: white;
-  --point-color:#0D1321;
+  --point-color: #0d1321;
 }
 /* 폰트 start*/
 /* 에스코어 드림 */
 @font-face {
-  font-family: 'S-CoreDream-3Light';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff') format('woff');
+  font-family: "S-CoreDream-3Light";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff")
+    format("woff");
   font-weight: normal;
   font-style: normal;
 }
 /* 학교안심 우주 */
 @font-face {
-  font-family: 'HakgyoansimWoojuR';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2307-2@1.0/HakgyoansimWoojuR.woff2') format('woff2');
+  font-family: "HakgyoansimWoojuR";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2307-2@1.0/HakgyoansimWoojuR.woff2")
+    format("woff2");
   font-weight: normal;
   font-style: normal;
 }
 /* 스위트 */
 @font-face {
-  font-family: 'SUITE-Regular';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-2@1.0/SUITE-Regular.woff2') format('woff2');
+  font-family: "SUITE-Regular";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-2@1.0/SUITE-Regular.woff2")
+    format("woff2");
   font-weight: 400;
   font-style: normal;
 }
 /* 조선일보명조체 */
 @font-face {
-  font-family: 'Chosunilbo_myungjo';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/Chosunilbo_myungjo.woff') format('woff');
+  font-family: "Chosunilbo_myungjo";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/Chosunilbo_myungjo.woff")
+    format("woff");
   font-weight: normal;
   font-style: normal;
 }
 
 /* 카페24 당당해*/
 @font-face {
-  font-family: 'Cafe24Dangdanghae';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.2/Cafe24Dangdanghae.woff') format('woff');
+  font-family: "Cafe24Dangdanghae";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.2/Cafe24Dangdanghae.woff")
+    format("woff");
   font-weight: normal;
   font-style: normal;
 }
 
 /* 여기어때 잘난체 고딕 */
 @font-face {
-  font-family: 'JalnanGothic';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_231029@1.1/JalnanGothic.woff') format('woff');
+  font-family: "JalnanGothic";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_231029@1.1/JalnanGothic.woff")
+    format("woff");
   font-weight: normal;
   font-style: normal;
 }
 /* Gmarket Sans */
 @font-face {
-  font-family: 'GmarketSansMedium';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+  font-family: "GmarketSansMedium";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+/* 조선궁서체 */
+@font-face {
+  font-family: "ChosunGs";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.0/ChosunGs.woff")
+    format("woff");
   font-weight: normal;
   font-style: normal;
 }
@@ -65,24 +80,21 @@
   height: 155em;
   position: relative;
   text-align: center;
-
 }
-.center-background{
+.center-background {
   background-color: var(--palettes-color1);
   position: relative;
-
 }
 
-  .center p {
-      margin: 1em 0; /* 각 문장 위아래에 10px 여백을 추가합니다 */
-      font-weight: bold;
-      font-size:2.5em;
-      color: var(--text-color);
-      
-  }
+.content-left p {
+  margin: 1em 0; /* 각 문장 위아래에 10px 여백을 추가합니다 */
+  font-weight: bold;
+  font-size: 2.5em;
+  color: var(--text-color);
+}
 
 .Try_JudiAI {
-  margin:0 auto;
+  margin: 0 auto;
   border: none;
   border-radius: 30px;
   background-color: var(--button-background-color);
@@ -92,9 +104,8 @@
   padding: 15px 32px !important;
   text-decoration: none; /* 밑줄 제거 */
   cursor: pointer;
-  font-size:2em;
+  font-size: 2em;
   box-shadow: 1px 1px 5px rgba(41, 41, 41, 0.5); /* 그림자 추가 */
-
 }
 
 .faArrowCircleDown {
@@ -108,10 +119,10 @@
 .center .content-left {
   position: absolute;
   white-space: nowrap; /* 텍스트 줄 바꿈 방지 */
-  font-family: 'GmarketSansMedium';
-	top: 50%;
-	left: 50%;
-	transform: translate( -50%, -50% );
+  font-family: "GmarketSansMedium";
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   background: rgba(0, 0, 0, 0.637);
   padding-left: 70px;
   padding-right: 70px;
@@ -119,10 +130,9 @@
   box-sizing: border-box; /* 내부 패딩을 너비에 포함시킵니다. */
 }
 
-
-
 /* our project */
-.our_project, .contact_us {
+.our_project,
+.contact_us {
   height: 65em;
   width: 100%; /* 전체 너비를 사용하도록 수정 */
   max-width: 1200px; /* 최대 너비 설정 */
@@ -132,21 +142,31 @@
 .contact_us {
   height: 50em;
 }
-.dashed-line{
+.dashed-line {
   margin-top: 70px;
-  border-top: 3px solid; /* 실선 스타일 적용 */
+  border-top: 2px solid; /* 실선 스타일 적용 */
   width: 100%;
 }
-.our_project h1, .contact_us h1 {
+.our_project h1,
+.contact_us h1 {
   font-weight: bold;
+  width: 40%;
   font-size: 3em;
   text-align: left;
   margin-top: 0.5em;
   margin-bottom: 1em;
+  font-family: "Chosunilbo_myungjo";
+  background: linear-gradient(
+    to right,
+    #000836,
+    #ffffff
+  ); /* 그라데이션의 시작 색상과 끝 색상을 지정합니다. */
+  -webkit-background-clip: text; /* 텍스트에만 그라데이션을 적용합니다. */
+  color: transparent; /* 텍스트의 색상을 투명으로 설정하여 그라데이션을 표시합니다. */
 }
 
 /* our project - 채팅 */
-.judiexplain{
+.judiexplain {
   background-color: rgb(31, 34, 34);
   width: 400px;
   height: 850px;
@@ -156,15 +176,15 @@
   position: absolute;
   z-index: 2;
 }
-.judi_white{
+.judi_white {
   background-color: white;
   width: 350px;
   height: 350px;
   margin: 0 auto;
-  margin-top:50px;
+  margin-top: 50px;
   display: block;
 }
-.judiexplain img{
+.judiexplain img {
   width: 300px;
   margin: 0 auto;
   /* margin-top:50px; */
@@ -172,119 +192,87 @@
   display: block;
 }
 
-.chat_info{
-  margin-top:50px;
+.chat_info {
+  margin-top: 50px;
   margin-left: 20px;
 }
-.chatbubble{
-  color:#000000;
+.chatbubble {
+  color: #000000;
   font-size: 1em;
-  padding :10px;
+  padding: 10px;
   border-radius: 15px;
   background-color: white;
 }
 
-.chat_info2{
-  margin-top:50px;
+.chat_info2 {
+  margin-top: 50px;
   margin-right: 20px;
   text-align: right;
 }
-.chatbubble2{
-  color:#000000;
+.chatbubble2 {
+  color: #000000;
   font-size: 1em;
-  padding :10px;
+  padding: 10px;
   border-radius: 15px;
   background-color: rgb(255, 240, 193);
 }
 
-.chat_info3{
-  margin-top:50px;
+.chat_info3 {
+  margin-top: 50px;
   margin-left: 20px;
   margin-right: 20px;
   border-radius: 15px;
   background-color: white;
-  padding :10px;
+  padding: 10px;
 }
-.chatbubble3{
-  color:#000000;
+.chatbubble3 {
+  color: #000000;
   font-size: 1em;
   line-height: 1.5;
   border-radius: 15px;
 }
 
-.chat_send{
+.chat_send {
   background-color: white;
-  padding :15px;
-  margin-top:90px;
+  padding: 15px;
+  margin-top: 90px;
   margin-left: 20px;
   margin-right: 20px;
   padding-right: 10px;
   text-align: right;
 }
 
-.send_button{
+.send_button {
   background-color: var(--primary-color);
   color: white;
   font-weight: bold;
-  font-size:14px;
-  padding :10px;
-  border-radius:10px;
+  font-size: 14px;
+  padding: 10px;
+  border-radius: 10px;
 }
 
 /* our project - 설명*/
 
 .introducing-back {
-  font-family: 'S-CoreDream-3Light', sans-serif;
+  font-family: "S-CoreDream-3Light", sans-serif;
+  line-height: 4;
   position: absolute;
-  width: 43em;
+  width: 48em;
   height: 48em;
-  top: 65em;
+  top: 60em;
   margin-left: 400px;
   padding: 30px;
-  padding-left: 120px;
-  border-radius: 15px;
-  background-color: #F7F7F5;
-  box-shadow: 10px 10px 30px rgba(156, 156, 156, 0.5); /* 그림자 추가 */
+  padding-left: 10em;
+  /* border-radius: 15px; */
+  /* background-color: #f7f7f5; */
+  /* box-shadow: 10px 10px 30px rgba(156, 156, 156, 0.5); 그림자 추가 */
   box-sizing: border-box; /* 내부 패딩을 너비에 포함시킵니다. */
 }
 
-.introducing-back p{
-  font-size:1.5em;
+.introducing-back p {
+  font-size: 1.5em;
   line-height: 1.5;
   color: var(--point-color);
-}
-
-
-/* Contact us */
-.contact_us_back{
-  background-color: var(--palettes-color4);
-  width: 40em;
-  height: 29em;
-  margin:0 auto;
-  display: flex;
-  text-align: center;
-  justify-content: center;
-  flex-direction:column;
-}
-.contact_us_back input{
-  background-color: rgba(255, 255, 255, 0.658);
-  width: 40em;
-  height: 3em;
-  margin: 10px;
-  border:none;
-}
-.input_message input{
-  height: 20em;
-}
-
-.contact_us_back button{
-  border-radius: 10px;
-  background-color: #F7F7F5;
-  color: #1D2D44;
-  padding: 5px 15px;
-  border: none;
-  cursor: pointer;
-  box-shadow: 1px 1px 1px rgba(156, 156, 156, 0.5);
 }
 
 .graph_container {
@@ -292,18 +280,28 @@
   justify-content: center;
   flex-wrap: wrap;
   margin: 50px;
-  font-family: 'GmarketSansMedium';
+  padding: 50px;
+  font-family: "GmarketSansMedium";
+  border: 1px solid rgb(232, 232, 232);
 }
 
 .graph_content_container {
   text-align: center;
-  padding-bottom: 100px;
+
   justify-content: center;
-}/*
+} /*
 .graph_content {
   text-align: center;
 
 }*/
-
-
-
+.graph {
+  background-color: #e7e7e764;
+  margin: 5px;
+  padding: 20px;
+  justify-content: center;
+  border-radius: 10px;
+}
+.test {
+  background-color: white;
+  margin: 10px;
+}
