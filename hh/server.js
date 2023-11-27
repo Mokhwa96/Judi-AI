@@ -22,9 +22,9 @@ connection.connect();
 
 app.use(bodyParser.json());
 
-app.use(express.static(path.join('C:/Users/gh576/JudiAI/hh/', 'build')));
+app.use(express.static(path.join('C:/Users/gjaischool/Judi-AI/hh/', 'build')));
 app.get('/', (req, res) => {
-    res.sendFile(path.join('C:/Users/gh576/JudiAI/hh/', 'build', 'index.html'));
+    res.sendFile(path.join('C:/Users/gjaischool/Judi-AI/hh/', 'build', 'index.html'));
 });
 app.post('/chat', (req, res) => {
     // 클라이언트 요청
@@ -42,7 +42,7 @@ app.post('/chat', (req, res) => {
     });
 
     // 파이썬 프로그램 실행
-    const pythonProcess = spawn('C:/Users/gh576/anaconda3/python', ['Main_Model.py']);
+    const pythonProcess = spawn('C:/Users/gjaischool/anaconda3/python', ['Main_Model.py']);
 
     const buffers = [];
 
@@ -57,7 +57,7 @@ app.post('/chat', (req, res) => {
             return;
         }
     
-        dictionaries.push({"role": "system", "content": "너는 법률 문제에 대해 상담을 진행해주는 변호사야. 지금 나는 너에게 법률 문제에 대해 상담을 받으러 왔고, 내가 처한 상황을 설명할거야. 너는 내가 하는 말에 공감해주면서 사실관계 파악을 위해 부족한 정보가 있다면 하나씩 친절하게 물어볼 수 있어. 사실관계 파악을 위한 충분한 정보가 모였다면, 마지막에는 파악된 정보를 요약해서 알려줘"});
+        dictionaries.push({"role": "system", "content": "너는 한국의 법률 문제에 대해 상담을 진행해주는 변호사야. 지금 나는 너에게 법률 문제에 대해 상담을 받으러 왔고, 내가 처한 상황을 설명할거야. 너는 내가 하는 말에 공감해주면서 사실관계 파악을 위해 부족한 정보가 있다면 하나씩 친절하게 물어볼 수 있어. 사실관계 파악을 위한 충분한 정보가 모였다면, 마지막에는 파악된 정보를 요약하고 그 사실을 바탕으로 어떤 법 몇조 몇항에 해당할 수 있는지 자세히 알려주고 어떻게 하면 좋을지 조언해줘. 그 후에 사용자가 감사 인사를 한다면, 간단한 인삿말을 돌려줘."});
         results.forEach(row => {
             const id = row.id;
             const role = row.role;
@@ -99,16 +99,16 @@ app.post('/chat', (req, res) => {
             console.log(resultData);
 
             // 응답을 TTS를 이용하여 변환 (현호계정으로만 가능)
-            const request_speech = {
-                input: { text: resultData['results']},
-                voice: { languageCode: 'ko-KR', name: 'ko-KR-Wavenet-B', ssmlGender: 'FEMALE'},
-                audioConfig: { audioEncoding: 'MP3', pitch: 0.4, speakingRate: 1.1}, 
-            };
+            // const request_speech = {
+            //     input: { text: resultData['results']},
+            //     voice: { languageCode: 'ko-KR', name: 'ko-KR-Wavenet-B', ssmlGender: 'FEMALE'},
+            //     audioConfig: { audioEncoding: 'MP3', pitch: 0.4, speakingRate: 1.1}, 
+            // };
 
-            const [response_speech] = await client.synthesizeSpeech(request_speech);
+            // const [response_speech] = await client.synthesizeSpeech(request_speech);
 
-            const writeFile = util.promisify(fs.writeFile);
-            await writeFile('public/answer.mp3', response_speech.audioContent, 'binary')
+            // const writeFile = util.promisify(fs.writeFile);
+            // await writeFile('public/answer.mp3', response_speech.audioContent, 'binary')
 
             console.log('res :');
             console.log(resultData);
