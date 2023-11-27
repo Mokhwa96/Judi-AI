@@ -247,8 +247,8 @@ def result_statistics(sentences):
     return casename_dict
 
 if __name__ == "__main__":
-  api_key = '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'
-  file_path = "C:/Users/gjaischool1/.vscode/react-app/hh/Judi-AI-1/hh/"
+  api_key = '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'
+  file_path = "C:/Users/gjaischool/Judi-AI\hh/"
 
   line = sys.stdin.buffer.readline().decode('utf-8')
   request = json.loads(line)
