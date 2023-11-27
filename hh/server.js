@@ -52,24 +52,43 @@ app.post('/chat', (req, res) => {
     const sqlQuery = "SELECT id, text, 'user' AS role FROM question UNION ALL SELECT id, text, 'assistant' AS role FROM answer ORDER BY id";
     connection.query(sqlQuery, function (error, results, fields) {
         if (error) {
-            console.error('Error retrieving data:', error);
-            connection.end();
-            return;
-        }
-    
-        dictionaries.push({"role": "system", "content": "너는 한국의 법률 문제에 대해 상담을 진행해주는 변호사야. 지금 나는 너에게 법률 문제에 대해 상담을 받으러 왔고, 내가 처한 상황을 설명할거야. 너는 내가 하는 말에 공감해주면서 사실관계 파악을 위해 부족한 정보가 있다면 하나씩 친절하게 물어볼 수 있어. 사실관계 파악을 위한 충분한 정보가 모였다면, 마지막에는 파악된 정보를 요약하고 그 사실을 바탕으로 어떤 법 몇조 몇항에 해당할 수 있는지 자세히 알려주고 어떻게 하면 좋을지 조언해줘. 그 후에 사용자가 감사 인사를 한다면, 간단한 인삿말을 돌려줘."});
-        results.forEach(row => {
-            const id = row.id;
-            const role = row.role;
-            const text = row.text;
+        console.error('Error retrieving data:', error);
+        connection.end();
+        return;
+    }
+    const dictionaries = [];  // 딕셔너리들을 저장할 배열
+    dictionaries.push({"role": "system", "content": "너는 법률 문제에 대해 상담을 진행해주는 변호사야. 지금 나는 너에게 법률 문제에 대해 상담을 받으러 왔고, 내가 처한 상황을 설명할거야. 너는 내가 하는 말에 공감해주면서 사실관계 파악을 위해 부족한 정보가 있다면 하나씩 친절하게 물어볼 수 있어. 사실관계 파악을 위한 충분한 정보가 모였다면, 마지막에는 파악된 정보를 요약해서 알려줘"});
 
-            if (role == 'user' || role == 'assistant') {
-                dictionaries.push({
-                    role: role,
-                    content: text
-                });
-            } 
-        });
+    let currentUser = null;
+    let currentAssistant = null;
+
+    results.forEach(row => {
+        const role = row.role;
+        const text = row.text;
+
+        if (role === 'user') {
+            currentUser = { role: 'user', content: text };
+            if (currentAssistant !== null) {
+                dictionaries.push(currentAssistant);
+                currentAssistant = null;
+            }
+        } else if (role === 'assistant') {
+            currentAssistant = { role: 'assistant', content: text };
+            if (currentUser !== null) {
+                dictionaries.push(currentUser);
+                currentUser = null;
+            }
+        }
+    });
+
+    // 마지막 문장 추가
+    if (currentUser !== null) {
+        dictionaries.push(currentUser);
+    }
+    if (currentAssistant !== null) {
+        dictionaries.push(currentAssistant);
+    }
+
         
         console.log('딕셔너리 확인')
         console.log(dictionaries);
