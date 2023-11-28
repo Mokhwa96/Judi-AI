@@ -132,7 +132,7 @@ function Dashboard() {
 
   // 메시지 배열이 변경될 때마다 스크롤을 맨 아래로 이동시키는 useEffect
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }, [messages]); // messages 배열이 변경될 때마다 실행
 
   // 채팅 박스 활성화/비활성화 부분
@@ -343,14 +343,10 @@ function Dashboard() {
 
               {/* Chat Simulator */}
               <button onClick={clickGraph}> 클릭 </button>
-              <div
-                className={`chat-container ${
-                  isChatboxActive ? "expanded" : ""
-                }`}
-              >
+              <div className={"chat-container expanded"}>
                 {/* 주디 이미지 */}
                 <img
-                  className="lawyer-image"
+                  className={"lawyer-image"}
                   src={LookAhead}
                   alt="변호사"
                   onClick={toggleChatbox} // 이벤트 핸들러
@@ -384,7 +380,6 @@ function Dashboard() {
                 {/* // 챗 박스 관련 구역 */}
                 <div
                   id="chatbox"
-                  className={`chatbox ${isChatboxActive ? "active" : "hidden"}`}
                 >
                   {/* 채팅 메시지를 표시하는 부분 */}
                   <div className="chat-messages">
@@ -400,7 +395,7 @@ function Dashboard() {
                     ) : (
                       <></>
                     )}
-                    <div ref={messagesEndRef} />{" "}
+                    <div ref={messagesEndRef}></div>
                     {/* 스크롤 조정을 위한 빈 div 추가 */}
                   </div>
 
