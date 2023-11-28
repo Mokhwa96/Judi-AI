@@ -33,7 +33,7 @@
   --search-area-bg: #1f2937;
   --message-box-hover: #243244;
   --message-box-border: rgba(255, 255, 255, 0.1);
-  --star: #ffd92c;
+  --star: #000274;
   --light-font: rgba(255, 255, 255, 0.8);
   --more-list-bg: #2f3142;
   --more-list-bg-hover: rgba(195, 207, 244, 0.1);
@@ -90,8 +90,8 @@ a {
 }
 
 .profile-btn span {
-  color: #ffd92c;
-  font-size: 40px;
+  color: #5b5b5b;
+  font-size: 16px;
   line-height: 24px;
   font-weight: 700;
 }
@@ -109,9 +109,11 @@ a {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #111827;
-  padding: 16px 24px;
+  /* background-color: #ffffff;
+  padding: 16px 24px; */
   position: relative;
+  border-radius: 15px;
+  /* width: 300px; */
 
   &-left,
   &-right {
@@ -127,7 +129,14 @@ a {
     margin-left: 10px;
   }
 }
-
+.app-header-right {
+  /* background-color: #ffffff; */
+  /* padding: 16px 20px 16px 1375px; */
+  padding: 0 40px 0 0;
+  border-radius: 15px;
+  display: flex;
+  justify-content: flex-end; /* 자식 요소를 오른쪽으로 정렬합니다 */
+}
 &-name {
   color: var(--main-color);
   margin: 0;
@@ -148,32 +157,30 @@ a {
   flex-direction: column;
   align-items: center;
   float: left;
+}
+.app-sidebar-link {
+  color: var(--main-color);
+  color: var(--link-color);
+  margin: 5px 0;
+  transition: 0.2s;
+  border-radius: 50%;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-  &-link {
-    color: var(--main-color);
-    color: var(--link-color);
-    margin: 16px 0;
-    transition: 0.2s;
-    border-radius: 50%;
-    flex-shrink: 0;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  &:hover {
+    background-color: var(--link-color-hover);
+    color: var(--link-color-active);
+  }
 
-    &:hover {
-      background-color: var(--link-color-hover);
-      color: var(--link-color-active);
-    }
-
-    &.active {
-      background-color: var(--link-color-active-bg);
-      color: var(--link-color-active);
-    }
+  &.active {
+    background-color: #214674;
+    color: var(--link-color-active);
   }
 }
-
 /* 대쉬보드 안 제일 상단 */
 .projects-section {
   flex: 2;
@@ -185,7 +192,7 @@ a {
   display: flex;
   position: relative;
   flex-direction: column;
-
+  width: 942px;
   &-line {
     display: flex;
     justify-content: space-between;
@@ -241,10 +248,10 @@ a {
     position: sticky;
     top: 0;
     z-index: 1;
-    padding: 32px 24px 24px 50px;
+    padding: 24px 0 24px 40px;
     background-color: var(--projects-section);
     font-size: 25px;
-    font-family: "S-CoreDream-3Light";
+    font-family: "SUITE-Regular";
   }
 }
 .messages-section .messages-close {
@@ -259,13 +266,17 @@ a {
 }
 .projects-section-left-header {
   padding: 0 24px 20px 24px;
+  font-family: "SUITE-Regular";
+  display: flex;
+  align-items: center;
 }
 .projects-section-left-header .title {
   color: #020202;
   font-size: 25px;
 }
 .projects-section-left-header .time {
-  float: right;
+  margin-left: auto; /* 오른쪽 위치 */
+  color: #edab79;
 }
 
 .messages .message-box {
@@ -770,4 +781,40 @@ input:checked + label svg {
   margin-top: 20px;
 }
 
-/* 변호사 소개 페이지 */
+/* 상단 아이콘 */
+.mode-switch {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  margin-right: 10px;
+  color: var(--main-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.add-btn {
+  color: #fff;
+  background-color: var(--button-bg);
+  padding: 0;
+  margin-right: 10px;
+  border: 0;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.notification-btn {
+  color: var(--main-color);
+  padding: 0;
+  margin-right: 10px;
+  border: 0;
+  background-color: transparent;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
