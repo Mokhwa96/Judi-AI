@@ -274,34 +274,3 @@
   line-height: 1.5;
   color: var(--point-color);
 }
-
-.graph_container {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin: 50px;
-  padding: 50px;
-  font-family: "GmarketSansMedium";
-  border: 1px solid rgb(232, 232, 232);
-}
-
-.graph_content_container {
-  text-align: center;
-
-  justify-content: center;
-} /*
-.graph_content {
-  text-align: center;
-
-}*/
-.graph {
-  background-color: #e7e7e764;
-  margin: 5px;
-  padding: 20px;
-  justify-content: center;
-  border-radius: 10px;
-}
-.test {
-  background-color: white;
-  margin: 10px;
-}

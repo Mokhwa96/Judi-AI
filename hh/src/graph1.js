@@ -69,10 +69,10 @@ const Graph1 = ({ graphdata, graphType }) => {
     <ResponsiveBar
       data={dataArray}
       keys={dataKeys}
-      margin={{ right: 90, bottom: 50, left: 80 }}
+      margin={{ top: 20, right: 90, bottom: 40, left: 80 }}
       padding={0.3}
       layout="horizontal"
-      colors={{ scheme: "nivo" }}
+      colors={{ scheme: "purple_blue" }}
       axisTop={null}
       axisRight={null}
       axisBottom={{
