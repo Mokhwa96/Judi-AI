@@ -36,7 +36,7 @@ def casename_find(sentence):
     return casename
 
 
-def get_similar_sentences(api_key, file_path, input_sentence, threshold=0.9, engine='text-embedding-ada-002'):
+def get_similar_sentences(api_key, file_path, input_sentence, threshold=0.8, engine='text-embedding-ada-002'):
     # API 키 설정
     client = OpenAI(api_key=api_key)
 
@@ -44,11 +44,7 @@ def get_similar_sentences(api_key, file_path, input_sentence, threshold=0.9, eng
     conn = create_engine('mysql+pymysql://judiai:mococo00.@localhost/mococodb')
     query = 'SELECT * FROM mococodb.data'
     data = pd.read_sql_query(query, conn)
-
-    # data = pd.read_csv(file_path + "data.csv")  # 원래 데이터 불러오던 코드
-    # print(f'data.head :\n{data.head()}')
     array = np.load(file_path +'embedding.npy')
-    # print(f'array : {array[0]}')
 
     # 입력 문장의 임베딩 계산
     input_sentence_embed = client.embeddings.create(input=input_sentence, model=engine).data[0].embedding
@@ -56,19 +52,15 @@ def get_similar_sentences(api_key, file_path, input_sentence, threshold=0.9, eng
 
     # 유사도 계산
     similarities = np.dot(array, input_fin) / (np.sqrt((array**2).sum(axis=-1)) * np.sqrt((input_fin**2).sum()))
-    # print(f'similarities : {similarities}')
         
     # 유사도가 threshold 이상인 모든 인덱스 찾기
     similar_indexes = np.where(similarities >= threshold)[0]
-    # print(f'similar_indexes : {similar_indexes}')
 
     # 유사도와 인덱스 쌍을 반환
     similar_sentences_sorted = sorted([(index, similarities[index]) for index in similar_indexes], key=lambda x: x[1], reverse=True)
-    # print(f'similar_sentences_sorted : {similar_sentences_sorted}')
 
     # 결과를 데이터 프레임으로 변환
     result_df = pd.DataFrame([data.iloc[i[0]][["casename", "facts", "ruling"]].to_dict() for i in similar_sentences_sorted])
-    # print(f'result_df :\n{result_df}')
 
     return result_df
 
@@ -247,7 +239,7 @@ def result_statistics(sentences):
     return casename_dict
 
 if __name__ == "__main__":
-  api_key = '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'
+  api_key = 'api_key'
   file_path = "C:/Users/gh576/JudiAI/hh/"
 
   line = sys.stdin.buffer.readline().decode('utf-8')
@@ -255,13 +247,21 @@ if __name__ == "__main__":
 
   # 요청 처리 및 결과 저장
   reply_text = chatbot(api_key, request)
-  df_similar_sentences = get_similar_sentences(api_key, file_path, reply_text, engine='text-embedding-ada-002')
-  if (df_similar_sentences.empty):
-      sentences = []
+  keyword = '사용자님의 상황을 요약하자면 :'
+  if keyword in reply_text:
+    index = reply_text.find(keyword)
+    situation_text = reply_text[(index + len(keyword)):]
+    df_similar_sentences = get_similar_sentences(api_key, file_path, situation_text, engine='text-embedding-ada-002')
+    if (df_similar_sentences.empty):
+        sentences = []
+    else:
+        sentences = [line for line in df_similar_sentences['ruling']]
+    result_final = result_statistics(sentences)
+    result_final['results'] = reply_text
   else:
-      sentences = [line for line in df_similar_sentences['ruling']]
-  result_final = result_statistics(sentences)
-  result_final['results'] = reply_text
+    result_final = result_statistics([])
+    result_final['results'] = reply_text
+
   # 결과를 클라이언트로 전송
   sys.stdout.reconfigure(encoding='utf-8')
   sys.stdout.write(json.dumps(result_final, ensure_ascii=False))

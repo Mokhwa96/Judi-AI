@@ -148,7 +148,7 @@ function Dashboard() {
         { text: userInput, sender: "user" },
       ]);
       chatbotChat(userInput);
-      setUserInput("".trim()); // 사용자 입력을 초기화
+      setUserInput("".replace("\n", "")); // 사용자 입력을 초기화
     }
   };
 
@@ -164,11 +164,12 @@ function Dashboard() {
       className={`message-container ${message.sender}-container`}
     >
       <div className={`bubble ${message.sender}`}>
-        {message.sender === "lawyer" && isLoading ? (
-          <img className="loading-chat_image" src={Loading} alt="로딩이미지" />
-        ) : (
-          message.text
-        )}
+        {message.text.split("\n").map((line, index) => (
+          <React.Fragment key={index}>
+            {line}
+            <br />
+          </React.Fragment>
+        ))}
       </div>
     </div>
   ));
@@ -388,6 +389,17 @@ function Dashboard() {
                   {/* 채팅 메시지를 표시하는 부분 */}
                   <div className="chat-messages">
                     {renderMessages}
+                    {isLoading ? (
+                      <div className={"bubble lawyer"}>
+                        <img
+                          className="loading-chat-image"
+                          src={Loading}
+                          alt="로딩이미지"
+                        />
+                      </div>
+                    ) : (
+                      <></>
+                    )}
                     <div ref={messagesEndRef} />{" "}
                     {/* 스크롤 조정을 위한 빈 div 추가 */}
                   </div>
