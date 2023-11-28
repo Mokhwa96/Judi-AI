@@ -15,7 +15,8 @@ import "../css/top.css";
 import "../css/center.css";
 import "../css/judi_chat.css";
 import "../css/dashboard.css";
-import LookAhead from "../gifs/judi_look_ahead_sample.gif"; // 애니매이션 gif(정면보기)
+import LookAhead from "../gifs/judi_animation_eye_blink.gif"; // 애니매이션 gif(정면보기)
+import Talking from "../gifs/judi_talking.gif"; // 애니매이션 gif(말하기)
 import Loading from "../gifs/loading.gif"; // 애니매이션 gif(채팅 로딩)
 import { Howl } from "howler";
 import Graph1 from "../graph1";
@@ -38,7 +39,6 @@ function downloadToFile(content, filename, contentType) {
 
 // 주디의 대화를 위한 구역
 function Dashboard() {
-  const [isChatboxActive, setIsChatboxActive] = useState(false);
   const [messages, setMessages] = useState([
     { text: "안녕하세요, 어떤 도움이 필요하신가요?", sender: "lawyer" },
   ]);
@@ -132,11 +132,6 @@ function Dashboard() {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }, [messages]); // messages 배열이 변경될 때마다 실행
-
-  // 채팅 박스 활성화/비활성화 부분
-  const toggleChatbox = () => {
-    setIsChatboxActive(!isChatboxActive);
-  };
 
   // 채팅의 응답을 제출하는 부분. 이곳을 변경해서 변호사의 응답 부분을 화면에 표시되게 했습니다.
   const submitResponse = () => {
@@ -326,7 +321,6 @@ function Dashboard() {
                   stroke-linejoin="round"
                   stroke-width="2"
                   viewBox="0 0 24 24"
-                  // onClick={clickGraph}
                 >
                   <defs />
                   <path d="M21.21 15.89A10 10 0 118 2.83M22 12A10 10 0 0012 2v10z" />
@@ -380,22 +374,6 @@ function Dashboard() {
                   <Clock today={today} />
                 </span>
               </div>
-              {/* <div className="projects-section-line">
-                <div className="projects-status">
-                  <div className="item-status">
-                    <span className="status-number">45</span>
-                    <span className="status-type">수정 가능 1</span>
-                  </div>
-                  <div className="item-status">
-                    <span className="status-number">24</span>
-                    <span className="status-type">수정 가능 2</span>
-                  </div>
-                  <div className="item-status">
-                    <span className="status-number">62</span>
-                    <span className="status-type">수정 가능 3</span>
-                  </div>
-                </div>
-              </div> */}
 
               {/* Chat Simulator */}
               <button onClick={clickGraph}> 클릭 </button>
@@ -405,14 +383,6 @@ function Dashboard() {
                   className={"lawyer-image"}
                   src={LookAhead}
                   alt="변호사"
-                  onClick={toggleChatbox} // 이벤트 핸들러
-                />
-                <img
-                  id="open-chatbox-button"
-                  onClick={toggleChatbox}
-                  src="/images/chat_icon3.png"
-                  alt="Chat Icon"
-                  style={{ cursor: "pointer", width: "60px", height: "auto" }}
                 />
                 {/* 음성 인식 & 전송 저장 버튼 */}
                 {listening ? (
@@ -435,13 +405,6 @@ function Dashboard() {
                       color: "#ffffff",
                     }}
                   />
-                  // <img
-                  //   className="voice-button"
-                  //   src="/images/record_icon.png"
-                  //   alt="녹음 시작"
-                  //   onClick={startListening}
-                  //   style={{ width: "30px", height: "30px" }}
-                  // />
                 )}
 
                 {/* // 챗 박스 관련 구역 */}
@@ -509,62 +472,6 @@ function Dashboard() {
               {listening && (
                 <div className="transcript">상담 내용 확인: {transcript}</div>
               )}
-
-              {/* 대쉬보드 안의 프로젝트들을 담을 수 있는 Box입니다. */}
-              {/* <div className="project-boxes jsGridView">
-                <div className="project-box-wrapper">
-                  <div
-                    className="project-box"
-                    style={{ backgroundcolor: "#fee4cb" }}
-                  >
-                    <div className="project-box-header">
-                      <span>December 10, 2020</span>
-                    </div>
-
-                    <div className="project-box-content-header">
-                      <p className="box-content-header">Web Designing</p>
-                      <p className="box-content-subheader">Prototyping</p>
-                    </div>
-                    <div className="box-progress-wrapper">
-                      <p className="box-progress-header">Progress</p>
-                      <div className="box-progress-bar">
-                        <span
-                          className="box-progress"
-                          style={{ width: "60%", backgroundcolor: "#ff942e" }}
-                        ></span>
-                      </div>
-                      <p className="box-progress-percentage">60%</p>
-                    </div>
-
-                    <div className="project-box-footer">
-                      <div className="participants">
-                        <button
-                          className="add-participant"
-                          style={{ color: "#ff942e" }}
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="12"
-                            height="12"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="3"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            className="feather feather-plus"
-                          >
-                            <path d="M12 5v14M5 12h14" />
-                          </svg>
-                        </button>
-                      </div>
-                      <div className="days-left" style={{ color: "#ff942e" }}>
-                        2 Days Left
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div> */}
             </div>
           </div>
 
@@ -834,11 +741,6 @@ function Dashboard() {
                     당신의 사례와 유사한 통계 결과를 보여드립니다.
                   </p>
                 </div>
-                {/* <div className="messages">
-                  <p className="message-line">
-                    당신의 사례와 유사한 통계 결과를 보여드립니다.
-                  </p>
-                </div> */}
 
                 <div className="graph_content_container">
                   {graphdata["징역"] &&
