@@ -20,7 +20,9 @@ import Loading from "../gifs/loading.gif"; // 애니매이션 gif(채팅 로딩)
 import { Howl } from "howler";
 import Graph1 from "../graph1";
 import Graph2 from "../graph2";
-
+import Clock from "./Clock";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMicrophone } from "@fortawesome/free-solid-svg-icons";
 // 솔빈 작업 구역
 // 대화 저장을 위한 구역
 function downloadToFile(content, filename, contentType) {
@@ -66,13 +68,9 @@ function Dashboard() {
   const [isGraphActive, setIsGraphActive] = useState(false);
   const clickGraph = () => {
     setIsGraphActive(!isGraphActive);
-
-    if (isGraphActive) {
-      console.log("활성화");
-    } else {
-      console.log("비활성화");
-    }
   };
+  // 현재 시간 표시
+  const today = new Date();
 
   const messagesEndRef = useRef(null); // 새로운 ref. 채팅창 스크롤 자동 최신화 위함.
   const [isLoading, setIsLoading] = useState(false); // 로딩 상태 추가
@@ -220,6 +218,67 @@ function Dashboard() {
         <div className="logo" onClick={() => navigate("/")}>
           <p>JudiAI</p>
         </div>
+        <div className="app-header-right">
+          <button className="mode-switch" title="Switch Theme">
+            <svg
+              className="moon"
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+            >
+              <defs></defs>
+              <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+            </svg>
+          </button>
+          <button className="add-btn" title="Add New Project">
+            <svg
+              className="btn-icon"
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="3"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+          </button>
+          <button className="notification-btn">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              className="feather feather-bell"
+            >
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+              <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+            </svg>
+          </button>
+          <button className="profile-btn">
+            <img
+              className="profile-image"
+              src={process.env.PUBLIC_URL + "images/judi_desk.png"}
+              alt="프로필이미지"
+            />
+            {/* 이 버튼은 오른쪽 상단의 로그인한 사람 이미지 버튼입니다. */}
+            <span>김현우</span>
+          </button>
+        </div>
       </div>
 
       {/* 대쉬보드 전체를 담고 있는 컨테이너 입니다. */}
@@ -228,13 +287,7 @@ function Dashboard() {
         <div className="app-header">
           <div className="app-header-left">
             <span className="app-icon"></span>
-            <p className="app-name">Portfolio</p>
-          </div>
-          <div className="app-header-right">
-            <button className="profile-btn">
-              {/* 이 버튼은 오른쪽 상단의 로그인한 사람 이미지 버튼입니다. */}
-              <span>Judi.AI</span>
-            </button>
+            {/* <p className="app-name">Portfolio</p> */}
           </div>
         </div>
 
@@ -322,7 +375,10 @@ function Dashboard() {
               {/* 대쉬보드 안쪽 상단 영역입니다. */}
               <div className="projects-section-left-header">
                 <span className="title">It's our tasks for you</span>
-                <span className="time">December, 5</span>
+                {/* 현재 날짜 표시 */}
+                <span className="time">
+                  <Clock today={today} />
+                </span>
               </div>
               {/* <div className="projects-section-line">
                 <div className="projects-status">
@@ -368,13 +424,24 @@ function Dashboard() {
                     style={{ width: "30px", height: "30px" }}
                   />
                 ) : (
-                  <img
+                  <FontAwesomeIcon
+                    icon={faMicrophone}
                     className="voice-button"
-                    src="/images/record_icon.png"
                     alt="녹음 시작"
                     onClick={startListening}
-                    style={{ width: "30px", height: "30px" }}
+                    style={{
+                      width: "30px",
+                      height: "30px",
+                      color: "#ffffff",
+                    }}
                   />
+                  // <img
+                  //   className="voice-button"
+                  //   src="/images/record_icon.png"
+                  //   alt="녹음 시작"
+                  //   onClick={startListening}
+                  //   style={{ width: "30px", height: "30px" }}
+                  // />
                 )}
 
                 {/* // 챗 박스 관련 구역 */}

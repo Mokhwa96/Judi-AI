@@ -11,7 +11,7 @@
 .chat-container {
   width: 500px; /* chatbox가 hidden일 때의 너비 */
   background: rgb(255, 255, 255);
-  border: 1px solid #6e6a6a;
+  /* border: 1px solid #6e6a6a; */
   border-radius: 20px 20px 20px 20px; /* 모서리 둥글게 */
   padding: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -100,8 +100,10 @@
   left: 30px;
   z-index: 1010;
   cursor: pointer;
-  background-color: black;
-  border-radius: 5px;
+  background-color: #214674;
+  padding: 10px;
+  border-radius: 50%;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
 }
 
 .voice-control-buttons {
@@ -209,7 +211,7 @@
   /* background-color: rgba(221, 208, 192, 0.192); */
   margin: 5px;
   margin: 5px 20px 10px 20px;
-  padding: 20px;
+  padding: 0 20px 20px 20px;
   justify-content: center;
   border-radius: 10px;
 }
@@ -234,8 +236,6 @@
 }
 
 .graph_title {
-  /* background-color: rgb(69, 86, 124); */
-  border: 2px solid #f1a13760;
   background-color: white;
   color: #000000;
   font-family: "S-CoreDream-3Light";
@@ -246,7 +246,7 @@
 }
 
 .graph-dashed-line {
-  border-top: 2px solid #f1a13760; /* 실선 스타일 적용 */
+  border-top: 3px solid #f1a13760; /* 실선 스타일 적용 */
   width: 100%;
   position: absolute;
   top: 50%;
