@@ -11,7 +11,7 @@
 .chat-container {
   width: 500px; /* chatbox가 hidden일 때의 너비 */
   background: rgb(255, 255, 255);
-  border: 1px solid #6e6a6a;
+  /* border: 1px solid #6e6a6a; */
   border-radius: 20px 20px 20px 20px; /* 모서리 둥글게 */
   padding: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
