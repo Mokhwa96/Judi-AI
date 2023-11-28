@@ -36,7 +36,7 @@ def casename_find(sentence):
     return casename
 
 
-def get_similar_sentences(api_key, file_path, input_sentence, threshold=0.9, engine='text-embedding-ada-002'):
+def get_similar_sentences(api_key, file_path, input_sentence, threshold=0.84, engine='text-embedding-ada-002'):
     # API 키 설정
     client = OpenAI(api_key=api_key)
 
@@ -240,15 +240,15 @@ def result_statistics(sentences):
     if 준법운전강의:
       전체['준법운전강의'] = sum(준법운전강의.values())
 
-    casename_dict = {'전체': 전체, '징역': 징역, '금고': 금고, '벌금': 벌금, '보호관찰': 보호관찰, '사회봉사': 사회봉사, '성폭력_치료프로그램': 성폭력_치료프로그램,
+    casename_dict = {'전체': 전체, '징역_전체': 전체['징역_전체'], '금고_전체': 전체['금고_전체'], '징역': 징역, '징역_실형' : 징역['실형'], '금고': 금고, '금고_실형': 금고['실형'], '벌금': 벌금, '보호관찰': 보호관찰, '사회봉사': 사회봉사, '성폭력_치료프로그램': 성폭력_치료프로그램,
                      '피고인_정보공개': 피고인_정보공개, '아동_청소년_장애인복지시설_취업제한': 아동_청소년_장애인복지시설_취업제한,
                      '준법운전강의': 준법운전강의}
 
     return casename_dict
 
 if __name__ == "__main__":
-  api_key = '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'
-  file_path = "C:/Users/gjaischool/Judi-AI\hh/"
+  api_key = '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'
+  file_path = "C:/Users/gjaischool/Judi-AI/hh/"
 
   line = sys.stdin.buffer.readline().decode('utf-8')
   request = json.loads(line)

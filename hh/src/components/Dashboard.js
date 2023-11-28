@@ -430,10 +430,31 @@ function Dashboard() {
                   <div className="project-box-header">
                     <span>December 10, 2020</span>
                   </div>
+
+                  {/* 전체 그래프 */}
+                  <div className="graph_content_container">
+                    {graphdata["전체"] && Object.keys(graphdata["전체"]).length > 0 && (
+                        <>
+                          전체
+                          <div
+                            style={{
+                              height: "200px",
+                              width: "300px",
+                              marginLeft: "50px",
+                            }}
+                          >
+                            <Graph1
+                              graphdata={graphdata["전체"]}
+                              graphType="전체"
+                            />
+                          </div>
+                        </>
+                      )}
+                  </div>
+
                   {/* 징역 그래프 */}
                   <div className="graph_content_container">
-                    {graphdata["징역"] &&
-                      Object.keys(graphdata["징역"]).length > 0 && (
+                  {graphdata["징역_전체"] && (
                         <>
                           징역
                           <div
@@ -463,6 +484,311 @@ function Dashboard() {
                         </>
                       )}
                   </div>
+
+                  {/* 징역_실형 그래프 */}
+                  <div className="graph_content_container">
+                    {graphdata["징역_실형"] &&
+                      Object.keys(graphdata["징역_실형"]).length > 0 && (
+                        <>
+                          징역_실형
+                          <div
+                            style={{
+                              height: "200px",
+                              width: "300px",
+                              marginLeft: "50px",
+                            }}
+                          >
+                            <Graph1
+                              graphdata={graphdata["징역_실형"]}
+                              graphType="징역_실형"
+                            />
+                          </div>
+                          <div
+                            style={{
+                              height: "200px",
+                              width: "300px",
+                              marginLeft: "50px",
+                            }}
+                          >
+                            <Graph2
+                              graphdata={graphdata["징역_실형"]}
+                              graphType="징역_실형"
+                            />
+                          </div>
+                        </>
+                      )}
+                  </div>
+
+                  {/* 금고 그래프 */}
+                  <div className="graph_content_container">
+                    {graphdata["금고_전체"] && (
+                        <>
+                          금고
+                          <div
+                            style={{
+                              height: "200px",
+                              width: "300px",
+                              marginLeft: "50px",
+                            }}
+                          >
+                            <Graph1
+                              graphdata={graphdata["금고"]}
+                              graphType="금고"
+                            />
+                          </div>
+                          <div
+                            style={{
+                              height: "200px",
+                              width: "300px",
+                              marginLeft: "50px",
+                            }}
+                          >
+                            <Graph2
+                              graphdata={graphdata["금고"]}
+                              graphType="금고"
+                            />
+                          </div>
+                        </>
+                      )}
+                  </div>
+
+                  {/* 벌금 그래프 */}
+                  <div className="graph_content_container">
+                    {graphdata["벌금"] &&
+                      Object.keys(graphdata["벌금"]).length > 0 && (
+                        <>
+                          벌금
+                          <div
+                            style={{
+                              height: "200px",
+                              width: "300px",
+                              marginLeft: "50px",
+                            }}
+                          >
+                            <Graph1
+                              graphdata={graphdata["벌금"]}
+                              graphType="벌금"
+                            />
+                          </div>
+                          <div
+                            style={{
+                              height: "200px",
+                              width: "300px",
+                              marginLeft: "50px",
+                            }}
+                          >
+                            <Graph2
+                              graphdata={graphdata["벌금"]}
+                              graphType="벌금"
+                            />
+                          </div>
+                        </>
+                      )}
+                  </div>        
+
+                  {/* 보호관찰 그래프 */}
+                  <div className="graph_content_container">
+                    {graphdata["보호관찰"] && Object.values(graphdata["보호관찰"]).reduce((acc, curr) => acc + curr, 0) > 0 && (
+                        <>
+                          보호관찰
+                          <div
+                            style={{
+                              height: "200px",
+                              width: "300px",
+                              marginLeft: "50px",
+                            }}
+                          >
+                            <Graph1
+                              graphdata={graphdata["보호관찰"]}
+                              graphType="보호관찰"
+                            />
+                          </div>
+                          <div
+                            style={{
+                              height: "200px",
+                              width: "300px",
+                              marginLeft: "50px",
+                            }}
+                          >
+                            <Graph2
+                              graphdata={graphdata["보호관찰"]}
+                              graphType="보호관찰"
+                            />
+                          </div>
+                        </>
+                      )}
+                  </div>
+
+                  {/* 사회봉사 그래프 */}
+                  <div className="graph_content_container">
+                    {graphdata["사회봉사"] &&
+                      Object.keys(graphdata["사회봉사"]).length > 0 && (
+                        <>
+                          사회봉사
+                          <div
+                            style={{
+                              height: "200px",
+                              width: "300px",
+                              marginLeft: "50px",
+                            }}
+                          >
+                            <Graph1
+                              graphdata={graphdata["사회봉사"]}
+                              graphType="사회봉사"
+                            />
+                          </div>
+                          <div
+                            style={{
+                              height: "200px",
+                              width: "300px",
+                              marginLeft: "50px",
+                            }}
+                          >
+                            <Graph2
+                              graphdata={graphdata["사회봉사"]}
+                              graphType="사회봉사"
+                            />
+                          </div>
+                        </>
+                      )}
+                  </div>
+
+                  {/* 성폭력_치료프로그램 그래프 */}
+                  <div className="graph_content_container">
+                    {graphdata["성폭력_치료프로그램"] &&
+                      Object.keys(graphdata["성폭력_치료프로그램"]).length > 0 && (
+                        <>
+                          성폭력_치료프로그램
+                          <div
+                            style={{
+                              height: "200px",
+                              width: "300px",
+                              marginLeft: "50px",
+                            }}
+                          >
+                            <Graph1
+                              graphdata={graphdata["성폭력_치료프로그램"]}
+                              graphType="성폭력_치료프로그램"
+                            />
+                          </div>
+                          <div
+                            style={{
+                              height: "200px",
+                              width: "300px",
+                              marginLeft: "50px",
+                            }}
+                          >
+                            <Graph2
+                              graphdata={graphdata["성폭력_치료프로그램"]}
+                              graphType="성폭력_치료프로그램"
+                            />
+                          </div>
+                        </>
+                      )}
+                  </div>
+
+                  {/* 피고인_정보공개 그래프 */}
+                  <div className="graph_content_container">
+                    {graphdata["피고인_정보공개"] &&
+                      Object.keys(graphdata["피고인_정보공개"]).length > 0 && (
+                        <>
+                          피고인_정보공개
+                          <div
+                            style={{
+                              height: "200px",
+                              width: "300px",
+                              marginLeft: "50px",
+                            }}
+                          >
+                            <Graph1
+                              graphdata={graphdata["피고인_정보공개"]}
+                              graphType="피고인_정보공개"
+                            />
+                          </div>
+                          <div
+                            style={{
+                              height: "200px",
+                              width: "300px",
+                              marginLeft: "50px",
+                            }}
+                          >
+                            <Graph2
+                              graphdata={graphdata["피고인_정보공개"]}
+                              graphType="피고인_정보공개"
+                            />
+                          </div>
+                        </>
+                      )}
+                  </div>
+
+                  {/* 아동_청소년_장애인복지시설_취업제한 그래프 */}
+                  <div className="graph_content_container">
+                    {graphdata["아동_청소년_장애인복지시설_취업제한"] &&
+                      Object.keys(graphdata["아동_청소년_장애인복지시설_취업제한"]).length > 0 && (
+                        <>
+                          아동_청소년_장애인복지시설_취업제한
+                          <div
+                            style={{
+                              height: "200px",
+                              width: "300px",
+                              marginLeft: "50px",
+                            }}
+                          >
+                            <Graph1
+                              graphdata={graphdata["아동_청소년_장애인복지시설_취업제한"]}
+                              graphType="아동_청소년_장애인복지시설_취업제한"
+                            />
+                          </div>
+                          <div
+                            style={{
+                              height: "200px",
+                              width: "300px",
+                              marginLeft: "50px",
+                            }}
+                          >
+                            <Graph2
+                              graphdata={graphdata["아동_청소년_장애인복지시설_취업제한"]}
+                              graphType="아동_청소년_장애인복지시설_취업제한"
+                            />
+                          </div>
+                        </>
+                      )}
+                  </div>
+
+                  {/* 준법운전강의 그래프 */}
+                  <div className="graph_content_container">
+                    {graphdata["준법운전강의"] &&
+                      Object.keys(graphdata["준법운전강의"]).length > 0 && (
+                        <>
+                          준법운전강의
+                          <div
+                            style={{
+                              height: "200px",
+                              width: "300px",
+                              marginLeft: "50px",
+                            }}
+                          >
+                            <Graph1
+                              graphdata={graphdata["준법운전강의"]}
+                              graphType="준법운전강의"
+                            />
+                          </div>
+                          <div
+                            style={{
+                              height: "200px",
+                              width: "300px",
+                              marginLeft: "50px",
+                            }}
+                          >
+                            <Graph2
+                              graphdata={graphdata["준법운전강의"]}
+                              graphType="준법운전강의"
+                            />
+                          </div>
+                        </>
+                      )}
+                  </div>
+
                   <div className="project-box-content-header">
                     <p className="box-content-header">Web Designing</p>
                     <p className="box-content-subheader">Prototyping</p>
