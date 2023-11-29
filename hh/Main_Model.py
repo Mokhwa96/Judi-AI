@@ -36,7 +36,7 @@ def casename_find(sentence):
     return casename
 
 
-def get_similar_sentences(api_key, file_path, input_sentence, threshold=0.8, engine='text-embedding-ada-002'):
+def get_similar_sentences(api_key, file_path, input_sentence, threshold=0.83, engine='text-embedding-ada-002'):
     # API 키 설정
     client = OpenAI(api_key=api_key)
 
@@ -63,7 +63,6 @@ def get_similar_sentences(api_key, file_path, input_sentence, threshold=0.8, eng
     result_df = pd.DataFrame([data.iloc[i[0]][["casename", "facts", "ruling"]].to_dict() for i in similar_sentences_sorted])
 
     return result_df
-
 
 def result_statistics(sentences):
 
@@ -186,13 +185,7 @@ def result_statistics(sentences):
                 else:
                     준법운전강의[re.search(pattern, text).group(1)] = 1
 
-    벌금 = dict(sorted(벌금.items(), key=lambda x:x[1], reverse=True))
-    보호관찰 = dict(sorted(보호관찰.items(), key=lambda x:x[1], reverse=True))
-    사회봉사 = dict(sorted(사회봉사.items(), key=lambda x:x[1], reverse=True))
-    성폭력_치료프로그램 = dict(sorted(성폭력_치료프로그램.items(), key=lambda x:x[1], reverse=True))
-    피고인_정보공개 = dict(sorted(피고인_정보공개.items(), key=lambda x:x[1], reverse=True))
-    아동_청소년_장애인복지시설_취업제한 = dict(sorted(아동_청소년_장애인복지시설_취업제한.items(), key=lambda x:x[1], reverse=True))
-    준법운전강의 = dict(sorted(준법운전강의.items(), key=lambda x:x[1], reverse=True))
+
     전체 = {}
 
     if 징역['실형']:
@@ -232,9 +225,25 @@ def result_statistics(sentences):
     if 준법운전강의:
       전체['준법운전강의'] = sum(준법운전강의.values())
 
-    casename_dict = {'전체': 전체, '징역': 징역, '금고': 금고, '벌금': 벌금, '보호관찰': 보호관찰, '사회봉사': 사회봉사, '성폭력_치료프로그램': 성폭력_치료프로그램,
-                     '피고인_정보공개': 피고인_정보공개, '아동_청소년_장애인복지시설_취업제한': 아동_청소년_장애인복지시설_취업제한,
-                     '준법운전강의': 준법운전강의}
+    def sort_dict(dictionary, limit=5):
+        return dict(sorted(dictionary.items(), key=lambda x: x[1], reverse=True))
+
+    # 각 범주에 대해 sort_dict 함수 적용
+    전체 = sort_dict(전체)
+    징역['실형'] = sort_dict(징역['실형'])
+    징역['집행유예'] = sort_dict(징역['집행유예'])
+    금고['실형'] = sort_dict(금고['실형'])
+    금고['집행유예'] = sort_dict(금고['집행유예'])
+    벌금 = sort_dict(벌금)
+    사회봉사 = sort_dict(사회봉사)
+    성폭력_치료프로그램 = sort_dict(성폭력_치료프로그램)
+    피고인_정보공개 = sort_dict(피고인_정보공개)
+    아동_청소년_장애인복지시설_취업제한 = sort_dict(아동_청소년_장애인복지시설_취업제한)
+    준법운전강의 = sort_dict(준법운전강의)
+
+    casename_dict = {'전체': 전체, '전체_징역_전체': 전체['징역_전체'], '전체_금고_전체': 전체['금고_전체'], '징역': 징역, '징역_실형' : 징역['실형'], '금고': 금고,
+                    '금고_실형': 금고['실형'], '벌금': 벌금, '보호관찰': 보호관찰, '사회봉사': 사회봉사, '성폭력_치료프로그램': 성폭력_치료프로그램,
+                    '피고인_정보공개': 피고인_정보공개, '아동_청소년_장애인복지시설_취업제한': 아동_청소년_장애인복지시설_취업제한, '준법운전강의': 준법운전강의}
 
     return casename_dict
 

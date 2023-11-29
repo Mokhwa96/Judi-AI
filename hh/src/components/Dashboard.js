@@ -46,6 +46,7 @@ function Dashboard() {
   const [answerState, setAnswerState] = useState(false);
   const navigate = useNavigate();
   const [graphdata, setGraphdata] = useState({
+    전체: {},
     징역: {
       "2년": 10,
       "5년": 20,
@@ -53,6 +54,7 @@ function Dashboard() {
       "4년": 20,
       "6년": 22,
     },
+    전체_징역_전체: {},
     금고: { "2년": 10, "5년": 20 },
     벌금: { "2년": 10, "5년": 20 },
     집행유예: { "2년": 10, "5년": 20 },
