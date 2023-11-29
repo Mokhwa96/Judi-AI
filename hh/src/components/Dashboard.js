@@ -577,7 +577,7 @@ function Dashboard() {
                       className={"lawyer-image"}
                       src={LookAhead}
                       alt="변호사"
-                      onClick={toggleChatbox} // 이벤트 핸들러
+                      // onClick={toggleChatbox} // 이벤트 핸들러
                     />
 
                     {/* 음성 인식 & 전송 저장 버튼 */}
