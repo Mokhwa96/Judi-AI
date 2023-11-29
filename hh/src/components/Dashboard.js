@@ -477,7 +477,7 @@ function Dashboard() {
                       0 && (
                       <div className="graph">
                         <div className="graph_title">
-                          <span>성폭력_치료프로그램</span>
+                          <span>성폭력 치료프로그램</span>
                         </div>
                         <div className="realgraph_container">
                           <div className="bar_style">
@@ -499,7 +499,7 @@ function Dashboard() {
                     Object.keys(graphdata["피고인_정보공개"]).length > 0 && (
                       <div className="graph">
                         <div className="graph_title">
-                          <span>피고인_정보공개</span>
+                          <span>피고인 정보공개</span>
                         </div>
                         <div className="realgraph_container">
                           <div className="bar_style">
@@ -519,7 +519,7 @@ function Dashboard() {
                     ).length > 0 && (
                       <div className="graph">
                         <div className="graph_title">
-                          <span>아동_청소년_장애인복지시설_취업제한</span>
+                          <span>아동 청소년 장애인복지시설 취업제한</span>
                         </div>
                         <div className="realgraph_container">
                           <div className="bar_style">
@@ -685,16 +685,20 @@ function Dashboard() {
               <div>
                 {/* 그래프 페이지*/}
                 <div className="projects-section-header">
-                  <p>통계</p>
-                  <p className="message-line">
-                    당신의 사례와 유사한 통계 결과를 보여드립니다.
-                  </p>
-                  <button
-                    className="detail_graph_button"
-                    onClick={clickDetailGraph}
-                  >
-                    자세히 보기
-                  </button>
+                  <div className="left">
+                    <p>통계</p>
+                    <p className="message-line">
+                      당신의 사례와 유사한 통계 결과를 보여드립니다.
+                    </p>
+                  </div>
+                  <div className="detail_graph_button_container">
+                    <button
+                      className="detail_graph_button"
+                      onClick={clickDetailGraph}
+                    >
+                      자세히 보기
+                    </button>
+                  </div>
                 </div>
 
                 <div className="graph_content_container">

@@ -254,6 +254,28 @@ a {
     font-family: "SUITE-Regular";
   }
 }
+.projects-section-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  .left {
+    flex-direction: column;
+  }
+}
+.detail_graph_button_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+}
+.detail_graph_button {
+  /* background-color: rgb(216, 216, 216); */
+  border-radius: 10px;
+  margin-right: 40px;
+  /* float: right; */
+  border: none;
+  padding: 5px;
+}
+
 .messages-section .messages-close {
   position: absolute;
   top: 12px;
@@ -821,7 +843,3 @@ input:checked + label svg {
 }
 
 /*  */
-.detail_graph_button {
-  background-color: white;
-  border-radius: 10px;
-}
