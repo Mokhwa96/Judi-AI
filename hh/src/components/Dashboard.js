@@ -44,6 +44,7 @@ function Dashboard() {
   const [answerState, setAnswerState] = useState(false);
   const navigate = useNavigate();
   const [graphdata, setGraphdata] = useState({
+    전체:{},
     징역: {
       "2년": 10,
       "5년": 20,
@@ -51,6 +52,7 @@ function Dashboard() {
       "4년": 20,
       "6년": 22,
     },
+    전체_징역_전체: {},
     금고: { "2년": 10, "5년": 20 },
     벌금: {},
     집행유예: {},
@@ -454,7 +456,7 @@ function Dashboard() {
 
                   {/* 징역 그래프 */}
                   <div className="graph_content_container">
-                  {graphdata["징역_전체"] && (
+                  {graphdata["전체_징역_전체"] && (
                         <>
                           징역
                           <div
@@ -521,7 +523,7 @@ function Dashboard() {
 
                   {/* 금고 그래프 */}
                   <div className="graph_content_container">
-                    {graphdata["금고_전체"] && (
+                    {graphdata["전체_금고_전체"] && (
                         <>
                           금고
                           <div
@@ -546,6 +548,40 @@ function Dashboard() {
                             <Graph2
                               graphdata={graphdata["금고"]}
                               graphType="금고"
+                            />
+                          </div>
+                        </>
+                      )}
+                  </div>
+
+                  {/* 금고_실형 그래프 */}
+                  <div className="graph_content_container">
+                    {graphdata["금고_실형"] &&
+                      Object.keys(graphdata["금고_실형"]).length > 0 && (
+                        <>
+                          금고_실형
+                          <div
+                            style={{
+                              height: "200px",
+                              width: "300px",
+                              marginLeft: "50px",
+                            }}
+                          >
+                            <Graph1
+                              graphdata={graphdata["금고_실형"]}
+                              graphType="금고_실형"
+                            />
+                          </div>
+                          <div
+                            style={{
+                              height: "200px",
+                              width: "300px",
+                              marginLeft: "50px",
+                            }}
+                          >
+                            <Graph2
+                              graphdata={graphdata["금고_실형"]}
+                              graphType="금고_실형"
                             />
                           </div>
                         </>
