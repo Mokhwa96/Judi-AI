@@ -65,7 +65,7 @@ function Dashboard() {
   });
 
   // 그래프 활성화/비활성화 부분
-  const [isGraphActive, setIsGraphActive] = useState(true);
+  const [isGraphActive, setIsGraphActive] = useState(false);
   const clickGraph = () => {
     setIsGraphActive(!isGraphActive);
   };
@@ -103,10 +103,13 @@ function Dashboard() {
         ...prevMessages,
         { text: data["results"], sender: "lawyer" },
       ]);
-      if (!data['final_text']) {
+      if (!data["final_text"]) {
         setIsFianl(false);
       } else {
-        setMessages((prevMessages) => [...prevMessages, { text: data["final_text"], sender: "lawyer",}]);
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          { text: data["final_text"], sender: "lawyer" },
+        ]);
         setIsFianl(true);
       }
       console.log("입력문은");
@@ -608,34 +611,32 @@ function Dashboard() {
                       />
                     )}
 
-                {/* // 챗 박스 관련 구역 */}
-                <div
-                  id="chatbox"
-                >
-                  {/* 채팅 메시지를 표시하는 부분 */}
-                  <div className="chat-messages">
-                    {renderMessages}
-                    {isLoading ? (
-                      <div className={"bubble lawyer"}>
-                        <img
-                          className="loading-chat-image"
-                          src={Loading}
-                          alt="로딩이미지"
-                        />
+                    {/* // 챗 박스 관련 구역 */}
+                    <div id="chatbox">
+                      {/* 채팅 메시지를 표시하는 부분 */}
+                      <div className="chat-messages">
+                        {renderMessages}
+                        {isLoading ? (
+                          <div className={"bubble lawyer"}>
+                            <img
+                              className="loading-chat-image"
+                              src={Loading}
+                              alt="로딩이미지"
+                            />
+                          </div>
+                        ) : (
+                          <></>
+                        )}
+                        {isFianl ? (
+                          <div className={"bubble lawyer"}>
+                            <button onClick={clickGraph}> 클릭 </button>
+                          </div>
+                        ) : (
+                          <></>
+                        )}
+                        <div ref={messagesEndRef}></div>
+                        {/* 스크롤 조정을 위한 빈 div 추가 */}
                       </div>
-                    ) : (
-                      <></>
-                    )}
-                    {isFianl ? (
-                      <div className={"bubble lawyer"}>
-                        <button onClick={clickGraph}> 클릭 </button>
-                      </div>
-                    ) : (
-                      <></>
-                    )}
-                    <div ref={messagesEndRef}></div>
-                    {/* 스크롤 조정을 위한 빈 div 추가 */}
-                  </div>
 
                       {/* 입력창 및 버튼 관련 구역 */}
                       <div className="chat-input-area">

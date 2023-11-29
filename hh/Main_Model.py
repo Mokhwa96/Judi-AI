@@ -240,7 +240,7 @@ def result_statistics(sentences):
 
 if __name__ == "__main__":
   api_key = 'api_key'
-  file_path = "C:/Users/gh576/JudiAI/hh/"
+  file_path = "C:/Users/gjaischool/Desktop/2차_프로젝트/reactest/hh/"
 
   line = sys.stdin.buffer.readline().decode('utf-8')
   request = json.loads(line)
