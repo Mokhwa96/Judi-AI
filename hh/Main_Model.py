@@ -239,7 +239,7 @@ def result_statistics(sentences):
     return casename_dict
 
 if __name__ == "__main__":
-  api_key = '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'
+  api_key = 'api_key'
   file_path = "C:/Users/gh576/JudiAI/hh/"
 
   line = sys.stdin.buffer.readline().decode('utf-8')

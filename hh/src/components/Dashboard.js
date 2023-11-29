@@ -15,7 +15,8 @@ import "../css/top.css";
 import "../css/center.css";
 import "../css/judi_chat.css";
 import "../css/dashboard.css";
-import LookAhead from "../gifs/judi_look_ahead_sample.gif"; // 애니매이션 gif(정면보기)
+import LookAhead from "../gifs/judi_animation_eye_blink.gif"; // 애니매이션 gif(정면보기)
+import Talking from "../gifs/judi_talking.gif"; // 애니매이션 gif(말하기)
 import Loading from "../gifs/loading.gif"; // 애니매이션 gif(채팅 로딩)
 import { Howl } from "howler";
 import Graph1 from "../graph1";
@@ -38,7 +39,6 @@ function downloadToFile(content, filename, contentType) {
 
 // 주디의 대화를 위한 구역
 function Dashboard() {
-  const [isChatboxActive, setIsChatboxActive] = useState(false);
   const [messages, setMessages] = useState([
     { text: "안녕하세요, 어떤 도움이 필요하신가요?", sender: "lawyer" },
   ]);
@@ -140,11 +140,6 @@ function Dashboard() {
       block: "nearest",
     });
   }, [messages]); // messages 배열이 변경될 때마다 실행
-
-  // 채팅 박스 활성화/비활성화 부분
-  const toggleChatbox = () => {
-    setIsChatboxActive(!isChatboxActive);
-  };
 
   // 채팅의 응답을 제출하는 부분. 이곳을 변경해서 변호사의 응답 부분을 화면에 표시되게 했습니다.
   const submitResponse = () => {
@@ -334,7 +329,6 @@ function Dashboard() {
                   stroke-linejoin="round"
                   stroke-width="2"
                   viewBox="0 0 24 24"
-                  // onClick={clickGraph}
                 >
                   <defs />
                   <path d="M21.21 15.89A10 10 0 118 2.83M22 12A10 10 0 0012 2v10z" />
