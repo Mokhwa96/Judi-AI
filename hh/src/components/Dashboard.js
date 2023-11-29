@@ -53,14 +53,14 @@ function Dashboard() {
       "4년": 20,
       "6년": 22,
     },
-    // 금고: { "2년": 10, "5년": 20 },
-    벌금: {},
-    집행유예: {},
-    사회봉사: {},
-    성폭력_치료프로그램: {},
-    피고인_정보공개: {},
-    아동_청소년_장애인복지시설_취업제한: {},
-    준법운전강의: {},
+    금고: { "2년": 10, "5년": 20 },
+    벌금: { "2년": 10, "5년": 20 },
+    집행유예: { "2년": 10, "5년": 20 },
+    사회봉사: { "2년": 10, "5년": 20 },
+    성폭력_치료프로그램: { "2년": 10, "5년": 20 },
+    피고인_정보공개: { "2년": 10, "5년": 20 },
+    아동_청소년_장애인복지시설_취업제한: { "2년": 10, "5년": 20 },
+    준법운전강의: { "2년": 10, "5년": 20 },
     results: "",
   });
 
@@ -68,6 +68,11 @@ function Dashboard() {
   const [isGraphActive, setIsGraphActive] = useState(false);
   const clickGraph = () => {
     setIsGraphActive(!isGraphActive);
+  };
+  // 상세 그래프 활성화/비활성화 부분
+  const [isDetailGraph, setIsDetailGraph] = useState(false);
+  const clickDetailGraph = () => {
+    setIsDetailGraph(!isDetailGraph);
   };
   // 현재 시간 표시
   const today = new Date();
@@ -130,7 +135,10 @@ function Dashboard() {
 
   // 메시지 배열이 변경될 때마다 스크롤을 맨 아래로 이동시키는 useEffect
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    messagesEndRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+    });
   }, [messages]); // messages 배열이 변경될 때마다 실행
 
   // 채팅 박스 활성화/비활성화 부분
@@ -272,7 +280,7 @@ function Dashboard() {
           <button className="profile-btn">
             <img
               className="profile-image"
-              src={process.env.PUBLIC_URL + "images/judi_desk.png"}
+              src={process.env.PUBLIC_URL + "images/현우프로필.jpg"}
               alt="프로필이미지"
             />
             {/* 이 버튼은 오른쪽 상단의 로그인한 사람 이미지 버튼입니다. */}
@@ -371,200 +379,303 @@ function Dashboard() {
               </a>
             </div>
             {/* 대쉬보드 안의 내용을 담는 영역입니다. */}
-            <div className="projects-section">
-              {/* 대쉬보드 안쪽 상단 영역입니다. */}
-              <div className="projects-section-left-header">
-                <span className="title">It's our tasks for you</span>
-                {/* 현재 날짜 표시 */}
-                <span className="time">
-                  <Clock today={today} />
-                </span>
-              </div>
-              {/* <div className="projects-section-line">
-                <div className="projects-status">
-                  <div className="item-status">
-                    <span className="status-number">45</span>
-                    <span className="status-type">수정 가능 1</span>
-                  </div>
-                  <div className="item-status">
-                    <span className="status-number">24</span>
-                    <span className="status-type">수정 가능 2</span>
-                  </div>
-                  <div className="item-status">
-                    <span className="status-number">62</span>
-                    <span className="status-type">수정 가능 3</span>
-                  </div>
-                </div>
-              </div> */}
-
-              {/* Chat Simulator */}
-              <button onClick={clickGraph}> 클릭 </button>
-              <div className={"chat-container expanded"}>
-                {/* 주디 이미지 */}
-                <img
-                  className={"lawyer-image"}
-                  src={LookAhead}
-                  alt="변호사"
-                  onClick={toggleChatbox} // 이벤트 핸들러
-                />
-                <img
-                  id="open-chatbox-button"
-                  onClick={toggleChatbox}
-                  src="/images/chat_icon3.png"
-                  alt="Chat Icon"
-                  style={{ cursor: "pointer", width: "60px", height: "auto" }}
-                />
-                {/* 음성 인식 & 전송 저장 버튼 */}
-                {listening ? (
-                  <img
-                    className="voice-button"
-                    src="/images/stop_icon.png"
-                    alt="녹음 중지"
-                    onClick={stopListening}
-                    style={{ width: "30px", height: "30px" }}
-                  />
-                ) : (
-                  <FontAwesomeIcon
-                    icon={faMicrophone}
-                    className="voice-button"
-                    alt="녹음 시작"
-                    onClick={startListening}
-                    style={{
-                      width: "30px",
-                      height: "30px",
-                      color: "#ffffff",
-                    }}
-                  />
-                  // <img
-                  //   className="voice-button"
-                  //   src="/images/record_icon.png"
-                  //   alt="녹음 시작"
-                  //   onClick={startListening}
-                  //   style={{ width: "30px", height: "30px" }}
-                  // />
-                )}
-
-                {/* // 챗 박스 관련 구역 */}
-                <div
-                  id="chatbox"
-                >
-                  {/* 채팅 메시지를 표시하는 부분 */}
-                  <div className="chat-messages">
-                    {renderMessages}
-                    {isLoading ? (
-                      <div className={"bubble lawyer"}>
-                        <img
-                          className="loading-chat-image"
-                          src={Loading}
-                          alt="로딩이미지"
-                        />
+            <div
+              className={`projects-section ${
+                isDetailGraph ? "detail_page" : "default_page"
+              }`}
+            >
+              {isDetailGraph ? (
+                <div className="detail_graph">
+                  {/* 상세페이지 영역 */}
+                  {/* 징역 */}
+                  {graphdata["징역"] &&
+                    Object.keys(graphdata["징역"]).length > 0 && (
+                      <div className="graph">
+                        <div className="graph_title">
+                          <span>징역</span>
+                        </div>
+                        <div className="realgraph_container">
+                          <div className="bar_style">
+                            <Graph1 graphdata={graphdata["징역"]} />
+                          </div>
+                          <div className="pie_style">
+                            <Graph2 graphdata={graphdata["징역"]} />
+                          </div>
+                        </div>
                       </div>
-                    ) : (
-                      <></>
                     )}
-                    <div ref={messagesEndRef}></div>
-                    {/* 스크롤 조정을 위한 빈 div 추가 */}
+                  <div className="dashed-line"></div>
+                  {/* 금고 */}
+                  {graphdata["금고"] &&
+                    Object.keys(graphdata["금고"]).length > 0 && (
+                      <div className="graph">
+                        <div className="graph_title">
+                          <span>금고</span>
+                        </div>
+                        <div className="realgraph_container">
+                          <div className="bar_style">
+                            <Graph1 graphdata={graphdata["금고"]} />
+                          </div>
+                          <div className="pie_style">
+                            <Graph2 graphdata={graphdata["금고"]} />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  <div className="dashed-line"></div>
+                  {/* 벌금 */}
+                  {graphdata["벌금"] &&
+                    Object.keys(graphdata["벌금"]).length > 0 && (
+                      <div className="graph">
+                        <div className="graph_title">
+                          <span>벌금</span>
+                        </div>
+                        <div className="realgraph_container">
+                          <div className="bar_style">
+                            <Graph1 graphdata={graphdata["벌금"]} />
+                          </div>
+                          <div className="pie_style">
+                            <Graph2 graphdata={graphdata["벌금"]} />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  <div className="dashed-line"></div>
+                  {/* 집행유예 */}
+                  {graphdata["집행유예"] &&
+                    Object.keys(graphdata["집행유예"]).length > 0 && (
+                      <div className="graph">
+                        <div className="graph_title">
+                          <span>집행유예</span>
+                        </div>
+                        <div className="realgraph_container">
+                          <div className="bar_style">
+                            <Graph1 graphdata={graphdata["집행유예"]} />
+                          </div>
+                          <div className="pie_style">
+                            <Graph2 graphdata={graphdata["집행유예"]} />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  <div className="dashed-line"></div>
+                  {/* 사회봉사 */}
+                  {graphdata["사회봉사"] &&
+                    Object.keys(graphdata["사회봉사"]).length > 0 && (
+                      <div className="graph">
+                        <div className="graph_title">
+                          <span>사회봉사</span>
+                        </div>
+                        <div className="realgraph_container">
+                          <div className="bar_style">
+                            <Graph1 graphdata={graphdata["사회봉사"]} />
+                          </div>
+                          <div className="pie_style">
+                            <Graph2 graphdata={graphdata["사회봉사"]} />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  <div className="dashed-line"></div>
+                  {/* 성폭력_치료프로그램 */}
+                  {graphdata["성폭력_치료프로그램"] &&
+                    Object.keys(graphdata["성폭력_치료프로그램"]).length >
+                      0 && (
+                      <div className="graph">
+                        <div className="graph_title">
+                          <span>성폭력_치료프로그램</span>
+                        </div>
+                        <div className="realgraph_container">
+                          <div className="bar_style">
+                            <Graph1
+                              graphdata={graphdata["성폭력_치료프로그램"]}
+                            />
+                          </div>
+                          <div className="pie_style">
+                            <Graph2
+                              graphdata={graphdata["성폭력_치료프로그램"]}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  <div className="dashed-line"></div>
+                  {/* 피고인_정보공개 */}
+                  {graphdata["피고인_정보공개"] &&
+                    Object.keys(graphdata["피고인_정보공개"]).length > 0 && (
+                      <div className="graph">
+                        <div className="graph_title">
+                          <span>피고인_정보공개</span>
+                        </div>
+                        <div className="realgraph_container">
+                          <div className="bar_style">
+                            <Graph1 graphdata={graphdata["피고인_정보공개"]} />
+                          </div>
+                          <div className="pie_style">
+                            <Graph2 graphdata={graphdata["피고인_정보공개"]} />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  <div className="dashed-line"></div>
+                  {/* 아동_청소년_장애인복지시설_취업제한 */}
+                  {graphdata["아동_청소년_장애인복지시설_취업제한"] &&
+                    Object.keys(
+                      graphdata["아동_청소년_장애인복지시설_취업제한"]
+                    ).length > 0 && (
+                      <div className="graph">
+                        <div className="graph_title">
+                          <span>아동_청소년_장애인복지시설_취업제한</span>
+                        </div>
+                        <div className="realgraph_container">
+                          <div className="bar_style">
+                            <Graph1
+                              graphdata={
+                                graphdata["아동_청소년_장애인복지시설_취업제한"]
+                              }
+                            />
+                          </div>
+                          <div className="pie_style">
+                            <Graph2
+                              graphdata={
+                                graphdata["아동_청소년_장애인복지시설_취업제한"]
+                              }
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  <div className="dashed-line"></div>
+                  {/* 준법운전강의 */}
+                  {graphdata["준법운전강의"] &&
+                    Object.keys(graphdata["준법운전강의"]).length > 0 && (
+                      <div className="graph">
+                        <div className="graph_title">
+                          <span>준법운전강의</span>
+                        </div>
+                        <div className="realgraph_container">
+                          <div className="bar_style">
+                            <Graph1 graphdata={graphdata["준법운전강의"]} />
+                          </div>
+                          <div className="pie_style">
+                            <Graph2 graphdata={graphdata["준법운전강의"]} />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  <div className="dashed-line"></div>
+                </div>
+              ) : (
+                <div>
+                  {/* 대쉬보드 안쪽 상단 영역입니다. */}
+                  <div className="projects-section-left-header">
+                    <span className="title">It's our tasks for you</span>
+                    {/* 현재 날짜 표시 */}
+                    <span className="time">
+                      <Clock today={today} />
+                    </span>
                   </div>
+                  {/* Chat Simulator */}
+                  <button onClick={clickGraph}> 클릭 </button>
+                  <div className={"chat-container expanded"}>
+                    {/* 주디 이미지 */}
+                    <img
+                      className={"lawyer-image"}
+                      src={LookAhead}
+                      alt="변호사"
+                      onClick={toggleChatbox} // 이벤트 핸들러
+                    />
 
-                  {/* 입력창 및 버튼 관련 구역 */}
-                  <div className="chat-input-area">
-                    <textarea
-                      id="input-area"
-                      type="text"
-                      value={userInput}
-                      onChange={handleInputChange}
-                      placeholder="여기에 상담 내용을 입력해주세요."
-                      onKeyDown={(event) => {
-                        if (event.key === "Enter") {
-                          submitResponse();
-                        }
-                      }}
-                    ></textarea>
+                    {/* 음성 인식 & 전송 저장 버튼 */}
+                    {listening ? (
+                      <img
+                        className="voice-button"
+                        src="/images/stop_icon.png"
+                        alt="녹음 중지"
+                        onClick={stopListening}
+                        style={{ width: "30px", height: "30px" }}
+                      />
+                    ) : (
+                      <FontAwesomeIcon
+                        icon={faMicrophone}
+                        className="voice-button"
+                        alt="녹음 시작"
+                        onClick={startListening}
+                        style={{
+                          width: "30px",
+                          height: "30px",
+                          color: "#ffffff",
+                        }}
+                      />
+                    )}
 
-                    <div className="voice-control-buttons">
-                      <img
-                        src="/images/reset_icon.png"
-                        alt="리셋"
-                        onClick={resetMessages}
-                        className="voice-control-button"
-                      />
-                      <img
-                        src="/images/save_icon.png"
-                        alt="저장"
-                        onClick={saveChatHistory}
-                        className="voice-control-button"
-                      />
-                      <img
-                        src="/images/send_icon.png"
-                        alt="전송"
-                        onClick={submitResponse}
-                        className="voice-control-button"
-                      />
+                    {/* // 챗 박스 관련 구역 */}
+                    <div id="chatbox">
+                      {/* 채팅 메시지를 표시하는 부분 */}
+                      <div className="chat-messages">
+                        {renderMessages}
+                        {isLoading ? (
+                          <div className={"bubble lawyer"}>
+                            <img
+                              className="loading-chat-image"
+                              src={Loading}
+                              alt="로딩이미지"
+                            />
+                          </div>
+                        ) : (
+                          <></>
+                        )}
+                        <div ref={messagesEndRef}></div>
+                        {/* 스크롤 조정을 위한 빈 div 추가 */}
+                      </div>
+
+                      {/* 입력창 및 버튼 관련 구역 */}
+                      <div className="chat-input-area">
+                        <textarea
+                          id="input-area"
+                          type="text"
+                          value={userInput}
+                          onChange={handleInputChange}
+                          placeholder="여기에 상담 내용을 입력해주세요."
+                          onKeyDown={(event) => {
+                            if (event.key === "Enter") {
+                              submitResponse();
+                            }
+                          }}
+                        ></textarea>
+
+                        <div className="voice-control-buttons">
+                          <img
+                            src="/images/reset_icon.png"
+                            alt="리셋"
+                            onClick={resetMessages}
+                            className="voice-control-button"
+                          />
+                          <img
+                            src="/images/save_icon.png"
+                            alt="저장"
+                            onClick={saveChatHistory}
+                            className="voice-control-button"
+                          />
+                          <img
+                            src="/images/send_icon.png"
+                            alt="전송"
+                            onClick={submitResponse}
+                            className="voice-control-button"
+                          />
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
 
-              {/* 음성 인식 텍스트 표시 */}
-              {listening && (
-                <div className="transcript">상담 내용 확인: {transcript}</div>
+                  {/* 음성 인식 텍스트 표시 */}
+                  {listening && (
+                    <div className="transcript">
+                      상담 내용 확인: {transcript}
+                    </div>
+                  )}
+                </div>
               )}
-
-              {/* 대쉬보드 안의 프로젝트들을 담을 수 있는 Box입니다. */}
-              {/* <div className="project-boxes jsGridView">
-                <div className="project-box-wrapper">
-                  <div
-                    className="project-box"
-                    style={{ backgroundcolor: "#fee4cb" }}
-                  >
-                    <div className="project-box-header">
-                      <span>December 10, 2020</span>
-                    </div>
-
-                    <div className="project-box-content-header">
-                      <p className="box-content-header">Web Designing</p>
-                      <p className="box-content-subheader">Prototyping</p>
-                    </div>
-                    <div className="box-progress-wrapper">
-                      <p className="box-progress-header">Progress</p>
-                      <div className="box-progress-bar">
-                        <span
-                          className="box-progress"
-                          style={{ width: "60%", backgroundcolor: "#ff942e" }}
-                        ></span>
-                      </div>
-                      <p className="box-progress-percentage">60%</p>
-                    </div>
-
-                    <div className="project-box-footer">
-                      <div className="participants">
-                        <button
-                          className="add-participant"
-                          style={{ color: "#ff942e" }}
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="12"
-                            height="12"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="3"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            className="feather feather-plus"
-                          >
-                            <path d="M12 5v14M5 12h14" />
-                          </svg>
-                        </button>
-                      </div>
-                      <div className="days-left" style={{ color: "#ff942e" }}>
-                        2 Days Left
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div> */}
             </div>
           </div>
 
@@ -572,11 +683,190 @@ function Dashboard() {
 
           <div
             className={`messages-section ${
-              isGraphActive ? "lawyer_page" : "graph_page"
+              isGraphActive ? "graph_page" : "lawyer_page"
             }`}
           >
             {/* 변호사, 그래프 페이지 전환 */}
             {isGraphActive ? (
+              <div>
+                {/* 그래프 페이지*/}
+                <div className="projects-section-header">
+                  <p>통계</p>
+                  <p className="message-line">
+                    당신의 사례와 유사한 통계 결과를 보여드립니다.
+                  </p>
+                  <button
+                    className="detail_graph_button"
+                    onClick={clickDetailGraph}
+                  >
+                    자세히 보기
+                  </button>
+                </div>
+
+                <div className="graph_content_container">
+                  {graphdata["징역"] &&
+                    Object.keys(graphdata["징역"]).length > 0 && (
+                      <div className="graph">
+                        <div className="dashtest">
+                          <div className="graph-dashed-line"></div>
+                          <span className="graph_title">징역</span>
+                        </div>
+                        <div className="bar_style">
+                          <Graph1
+                            graphdata={graphdata["징역"]}
+                            graphType="징역"
+                          />
+                        </div>
+                        <div className="pie_style">
+                          <Graph2
+                            graphdata={graphdata["징역"]}
+                            graphType="징역"
+                          />
+                        </div>
+                      </div>
+                    )}
+                  {graphdata["금고"] &&
+                    Object.keys(graphdata["금고"]).length > 0 && (
+                      <div className="graph">
+                        <div className="dashtest">
+                          <div className="graph-dashed-line"></div>
+                          <span className="graph_title">금고</span>
+                        </div>
+                        <div className="bar_style">
+                          <Graph1 graphdata={graphdata["금고"]} />
+                        </div>
+                        <div className="pie_style">
+                          <Graph2 graphdata={graphdata["금고"]} />
+                        </div>
+                      </div>
+                    )}
+                  {graphdata["벌금"] &&
+                    Object.keys(graphdata["벌금"]).length > 0 && (
+                      <div className="graph">
+                        <div className="dashtest">
+                          <div className="graph-dashed-line"></div>
+                          <span className="graph_title">벌금</span>
+                        </div>
+                        <div className="bar_style">
+                          <Graph1 graphdata={graphdata["벌금"]} />
+                        </div>
+                        <div className="pie_style">
+                          <Graph2 graphdata={graphdata["벌금"]} />
+                        </div>
+                      </div>
+                    )}
+                  {graphdata["집행유예"] &&
+                    Object.keys(graphdata["집행유예"]).length > 0 && (
+                      <div className="graph">
+                        <div className="dashtest">
+                          <div className="graph-dashed-line"></div>
+                          <span className="graph_title">집행유예</span>
+                        </div>
+                        <div className="bar_style">
+                          <Graph1 graphdata={graphdata["집행유예"]} />
+                        </div>
+                        <div className="pie_style">
+                          <Graph2 graphdata={graphdata["집행유예"]} />
+                        </div>
+                      </div>
+                    )}
+                  {graphdata["사회봉사"] &&
+                    Object.keys(graphdata["사회봉사"]).length > 0 && (
+                      <div className="graph">
+                        <div className="dashtest">
+                          <div className="graph-dashed-line"></div>
+                          <span className="graph_title">사회봉사</span>
+                        </div>
+                        <div className="bar_style">
+                          <Graph1 graphdata={graphdata["사회봉사"]} />
+                        </div>
+                        <div className="pie_style">
+                          <Graph2 graphdata={graphdata["사회봉사"]} />
+                        </div>
+                      </div>
+                    )}
+                  {graphdata["성폭력_치료프로그램"] &&
+                    Object.keys(graphdata["성폭력_치료프로그램"]).length >
+                      0 && (
+                      <div className="graph">
+                        <div className="dashtest">
+                          <div className="graph-dashed-line"></div>
+                          <span className="graph_title">
+                            성폭력 치료프로그램
+                          </span>
+                        </div>
+                        <div className="bar_style">
+                          <Graph1
+                            graphdata={graphdata["성폭력_치료프로그램"]}
+                          />
+                        </div>
+                        <div className="pie_style">
+                          <Graph2
+                            graphdata={graphdata["성폭력_치료프로그램"]}
+                          />
+                        </div>
+                      </div>
+                    )}
+                  {graphdata["피고인_정보공개"] &&
+                    Object.keys(graphdata["피고인_정보공개"]).length > 0 && (
+                      <div className="graph">
+                        <div className="dashtest">
+                          <div className="graph-dashed-line"></div>
+                          <span className="graph_title">피고인 정보공개</span>
+                        </div>
+                        <div className="bar_style">
+                          <Graph1 graphdata={graphdata["피고인_정보공개"]} />
+                        </div>
+                        <div className="pie_style">
+                          <Graph2 graphdata={graphdata["피고인_정보공개"]} />
+                        </div>
+                      </div>
+                    )}
+                  {graphdata["아동_청소년_장애인복지시설_취업제한"] &&
+                    Object.keys(
+                      graphdata["아동_청소년_장애인복지시설_취업제한"]
+                    ).length > 0 && (
+                      <div className="graph">
+                        <div className="dashtest">
+                          <div className="graph-dashed-line"></div>
+                          <span className="graph_title">
+                            아동 청소년 장애인복지시설_취업제한
+                          </span>
+                        </div>
+                        <div className="bar_style">
+                          <Graph1
+                            graphdata={
+                              graphdata["아동_청소년_장애인복지시설_취업제한"]
+                            }
+                          />
+                        </div>
+                        <div className="pie_style">
+                          <Graph2
+                            graphdata={
+                              graphdata["아동_청소년_장애인복지시설_취업제한"]
+                            }
+                          />
+                        </div>
+                      </div>
+                    )}
+                  {graphdata["준법운전강의"] &&
+                    Object.keys(graphdata["준법운전강의"]).length > 0 && (
+                      <div className="graph">
+                        <div className="dashtest">
+                          <div className="graph-dashed-line"></div>
+                          <span className="graph_title">준법운전강의</span>
+                        </div>
+                        <div className="bar_style">
+                          <Graph1 graphdata={graphdata["준법운전강의"]} />
+                        </div>
+                        <div className="pie_style">
+                          <Graph2 graphdata={graphdata["준법운전강의"]} />
+                        </div>
+                      </div>
+                    )}
+                </div>
+              </div>
+            ) : (
               <div>
                 {/* 변호사 소개 페이지 */}
 
@@ -823,184 +1113,6 @@ function Dashboard() {
                       </p>
                     </div>
                   </div>
-                </div>
-              </div>
-            ) : (
-              <div>
-                {/* 그래프 페이지*/}
-                <div className="projects-section-header">
-                  <p>통계</p>
-                  <p className="message-line">
-                    당신의 사례와 유사한 통계 결과를 보여드립니다.
-                  </p>
-                </div>
-                {/* <div className="messages">
-                  <p className="message-line">
-                    당신의 사례와 유사한 통계 결과를 보여드립니다.
-                  </p>
-                </div> */}
-
-                <div className="graph_content_container">
-                  {graphdata["징역"] &&
-                    Object.keys(graphdata["징역"]).length > 0 && (
-                      <div className="graph">
-                        <div className="dashtest">
-                          <div className="graph-dashed-line"></div>
-                          <span className="graph_title">징역</span>
-                        </div>
-                        <div className="bar_style">
-                          <Graph1
-                            graphdata={graphdata["징역"]}
-                            graphType="징역"
-                          />
-                        </div>
-                        <div className="pie_style">
-                          <Graph2
-                            graphdata={graphdata["징역"]}
-                            graphType="징역"
-                          />
-                        </div>
-                      </div>
-                    )}
-                  {graphdata["금고"] &&
-                    Object.keys(graphdata["금고"]).length > 0 && (
-                      <div className="graph">
-                        <div className="dashtest">
-                          <div className="graph-dashed-line"></div>
-                          <span className="graph_title">금고</span>
-                        </div>
-                        <div className="bar_style">
-                          <Graph1 graphdata={graphdata["금고"]} />
-                        </div>
-                        <div className="pie_style">
-                          <Graph2 graphdata={graphdata["금고"]} />
-                        </div>
-                      </div>
-                    )}
-                  {graphdata["벌금"] &&
-                    Object.keys(graphdata["벌금"]).length > 0 && (
-                      <div className="graph">
-                        <div className="dashtest">
-                          <div className="graph-dashed-line"></div>
-                          <span className="graph_title">벌금</span>
-                        </div>
-                        <div className="bar_style">
-                          <Graph1 graphdata={graphdata["벌금"]} />
-                        </div>
-                        <div className="pie_style">
-                          <Graph2 graphdata={graphdata["벌금"]} />
-                        </div>
-                      </div>
-                    )}
-                  {graphdata["집행유예"] &&
-                    Object.keys(graphdata["집행유예"]).length > 0 && (
-                      <div className="graph">
-                        <div className="dashtest">
-                          <div className="graph-dashed-line"></div>
-                          <span className="graph_title">집행유예</span>
-                        </div>
-                        <div className="bar_style">
-                          <Graph1 graphdata={graphdata["집행유예"]} />
-                        </div>
-                        <div className="pie_style">
-                          <Graph2 graphdata={graphdata["집행유예"]} />
-                        </div>
-                      </div>
-                    )}
-                  {graphdata["사회봉사"] &&
-                    Object.keys(graphdata["사회봉사"]).length > 0 && (
-                      <div className="graph">
-                        <div className="dashtest">
-                          <div className="graph-dashed-line"></div>
-                          <span className="graph_title">사회봉사</span>
-                        </div>
-                        <div className="bar_style">
-                          <Graph1 graphdata={graphdata["사회봉사"]} />
-                        </div>
-                        <div className="pie_style">
-                          <Graph2 graphdata={graphdata["사회봉사"]} />
-                        </div>
-                      </div>
-                    )}
-                  {graphdata["성폭력_치료프로그램"] &&
-                    Object.keys(graphdata["성폭력_치료프로그램"]).length >
-                      0 && (
-                      <div className="graph">
-                        <div className="dashtest">
-                          <div className="graph-dashed-line"></div>
-                          <span className="graph_title">
-                            성폭력 치료프로그램
-                          </span>
-                        </div>
-                        <div className="bar_style">
-                          <Graph1
-                            graphdata={graphdata["성폭력_치료프로그램"]}
-                          />
-                        </div>
-                        <div className="pie_style">
-                          <Graph2
-                            graphdata={graphdata["성폭력_치료프로그램"]}
-                          />
-                        </div>
-                      </div>
-                    )}
-                  {graphdata["피고인_정보공개"] &&
-                    Object.keys(graphdata["피고인_정보공개"]).length > 0 && (
-                      <div className="graph">
-                        <div className="dashtest">
-                          <div className="graph-dashed-line"></div>
-                          <span className="graph_title">피고인 정보공개</span>
-                        </div>
-                        <div className="bar_style">
-                          <Graph1 graphdata={graphdata["피고인_정보공개"]} />
-                        </div>
-                        <div className="pie_style">
-                          <Graph2 graphdata={graphdata["피고인_정보공개"]} />
-                        </div>
-                      </div>
-                    )}
-                  {graphdata["아동_청소년_장애인복지시설_취업제한"] &&
-                    Object.keys(
-                      graphdata["아동_청소년_장애인복지시설_취업제한"]
-                    ).length > 0 && (
-                      <div className="graph">
-                        <div className="dashtest">
-                          <div className="graph-dashed-line"></div>
-                          <span className="graph_title">
-                            아동 청소년 장애인복지시설_취업제한
-                          </span>
-                        </div>
-                        <div className="bar_style">
-                          <Graph1
-                            graphdata={
-                              graphdata["아동_청소년_장애인복지시설_취업제한"]
-                            }
-                          />
-                        </div>
-                        <div className="pie_style">
-                          <Graph2
-                            graphdata={
-                              graphdata["아동_청소년_장애인복지시설_취업제한"]
-                            }
-                          />
-                        </div>
-                      </div>
-                    )}
-                  {graphdata["준법운전강의"] &&
-                    Object.keys(graphdata["준법운전강의"]).length > 0 && (
-                      <div className="graph">
-                        <div className="dashtest">
-                          <div className="graph-dashed-line"></div>
-                          <span className="graph_title">준법운전강의</span>
-                        </div>
-                        <div className="bar_style">
-                          <Graph1 graphdata={graphdata["준법운전강의"]} />
-                        </div>
-                        <div className="pie_style">
-                          <Graph2 graphdata={graphdata["준법운전강의"]} />
-                        </div>
-                      </div>
-                    )}
                 </div>
               </div>
             )}

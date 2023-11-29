@@ -56,7 +56,7 @@
   position: relative;
   width: 100%;
   height: calc(100% - 160px);
-  padding: 10px 5px 5px 5px;
+  padding: 15px;
   overflow-y: auto; /* 스크롤 가능하도록 설정 */
   overflow-x: hidden; /* 수평 스크롤바 숨김 */
   line-height: 1.6; /* 글꼴 크기의 1.6배에 해당하는 줄 간격을 의미 */
@@ -105,11 +105,13 @@
   border-radius: 50%;
   box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
 }
-
+.voice-button:hover {
+  background-color: #c3cff4;
+}
 .voice-control-buttons {
   display: flex; /* Flex 컨테이너 설정 */
   justify-content: flex-end; /* 오른쪽 정렬 */
-  margin-bottom: 2px; /* chat-input-area와의 간격 */
+  margin-top: 5px; /* chat-input-area와의 간격 */
   padding: 5px;
 }
 
@@ -159,6 +161,7 @@
   text-align: left;
   display: inline-block; /* 블록 레벨 요소로 만들어 줄 단위로 표시 */
   margin-left: auto; /* 왼쪽 정렬 */
+  margin-right: 18px;
   border-radius: 20px;
   padding: 10px;
   margin-bottom: 10px; /* 메시지 간 간격 */
@@ -185,13 +188,6 @@
 
 /* 주디의 그래프 내용을 담는 영역입니다. */
 /* 각 그래프 컨테이너 스타일링 */
-.graph_container {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin: 50px;
-  font-family: "GmarketSansMedium";
-}
 
 .bar_style,
 .pie_style {
@@ -204,15 +200,13 @@
   box-shadow: 1px 1px 10px 1px #cecece7a;
 }
 .bar_style {
-  /* margin-top: 20px; */
   margin-bottom: 20px;
 }
 .graph {
-  /* background-color: rgba(221, 208, 192, 0.192); */
   margin: 5px;
   margin: 5px 20px 10px 20px;
   padding: 0 20px 20px 20px;
-  justify-content: center;
+
   border-radius: 10px;
 }
 
@@ -255,4 +249,42 @@
 .dashtest {
   margin-bottom: 12px;
   position: relative;
+}
+
+/* 상세 페이지 영역 */
+.detail_graph {
+  .graph {
+    display: flex;
+    margin: 0;
+    padding: 0;
+  }
+  .realgraph_container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+  .bar_style,
+  .pie_style {
+    margin: 0;
+    height: 300px;
+    width: 400px;
+  }
+  .graph_title {
+    /* margin: 0; */
+    padding: 0;
+    background-color: #214674;
+    width: 100px;
+    color: white;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    border-radius: 10px;
+    display: flex;
+  }
+  .dashed-line {
+    margin: 20px auto;
+    color: #00000023;
+    /* width: 80%; */
+  }
 }

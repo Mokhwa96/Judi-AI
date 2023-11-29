@@ -7,7 +7,7 @@ import { ResponsiveBar } from "@nivo/bar";
 // no chart will be rendered.
 // website examples showcase many properties,
 // you'll often use just a few of them.
-const Graph1 = ({ graphdata, graphType }) => {
+const Graph1 = ({ graphdata }) => {
   // 데이터의 키 배열 추출 (results를 제외하고 추출)
   const dataKeys = Object.keys(graphdata).filter((key) => key !== "results");
 
@@ -26,7 +26,7 @@ const Graph1 = ({ graphdata, graphType }) => {
       };
     })
     .slice(0, 5);
-  // console.log(dataArray)
+
   // 그래프 눈금 조절
   const tickvalues = (totalValue, numTicks) => {
     const tickValues = [];
@@ -42,29 +42,6 @@ const Graph1 = ({ graphdata, graphType }) => {
 
   // 눈금 수 설정
   const numofTick = 5;
-
-  // 각 그래프마다 라벨 붙임
-  // let xAxisLabel = '';
-  // if (graphType === '징역') {
-  //     xAxisLabel = '징역';
-  // } else if (graphType === '금고') {
-  //     xAxisLabel = '금고';
-  // } else if (graphType === '벌금') {
-  //     xAxisLabel = '벌금';
-  // } else if (graphType === '집행유예') {
-  //     xAxisLabel = '집행유예';
-  // } else if (graphType === '사회봉사') {
-  //     xAxisLabel = '사회봉사';
-  // } else if (graphType === '성폭력') {
-  //     xAxisLabel = '성폭력';
-  // } else if (graphType === '정보공개') {
-  //     xAxisLabel = '정보공개';
-  // } else if (graphType === '취업제한') {
-  //     xAxisLabel = '취업제한';
-  // } else if (graphType === '준법운전강의') {
-  //     xAxisLabel = '준법운전강의';
-  // }
-
   return (
     <ResponsiveBar
       data={dataArray}
@@ -95,12 +72,11 @@ const Graph1 = ({ graphdata, graphType }) => {
         legendOffset: -70,
         truncateTickAt: 0,
       }}
-      // labelSkipWidth={12}
-      // labelSkipHeight={12}
       labelTextColor={{
         from: "color",
         modifiers: [["darker", 1.6]],
       }}
+      borderRadius={10}
       legends={[
         {
           dataFrom: "keys",

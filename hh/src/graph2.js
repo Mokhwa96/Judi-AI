@@ -30,7 +30,7 @@ const Graph2 = ({ graphdata, graphType }) => {
       data={dataArray}
       keys={dataKeys}
       margin={{ top: 50, right: 60, bottom: 50, left: 80 }}
-      innerRadius={0.5}
+      innerRadius={0.6}
       padAngle={0.7}
       cornerRadius={3}
       activeOuterRadiusOffset={8}
@@ -92,7 +92,6 @@ const Graph2 = ({ graphdata, graphType }) => {
           id: "lines",
         },
       ]}
-      //   borderRadius={20}
       legends={[
         {
           anchor: "left",
