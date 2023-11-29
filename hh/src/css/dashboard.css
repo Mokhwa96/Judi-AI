@@ -343,6 +343,7 @@ input:checked + label svg {
   color: var(--secondary-color);
   opacity: 0.7;
   padding-left: 10px;
+  padding-right: 20px;
 }
 .messages-section.graph_page .message-line {
   padding: 0;
@@ -817,4 +818,10 @@ input:checked + label svg {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+/*  */
+.detail_graph_button {
+  background-color: white;
+  border-radius: 10px;
 }
