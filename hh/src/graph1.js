@@ -40,7 +40,7 @@ const Graph1 = ({ graphdata, graphType }) => {
   // 전체 건수 예시
   const totalValue = 100;
 
-  // 눈금 수 설정
+  // // 눈금 수 설정
   const numofTick = 5;
 
   // 각 그래프마다 라벨 붙임
