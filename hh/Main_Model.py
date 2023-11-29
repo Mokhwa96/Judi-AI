@@ -247,7 +247,7 @@ if __name__ == "__main__":
 
   # 요청 처리 및 결과 저장
   reply_text = chatbot(api_key, request)
-  keyword = '사용자님의 상황을 요약하자면 :'
+  keyword = '사용자님의 상황을 요약하자면'
   if keyword in reply_text:
     index = reply_text.find(keyword)
     situation_text = reply_text[(index + len(keyword)):]
@@ -258,9 +258,13 @@ if __name__ == "__main__":
         sentences = [line for line in df_similar_sentences['ruling']]
     result_final = result_statistics(sentences)
     result_final['results'] = reply_text
+
+    final_text = f"사용자님의 상황과 유사한 사례가 총 {sum(result_final['전체'].values())}건 검색되었습니다. 더 자세한 결과를 확인하고 싶으시다면 아래의 버튼을 눌러 확인해 주세요."
+    result_final['final_text'] = final_text
   else:
     result_final = result_statistics([])
     result_final['results'] = reply_text
+    result_final['final_text'] = ''
 
   # 결과를 클라이언트로 전송
   sys.stdout.reconfigure(encoding='utf-8')

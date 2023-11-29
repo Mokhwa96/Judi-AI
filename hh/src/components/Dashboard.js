@@ -65,7 +65,7 @@ function Dashboard() {
   });
 
   // 그래프 활성화/비활성화 부분
-  const [isGraphActive, setIsGraphActive] = useState(false);
+  const [isGraphActive, setIsGraphActive] = useState(true);
   const clickGraph = () => {
     setIsGraphActive(!isGraphActive);
   };
@@ -74,6 +74,7 @@ function Dashboard() {
 
   const messagesEndRef = useRef(null); // 새로운 ref. 채팅창 스크롤 자동 최신화 위함.
   const [isLoading, setIsLoading] = useState(false); // 로딩 상태 추가
+  const [isFianl, setIsFianl] = useState(false); // 마지막 대답 여부
 
   // 현호 작업구역
   // 검색 test
@@ -97,6 +98,12 @@ function Dashboard() {
         ...prevMessages,
         { text: data["results"], sender: "lawyer" },
       ]);
+      if (!data['final_text']) {
+        setIsFianl(false);
+      } else {
+        setMessages((prevMessages) => [...prevMessages, { text: data["final_text"], sender: "lawyer",}]);
+        setIsFianl(true);
+      }
       console.log("입력문은");
       console.log(userinput);
       console.log("응답은");
@@ -376,7 +383,6 @@ function Dashboard() {
               </div>
 
               {/* Chat Simulator */}
-              <button onClick={clickGraph}> 클릭 </button>
               <div className={"chat-container expanded"}>
                 {/* 주디 이미지 */}
                 <img
@@ -421,6 +427,13 @@ function Dashboard() {
                           src={Loading}
                           alt="로딩이미지"
                         />
+                      </div>
+                    ) : (
+                      <></>
+                    )}
+                    {isFianl ? (
+                      <div className={"bubble lawyer"}>
+                        <button onClick={clickGraph}> 클릭 </button>
                       </div>
                     ) : (
                       <></>
