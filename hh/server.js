@@ -51,21 +51,26 @@ app.post("/chat", (req, res) => {
 
   var dictionaries = []; // 딕셔너리들을 저장할 배열
 
-    // 데이터베이스에서 데이터 불러오기
-    const sqlQuery = "SELECT id, text, 'user' AS role FROM question UNION ALL SELECT id, text, 'assistant' AS role FROM answer ORDER BY id";
-    connection.query(sqlQuery, function (error, results, fields) {
-        if (error) {
-        console.error('Error retrieving data:', error);
-        connection.end();
-        return;
+  // 데이터베이스에서 데이터 불러오기
+  const sqlQuery =
+    "SELECT id, text, 'user' AS role FROM question UNION ALL SELECT id, text, 'assistant' AS role FROM answer ORDER BY id";
+  connection.query(sqlQuery, function (error, results, fields) {
+    if (error) {
+      console.error("Error retrieving data:", error);
+      connection.end();
+      return;
     }
-    const dictionaries = [];  // 딕셔너리들을 저장할 배열
-    dictionaries.push({"role": "system", "content": "너는 법률 문제에 대해 상담을 진행해주는 변호사야. 지금 나는 너에게 법률 문제에 대해 상담을 받으러 왔고, 내가 처한 상황을 설명할거야. 너는 내가 하는 말에 공감해주면서 사실관계 파악을 위해 부족한 정보가 있다면 하나씩 친절하게 물어볼 수 있어. 사실관계 파악을 위한 충분한 정보가 모였다면, 마지막에는 파악된 정보를 요약해서 알려줘"});
+
+    dictionaries.push({
+      role: "system",
+      content:
+        "너는 한국의 법률 문제에 대해 상담을 해주는 변호사야. 지금 나는 너에게 내 법률 문제에 대해 상담을 받으러 왔고, 내가 처한 상황을 설명할거야. 너의 목표는 내가 처한 상황을 재판 판결문에 쓰일만한 [사실관계] 형식으로 요약해주는거야. 네가 요약해준 내용으로 진행되는 이후 과정은 준비되어 있으니, 나의 상황만 요약해주면 돼. 문의가 오면 먼저 현재 상황을 설명해 달라고 안내 해줘. 나와의 대화에서 처음에는 [공감]을 하고, 더 필요한 정보에 대해서는 추가적인 [질문]을 해줘. 질문은 한꺼번에 물어보지 말고 하나씩 차근차근, 해당 내용이 왜 추가로 필요한지도 설명과 함께. 마지막으로 상황 파악에 대한 충분한 정보가 모였다면, 상황에 대한 요약과 함께 해당 사건이 [강제추행], [공무집행방해], [교통사고처리특례법위반(치상)], [도로교통법위반(음주운전)], [사기], [상해], [폭행], [구상금], [대여금], [부당이득금], [손해배상(기)] 중 어느 케이스에 해당하는지 답변을 해 줘. 단, 요약을 하기 전에 꼭 ['사용자님의 상황을 요약하자면 :']을 붙여주고 사건 내용의 인원들은 알파벳으로 [익명처리]를 해줘. 그리고 모든 답변은 가독성이 좋게 보여줘.",
+    });
 
     let currentUser = null;
     let currentAssistant = null;
 
-    results.forEach(row => {
+    results.forEach((row) => {
         const role = row.role;
         const text = row.text;
 
@@ -104,16 +109,13 @@ app.post("/chat", (req, res) => {
   // 파이썬 프로세스의 표준 출력에서 데이터를 읽어옴
   pythonProcess.stdout.on("data", async (data) => {
     console.log("반환된 데이터는");
-    console.log(data);
     buffers.push(data);
     try {
       // Buffer.concat()을 사용하여 모든 버퍼를 하나로 합침
       const concatenatedBuffer = Buffer.concat(buffers);
 
-      // iconv-lite를 사용하여 UTF-8로 디코딩
-      const decodedResult = iconv.decode(concatenatedBuffer, "utf-8");
-      console.log("decodedResult :");
-      console.log(decodedResult);
+            // iconv-lite를 사용하여 UTF-8로 디코딩
+            const decodedResult = iconv.decode(concatenatedBuffer, 'utf-8');
 
       // JSON 문자열을 파싱하여 JavaScript 객체로 변환
       const resultData = JSON.parse(decodedResult);
@@ -132,28 +134,21 @@ app.post("/chat", (req, res) => {
             // const writeFile = util.promisify(fs.writeFile);
             // await writeFile('public/answer.mp3', response_speech.audioContent, 'binary')
 
-      console.log("res :");
-      console.log(resultData);
-      res.json(resultData);
-      // 데이터베이스 답변 삽입
-      var sql = "INSERT INTO answer(text) VALUES (?)";
-      connection.query(
-        sql,
-        resultData["results"],
-        function (error, results, fields) {
-          if (error) throw error;
-          console.log("answer inserted: ", results.affectedRows);
+            res.json(resultData);
+            // 데이터베이스 답변 삽입
+            var sql = "INSERT INTO answer(text) VALUES (?)";
+            connection.query(sql,resultData['results'], function (error, results, fields) {
+                if (error) throw error;
+                console.log('answer inserted: ', results.affectedRows);
+            });
+
+        } catch (error) {
+            // JSON 파싱에 실패한 경우
+            console.error('파이썬 스크립트에서 반환된 데이터가 유효한 JSON이 아닙니다');
+            console.log(data);
+            res.status(500).json({ error: '내부 서버 오류' });  // 오류 응답 반환
         }
-      );
-    } catch (error) {
-      // JSON 파싱에 실패한 경우
-      console.error(
-        "파이썬 스크립트에서 반환된 데이터가 유효한 JSON이 아닙니다"
-      );
-      console.log(data);
-      res.status(500).json({ error: "내부 서버 오류" }); // 오류 응답 반환
-    }
-  });
+    });
 
   pythonProcess.stderr.on("data", (errorData) => {
     console.error("파이썬 프로세스 표준 에러 출력 :", errorData.toString());
