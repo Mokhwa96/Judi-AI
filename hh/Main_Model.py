@@ -36,7 +36,7 @@ def casename_find(sentence):
     return casename
 
 
-def get_similar_sentences(api_key, file_path, input_sentence, threshold=0.83, engine='text-embedding-ada-002'):
+def get_similar_sentences(api_key, file_path, input_sentence, threshold=0.7, engine='text-embedding-ada-002'):
     # API 키 설정
     client = OpenAI(api_key=api_key)
 
@@ -188,20 +188,7 @@ def result_statistics(sentences):
 
     전체 = {}
 
-    # if 징역['실형']:
-    #   전체['징역_실형'] = sum(징역['실형'].values())
-    # if 징역['집행유예']:
-    #   전체['징역_집행유예'] = sum(징역['집행유예'].values())
-    # if 징역['선고유예']:
-    #   전체['징역_선고유예'] = sum(징역['선고유예'].values())
     전체['징역'] =  sum([sum(징역[key].values()) for key in 징역.keys() if 징역[key]])
-
-    # if 금고['실형']:
-    #   전체['금고_실형'] = sum(금고['실형'].values())
-    # if 금고['집행유예']:
-    #   전체['금고_집행유예'] = sum(금고['집행유예'].values())
-    # if 금고['선고유예']:
-    #   전체['금고_선고유예'] = sum(금고['선고유예'].values())
     전체['금고'] =  sum([sum(금고[key].values()) for key in 금고.keys() if 금고[key]])
 
     if 벌금:

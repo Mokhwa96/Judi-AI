@@ -941,6 +941,9 @@ function Dashboard() {
                         <div className="bar_style">
                           <Graph1 graphdata={graphdata["전체"]} />
                         </div>
+                        <div className="pie_style">
+                          <Graph2 graphdata={graphdata["전체"]} />
+                        </div>
                       </div>
                     )}
                   {graphdata["전체_징역"] && (
@@ -952,6 +955,9 @@ function Dashboard() {
                       <div className="realgraph_container">
                         <div className="bar_style">
                           <Graph1 graphdata={graphdata["징역"]} />
+                        </div>
+                        <div className="pie_style">
+                          <Graph2 graphdata={graphdata["징역"]} />
                         </div>
                       </div>
                     </div>
@@ -965,6 +971,9 @@ function Dashboard() {
                       <div className="realgraph_container">
                         <div className="bar_style">
                           <Graph1 graphdata={graphdata["금고"]} />
+                        </div>
+                        <div className="pie_style">
+                          <Graph2 graphdata={graphdata["금고"]} />
                         </div>
                       </div>
                     </div>
