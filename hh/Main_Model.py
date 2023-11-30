@@ -36,7 +36,7 @@ def casename_find(sentence):
     return casename
 
 
-def get_similar_sentences(api_key, file_path, input_sentence, threshold=0.8, engine='text-embedding-ada-002'):
+def get_similar_sentences(api_key, file_path, input_sentence, threshold=0.7, engine='text-embedding-ada-002'):
     # API 키 설정
     client = OpenAI(api_key=api_key)
 
@@ -63,7 +63,6 @@ def get_similar_sentences(api_key, file_path, input_sentence, threshold=0.8, eng
     result_df = pd.DataFrame([data.iloc[i[0]][["casename", "facts", "ruling"]].to_dict() for i in similar_sentences_sorted])
 
     return result_df
-
 
 def result_statistics(sentences):
 
@@ -186,30 +185,11 @@ def result_statistics(sentences):
                 else:
                     준법운전강의[re.search(pattern, text).group(1)] = 1
 
-    벌금 = dict(sorted(벌금.items(), key=lambda x:x[1], reverse=True))
-    보호관찰 = dict(sorted(보호관찰.items(), key=lambda x:x[1], reverse=True))
-    사회봉사 = dict(sorted(사회봉사.items(), key=lambda x:x[1], reverse=True))
-    성폭력_치료프로그램 = dict(sorted(성폭력_치료프로그램.items(), key=lambda x:x[1], reverse=True))
-    피고인_정보공개 = dict(sorted(피고인_정보공개.items(), key=lambda x:x[1], reverse=True))
-    아동_청소년_장애인복지시설_취업제한 = dict(sorted(아동_청소년_장애인복지시설_취업제한.items(), key=lambda x:x[1], reverse=True))
-    준법운전강의 = dict(sorted(준법운전강의.items(), key=lambda x:x[1], reverse=True))
+
     전체 = {}
 
-    if 징역['실형']:
-      전체['징역_실형'] = sum(징역['실형'].values())
-    if 징역['집행유예']:
-      전체['징역_집행유예'] = sum(징역['집행유예'].values())
-    if 징역['선고유예']:
-      전체['징역_선고유예'] = sum(징역['선고유예'].values())
-    전체['징역_전체'] =  sum([sum(징역[key].values()) for key in 징역.keys() if 징역[key]])
-
-    if 금고['실형']:
-      전체['금고_실형'] = sum(금고['실형'].values())
-    if 금고['집행유예']:
-      전체['금고_집행유예'] = sum(금고['집행유예'].values())
-    if 금고['선고유예']:
-      전체['금고_선고유예'] = sum(금고['선고유예'].values())
-    전체['금고_전체'] =  sum([sum(금고[key].values()) for key in 금고.keys() if 금고[key]])
+    전체['징역'] =  sum([sum(징역[key].values()) for key in 징역.keys() if 징역[key]])
+    전체['금고'] =  sum([sum(금고[key].values()) for key in 금고.keys() if 금고[key]])
 
     if 벌금:
       전체['벌금'] = sum(벌금.values())
@@ -232,15 +212,31 @@ def result_statistics(sentences):
     if 준법운전강의:
       전체['준법운전강의'] = sum(준법운전강의.values())
 
-    casename_dict = {'전체': 전체, '징역': 징역, '금고': 금고, '벌금': 벌금, '보호관찰': 보호관찰, '사회봉사': 사회봉사, '성폭력_치료프로그램': 성폭력_치료프로그램,
-                     '피고인_정보공개': 피고인_정보공개, '아동_청소년_장애인복지시설_취업제한': 아동_청소년_장애인복지시설_취업제한,
-                     '준법운전강의': 준법운전강의}
+    def sort_dict(dictionary, limit=5):
+        return dict(sorted(dictionary.items(), key=lambda x: x[1], reverse=True))
+
+    # 각 범주에 대해 sort_dict 함수 적용
+    전체 = sort_dict(전체)
+    징역['실형'] = sort_dict(징역['실형'])
+    징역['집행유예'] = sort_dict(징역['집행유예'])
+    금고['실형'] = sort_dict(금고['실형'])
+    금고['집행유예'] = sort_dict(금고['집행유예'])
+    벌금 = sort_dict(벌금)
+    사회봉사 = sort_dict(사회봉사)
+    성폭력_치료프로그램 = sort_dict(성폭력_치료프로그램)
+    피고인_정보공개 = sort_dict(피고인_정보공개)
+    아동_청소년_장애인복지시설_취업제한 = sort_dict(아동_청소년_장애인복지시설_취업제한)
+    준법운전강의 = sort_dict(준법운전강의)
+
+    casename_dict = {'전체': 전체, '전체_징역': 전체['징역'], '전체_금고': 전체['금고'], '징역': 징역, '징역_실형' : 징역['실형'], '금고': 금고,
+                    '금고_실형': 금고['실형'], '벌금': 벌금, '보호관찰': 보호관찰, '사회봉사': 사회봉사, '성폭력_치료프로그램': 성폭력_치료프로그램,
+                    '피고인_정보공개': 피고인_정보공개, '아동_청소년_장애인복지시설_취업제한': 아동_청소년_장애인복지시설_취업제한, '준법운전강의': 준법운전강의}
 
     return casename_dict
 
 if __name__ == "__main__":
-  api_key = 'api_key'
-  file_path = "C:/Users/gh576/JudiAI/hh/"
+  api_key = 'apikey'
+  file_path = "C:/Users/gjaischool/Desktop/2차_프로젝트/reactest/hh/"
 
   line = sys.stdin.buffer.readline().decode('utf-8')
   request = json.loads(line)

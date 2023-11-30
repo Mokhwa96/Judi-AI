@@ -153,7 +153,7 @@
   text-align: left;
   display: inline-block; /* 블록 레벨 요소로 만들어 줄 단위로 표시 */
   margin-left: auto; /* 왼쪽 정렬 */
-  margin-right: 18px;
+  margin-right: 3px;
   border-radius: 20px;
   padding: 10px;
   margin-bottom: 10px; /* 메시지 간 간격 */
@@ -184,9 +184,9 @@
 .bar_style,
 .pie_style {
   height: 300px;
-  width: 427px;
+  /* width: 4px; */
   margin-left: 50px;
-  background-color: rgb(255, 255, 255);
+  /* background-color: rgb(255, 255, 255); */
   margin: 2px;
   border-radius: 20px;
   box-shadow: 1px 1px 10px 1px #cecece7a;
@@ -227,12 +227,11 @@
   font-family: "S-CoreDream-3Light";
   font-size: 16px;
   padding: 4px 8px;
-  border-radius: 20px;
   position: relative;
 }
 
 .graph-dashed-line {
-  border-top: 3px solid #f1a13760; /* 실선 스타일 적용 */
+  border-top: 1px solid #f1a13760; /* 실선 스타일 적용 */
   width: 100%;
   position: absolute;
   top: 50%;
@@ -246,37 +245,67 @@
 /* 상세 페이지 영역 */
 .detail_graph {
   .graph {
-    display: flex;
     margin: 0;
     padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
   .realgraph_container {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    /* background-color: rgba(148, 172, 211, 0.298); */
+    background-color: rgba(148, 172, 211, 0.13);
+    border-radius: 15px;
+    padding: 20px 20px 20px 0;
   }
   .bar_style,
   .pie_style {
     margin: 0;
     height: 300px;
-    width: 400px;
+    width: 450px;
+    box-shadow: none;
   }
   .graph_title {
-    /* margin: 0; */
-    padding: 0;
-    background-color: #214674;
-    width: 100px;
-    color: white;
-    align-items: center;
+    margin: 20px 0 20px 0;
+    /* padding: 5px; */
+    /* background-color: #e0e0e071; */
+    /* width: 300px; */
+    padding: 0 30px 0 30px;
+    color: rgb(49, 49, 49);
     text-align: center;
-    justify-content: center;
-    border-radius: 10px;
-    display: flex;
+    font-weight: bold;
+    border-left: 2px solid #c3cff4;
+    border-right: 2px solid #c3cff4;
   }
   .dashed-line {
-    margin: 20px auto;
-    color: #00000023;
-    /* width: 80%; */
+    /* margin: 20px auto; */
+    margin: 0;
+    color: #ffffff;
+    /* color: #c3cff4; */
+  }
+}
+
+.detail_graph_header {
+  font-size: 25px;
+  font-family: "SUITE-Regular";
+  font-weight: bold;
+  padding-left: 24px;
+}
+
+.graph_button {
+  border: none;
+  background-color: #214674;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 10px;
+  .right {
+    color: #ffffff;
+    font-weight: bold;
+    margin-left: 10px;
   }
 }

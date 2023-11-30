@@ -55,7 +55,7 @@ app.post("/chat", (req, res) => {
   );
 
   // 파이썬 프로그램 실행
-  const pythonProcess = spawn("C:/Users/gh576/anaconda3/python", [
+  const pythonProcess = spawn("C:/Users/gjaischool/anaconda3/python", [
     "Main_Model.py",
   ]);
 
@@ -83,30 +83,30 @@ app.post("/chat", (req, res) => {
     let currentAssistant = null;
 
     results.forEach((row) => {
-        const role = row.role;
-        const text = row.text;
+      const role = row.role;
+      const text = row.text;
 
-        if (role === 'user') {
-            currentUser = { role: 'user', content: text };
-            if (currentAssistant !== null) {
-                dictionaries.push(currentAssistant);
-                currentAssistant = null;
-            }
-        } else if (role === 'assistant') {
-            currentAssistant = { role: 'assistant', content: text };
-            if (currentUser !== null) {
-                dictionaries.push(currentUser);
-                currentUser = null;
-            }
+      if (role === "user") {
+        currentUser = { role: "user", content: text };
+        if (currentAssistant !== null) {
+          dictionaries.push(currentAssistant);
+          currentAssistant = null;
         }
+      } else if (role === "assistant") {
+        currentAssistant = { role: "assistant", content: text };
+        if (currentUser !== null) {
+          dictionaries.push(currentUser);
+          currentUser = null;
+        }
+      }
     });
 
     // 마지막 문장 추가
     if (currentUser !== null) {
-        dictionaries.push(currentUser);
+      dictionaries.push(currentUser);
     }
     if (currentAssistant !== null) {
-        dictionaries.push(currentAssistant);
+      dictionaries.push(currentAssistant);
     }
 
     console.log("딕셔너리 확인");
@@ -125,8 +125,8 @@ app.post("/chat", (req, res) => {
       // Buffer.concat()을 사용하여 모든 버퍼를 하나로 합침
       const concatenatedBuffer = Buffer.concat(buffers);
 
-            // iconv-lite를 사용하여 UTF-8로 디코딩
-            const decodedResult = iconv.decode(concatenatedBuffer, 'utf-8');
+      // iconv-lite를 사용하여 UTF-8로 디코딩
+      const decodedResult = iconv.decode(concatenatedBuffer, "utf-8");
 
       // JSON 문자열을 파싱하여 JavaScript 객체로 변환
       const resultData = JSON.parse(decodedResult);
@@ -134,32 +134,45 @@ app.post("/chat", (req, res) => {
       console.log(resultData);
 
       // 응답을 TTS를 이용하여 변환 (현호계정으로만 가능)
-      const request_speech = {
-          input: { text: resultData['results']},
-          voice: { languageCode: 'ko-KR', name: 'ko-KR-Wavenet-B', ssmlGender: 'FEMALE'},
-          audioConfig: { audioEncoding: 'MP3', pitch: 0.4, speakingRate: 1.1},
-      };
+      // const request_speech = {
+      //   input: { text: resultData["results"] },
+      //   voice: {
+      //     languageCode: "ko-KR",
+      //     name: "ko-KR-Wavenet-B",
+      //     ssmlGender: "FEMALE",
+      //   },
+      //   audioConfig: { audioEncoding: "MP3", pitch: 0.4, speakingRate: 1.1 },
+      // };
 
-      const [response_speech] = await client.synthesizeSpeech(request_speech);
+      // const [response_speech] = await client.synthesizeSpeech(request_speech);
 
-      const writeFile = util.promisify(fs.writeFile);
-      await writeFile('build/answer.mp3', response_speech.audioContent, 'binary')
+      // const writeFile = util.promisify(fs.writeFile);
+      // await writeFile(
+      //   "build/answer.mp3",
+      //   response_speech.audioContent,
+      //   "binary"
+      // );
 
-            res.json(resultData);
-            // 데이터베이스 답변 삽입
-            var sql = "INSERT INTO answer(text) VALUES (?)";
-            connection.query(sql,resultData['results'], function (error, results, fields) {
-                if (error) throw error;
-                console.log('answer inserted: ', results.affectedRows);
-            });
-
-        } catch (error) {
-            // JSON 파싱에 실패한 경우
-            console.error('파이썬 스크립트에서 반환된 데이터가 유효한 JSON이 아닙니다');
-            console.log(data);
-            res.status(500).json({ error: '내부 서버 오류' });  // 오류 응답 반환
+      res.json(resultData);
+      // 데이터베이스 답변 삽입
+      var sql = "INSERT INTO answer(text) VALUES (?)";
+      connection.query(
+        sql,
+        resultData["results"],
+        function (error, results, fields) {
+          if (error) throw error;
+          console.log("answer inserted: ", results.affectedRows);
         }
-    });
+      );
+    } catch (error) {
+      // JSON 파싱에 실패한 경우
+      console.error(
+        "파이썬 스크립트에서 반환된 데이터가 유효한 JSON이 아닙니다"
+      );
+      console.log(data);
+      res.status(500).json({ error: "내부 서버 오류" }); // 오류 응답 반환
+    }
+  });
 
   pythonProcess.stderr.on("data", (errorData) => {
     console.error("파이썬 프로세스 표준 에러 출력 :", errorData.toString());
