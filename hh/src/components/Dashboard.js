@@ -65,7 +65,7 @@ function Dashboard() {
   });
 
   // 그래프 활성화/비활성화 부분
-  const [isGraphActive, setIsGraphActive] = useState(true);
+  const [isGraphActive, setIsGraphActive] = useState(false);
   const clickGraph = () => {
     setIsGraphActive(!isGraphActive);
   };
@@ -123,6 +123,14 @@ function Dashboard() {
     } catch (error) {
       console.error(error);
       setIsLoading(false); // (주의) 로딩 표시 관련 기능, 에러 시 로딩 종료
+    }
+  };
+
+  const clear = async () => {
+    try {
+      const resp = await fetch("/clear");
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -656,7 +664,10 @@ function Dashboard() {
                           <img
                             src="/images/reset_icon.png"
                             alt="리셋"
-                            onClick={resetMessages}
+                            onClick={() => {
+                              resetMessages();
+                              clear();
+                            }}
                             className="voice-control-button"
                           />
                           <img

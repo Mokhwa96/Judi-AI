@@ -16,6 +16,7 @@ const connection = mysql.createConnection({
   user: "judiai",
   password: "mococo00.",
   database: "mococodb",
+  multipleStatements: true,
 });
 connection.connect();
 
@@ -24,6 +25,15 @@ app.use(bodyParser.json());
 app.use(express.static("build"));
 app.get("/", (req, res) => {
   res.sendFile(path.join("build", "index.html"));
+});
+
+app.get("/clear", (req, res) => {
+  const sql_clear = "TRUNCATE TABLE answer; TRUNCATE TABLE question; ALTER TABLE \`answer\` AUTO_INCREMENT=1; ALTER TABLE \`question\` AUTO_INCREMENT=1;";
+  connection.query(sql_clear, function (error, results, fields) {
+    if (error) throw error;
+    console.log("error :", error);
+    connection.release();
+  })
 });
 app.post("/chat", (req, res) => {
   // 클라이언트 요청
