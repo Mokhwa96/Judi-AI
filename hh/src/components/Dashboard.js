@@ -52,7 +52,7 @@ function Dashboard() {
       "4년": 20,
       "6년": 22,
     },
-    전체_징역_전체: {},
+    전체_징역: {},
     금고: { "2년": 10, "5년": 20 },
     벌금: {},
     집행유예: {},
@@ -450,13 +450,25 @@ function Dashboard() {
                               graphType="전체"
                             />
                           </div>
+                          <div
+                            style={{
+                              height: "200px",
+                              width: "300px",
+                              marginLeft: "50px",
+                            }}
+                          >
+                            <Graph2
+                              graphdata={graphdata["전체"]}
+                              graphType="전체"
+                            />
+                          </div>
                         </>
                       )}
                   </div>
 
                   {/* 징역 그래프 */}
                   <div className="graph_content_container">
-                  {graphdata["전체_징역_전체"] && (
+                  {graphdata["전체_징역"] && (
                         <>
                           징역
                           <div
@@ -523,7 +535,7 @@ function Dashboard() {
 
                   {/* 금고 그래프 */}
                   <div className="graph_content_container">
-                    {graphdata["전체_금고_전체"] && (
+                    {graphdata["전체_금고"] && (
                         <>
                           금고
                           <div

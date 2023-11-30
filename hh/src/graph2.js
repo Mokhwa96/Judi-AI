@@ -7,21 +7,40 @@ import { ResponsivePie } from '@nivo/pie'
 // no chart will be rendered.
 // website examples showcase many properties,
 // you'll often use just a few of them.
-const Graph2 = ({ graphdata , graphType }) => {
-    // 데이터의 키 배열 추출 (results를 제외하고 추출)
+const Graph2 = ({ graphdata, graphType }) => {
+    // 데이터의 키 배열 추출
     const dataKeys = Object.keys(graphdata).filter(key => key !== 'results');
-    
 
-    // 데이터를 배열로 변환
-    const dataArray = dataKeys.map((key) => {
+    // 각 키에 대한 값 계산
+    const processedData = dataKeys.map(key => {
         const value = graphdata[key];
-        
         const totalValue = typeof value === 'object' ? Object.values(value).reduce((acc, cur) => acc + cur, 0) : value;
-        return {
-            id : key,
-            value: totalValue || 0,
-        };
+        return { id: key, value: totalValue };
     });
+
+    // 값에 따라 내림차순 정렬
+    processedData.sort((a, b) => b.value - a.value);
+
+    // 상위 4개 데이터 추출
+    const topData = processedData.slice(0, 4);
+
+    // '기타' 항목 계산
+    let othersSum = 0;
+    if (processedData.length > 4) {
+        othersSum = processedData.slice(4).reduce((sum, current) => sum + current.value, 0);
+    }
+
+    // 최종 데이터 구성
+    let finalData = topData;
+    if (othersSum > 0) {
+        finalData.push({ id: '기타', value: othersSum }); // '기타' 항목 추가
+    }
+
+    // 파이 차트 데이터 변환
+    const dataArray = finalData.map(item => ({
+        id: item.id,
+        value: item.value
+    }));
 
     return(
         <ResponsivePie
