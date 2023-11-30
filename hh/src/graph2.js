@@ -7,23 +7,27 @@ import { ResponsivePie } from "@nivo/pie";
 // no chart will be rendered.
 // website examples showcase many properties,
 // you'll often use just a few of them.
-const Graph2 = ({ graphdata, graphType }) => {
+const Graph2 = ({ graphdata }) => {
   // 데이터의 키 배열 추출 (results를 제외하고 추출)
   const dataKeys = Object.keys(graphdata).filter((key) => key !== "results");
 
   // 데이터를 배열로 변환
-  const dataArray = dataKeys.map((key) => {
-    const value = graphdata[key];
+  const dataArray = dataKeys
+    .map((key) => {
+      const value = graphdata[key];
 
-    const totalValue =
-      typeof value === "object"
-        ? Object.values(value).reduce((acc, cur) => acc + cur, 0)
-        : value;
-    return {
-      id: key,
-      value: totalValue || 0,
-    };
-  });
+      const totalValue =
+        typeof value === "object"
+          ? Object.values(value).reduce((acc, cur) => acc + cur, 0)
+          : value;
+      return {
+        id: key,
+        value: totalValue || 0,
+      };
+    })
+    .slice(0, 5);
+
+  const fivekeys = Object.values(dataArray).map((item) => item.id);
 
   return (
     <ResponsivePie
@@ -45,6 +49,9 @@ const Graph2 = ({ graphdata, graphType }) => {
       arcLinkLabelsThickness={2}
       arcLinkLabelsColor={{ from: "color" }}
       arcLabelsSkipAngle={10}
+      arcLinkLabelsDiagonalLength={10}
+      arcLinkLabelsStraightLength={10}
+      arcLinkLabelsTextOffset={4}
       arcLabel={(e) =>
         `${(
           (e.value / dataArray.reduce((acc, cur) => acc + cur.value, 0)) *

@@ -188,21 +188,21 @@ def result_statistics(sentences):
 
     전체 = {}
 
-    if 징역['실형']:
-      전체['징역_실형'] = sum(징역['실형'].values())
-    if 징역['집행유예']:
-      전체['징역_집행유예'] = sum(징역['집행유예'].values())
-    if 징역['선고유예']:
-      전체['징역_선고유예'] = sum(징역['선고유예'].values())
-    전체['징역_전체'] =  sum([sum(징역[key].values()) for key in 징역.keys() if 징역[key]])
+    # if 징역['실형']:
+    #   전체['징역_실형'] = sum(징역['실형'].values())
+    # if 징역['집행유예']:
+    #   전체['징역_집행유예'] = sum(징역['집행유예'].values())
+    # if 징역['선고유예']:
+    #   전체['징역_선고유예'] = sum(징역['선고유예'].values())
+    전체['징역'] =  sum([sum(징역[key].values()) for key in 징역.keys() if 징역[key]])
 
-    if 금고['실형']:
-      전체['금고_실형'] = sum(금고['실형'].values())
-    if 금고['집행유예']:
-      전체['금고_집행유예'] = sum(금고['집행유예'].values())
-    if 금고['선고유예']:
-      전체['금고_선고유예'] = sum(금고['선고유예'].values())
-    전체['금고_전체'] =  sum([sum(금고[key].values()) for key in 금고.keys() if 금고[key]])
+    # if 금고['실형']:
+    #   전체['금고_실형'] = sum(금고['실형'].values())
+    # if 금고['집행유예']:
+    #   전체['금고_집행유예'] = sum(금고['집행유예'].values())
+    # if 금고['선고유예']:
+    #   전체['금고_선고유예'] = sum(금고['선고유예'].values())
+    전체['금고'] =  sum([sum(금고[key].values()) for key in 금고.keys() if 금고[key]])
 
     if 벌금:
       전체['벌금'] = sum(벌금.values())
@@ -241,14 +241,14 @@ def result_statistics(sentences):
     아동_청소년_장애인복지시설_취업제한 = sort_dict(아동_청소년_장애인복지시설_취업제한)
     준법운전강의 = sort_dict(준법운전강의)
 
-    casename_dict = {'전체': 전체, '전체_징역_전체': 전체['징역_전체'], '전체_금고_전체': 전체['금고_전체'], '징역': 징역, '징역_실형' : 징역['실형'], '금고': 금고,
+    casename_dict = {'전체': 전체, '전체_징역': 전체['징역'], '전체_금고': 전체['금고'], '징역': 징역, '징역_실형' : 징역['실형'], '금고': 금고,
                     '금고_실형': 금고['실형'], '벌금': 벌금, '보호관찰': 보호관찰, '사회봉사': 사회봉사, '성폭력_치료프로그램': 성폭력_치료프로그램,
                     '피고인_정보공개': 피고인_정보공개, '아동_청소년_장애인복지시설_취업제한': 아동_청소년_장애인복지시설_취업제한, '준법운전강의': 준법운전강의}
 
     return casename_dict
 
 if __name__ == "__main__":
-  api_key = 'api_key'
+  api_key = 'apikey'
   file_path = "C:/Users/gjaischool/Desktop/2차_프로젝트/reactest/hh/"
 
   line = sys.stdin.buffer.readline().decode('utf-8')

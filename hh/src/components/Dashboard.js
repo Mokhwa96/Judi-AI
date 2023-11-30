@@ -24,6 +24,8 @@ import Graph2 from "../graph2";
 import Clock from "./Clock";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMicrophone } from "@fortawesome/free-solid-svg-icons";
+import { faSquarePollVertical } from "@fortawesome/free-solid-svg-icons";
+
 // 솔빈 작업 구역
 // 대화 저장을 위한 구역
 function downloadToFile(content, filename, contentType) {
@@ -46,28 +48,209 @@ function Dashboard() {
   const [answerState, setAnswerState] = useState(false);
   const navigate = useNavigate();
   const [graphdata, setGraphdata] = useState({
-    전체: {},
-    징역: {
-      "2년": 10,
-      "5년": 20,
-      "3년": 10,
-      "4년": 20,
-      "6년": 22,
+    // 전체: {},
+    // 징역: {
+    //   "2년": 10,
+    //   "5년": 20,
+    //   "3년": 10,
+    //   "4년": 20,
+    //   "6년": 22,
+    // },
+    // 전체_징역_전체: {},
+    // 금고: { "2년": 10, "5년": 20 },
+    // 벌금: { "2년": 10, "5년": 20 },
+    // 집행유예: { "2년": 10, "5년": 20 },
+    // 사회봉사: { "2년": 10, "5년": 20 },
+    // 성폭력_치료프로그램: { "2년": 10, "5년": 20 },
+    // 피고인_정보공개: { "2년": 10, "5년": 20 },
+    // 아동_청소년_장애인복지시설_취업제한: { "2년": 10, "5년": 20 },
+    // 준법운전강의: { "2년": 10, "5년": 20 },
+    전체: {
+      징역: 4281,
+      벌금: 3642,
+      사회봉사: 1446,
+      성폭력_치료프로그램: 1354,
+      준법운전강의: 836,
+      보호관찰: 602,
+      아동_청소년_장애인복지시설_취업제한: 443,
+      금고: 78,
+      피고인_정보공개: 17,
     },
-    전체_징역_전체: {},
-    금고: { "2년": 10, "5년": 20 },
-    벌금: { "2년": 10, "5년": 20 },
-    집행유예: { "2년": 10, "5년": 20 },
-    사회봉사: { "2년": 10, "5년": 20 },
-    성폭력_치료프로그램: { "2년": 10, "5년": 20 },
-    피고인_정보공개: { "2년": 10, "5년": 20 },
-    아동_청소년_장애인복지시설_취업제한: { "2년": 10, "5년": 20 },
-    준법운전강의: { "2년": 10, "5년": 20 },
+    전체_징역: 4281,
+    전체_금고: 78,
+    징역: {
+      실형: {
+        "6월": 261,
+        "8월": 145,
+        "1년": 132,
+        "4월": 131,
+        "10월": 78,
+        "1년 6월": 49,
+        "2월": 35,
+        "3월": 29,
+        "5월": 20,
+        "1년 2월": 18,
+        "2년": 17,
+        "1년 4월": 5,
+        "3년": 5,
+        "3년 6월": 4,
+        "9월": 3,
+        "1월": 3,
+        "2년 6월": 3,
+        "1년 3월": 2,
+        "5년": 1,
+        "1년 10월": 1,
+        "1년 8월": 1,
+        "2년 4월": 1,
+        "1년 5월": 1,
+        "7월": 1,
+      },
+      집행유예: {
+        "6월": 1230,
+        "1년": 834,
+        "8월": 420,
+        "4월": 356,
+        "10월": 167,
+        "1년 6월": 88,
+        "1년 2월": 75,
+        "2년": 52,
+        "5월": 34,
+        "3월": 25,
+        "1년 4월": 25,
+        "1년 8월": 7,
+        "1년 3월": 6,
+        "2월": 4,
+        "2년 6월": 4,
+        "9월": 2,
+        "7월": 2,
+        "1년2월": 1,
+        "2년6월": 1,
+        "1년 5월": 1,
+        "1년 10월": 1,
+      },
+      선고유예: {},
+    },
+    징역_실형: {
+      "6월": 261,
+      "8월": 145,
+      "1년": 132,
+      "4월": 131,
+      "10월": 78,
+      "1년 6월": 49,
+      "2월": 35,
+      "3월": 29,
+      "5월": 20,
+      "1년 2월": 18,
+      "2년": 17,
+      "1년 4월": 5,
+      "3년": 5,
+      "3년 6월": 4,
+      "9월": 3,
+      "1월": 3,
+      "2년 6월": 3,
+      "1년 3월": 2,
+      "5년": 1,
+      "1년 10월": 1,
+      "1년 8월": 1,
+      "2년 4월": 1,
+      "1년 5월": 1,
+      "7월": 1,
+    },
+    금고: {
+      실형: { "2년": 1, "1년": 1 },
+      집행유예: {
+        "1년": 43,
+        "5월": 7,
+        "10월": 5,
+        "8월": 5,
+        "1년 6월": 5,
+        "4월": 3,
+        "3월": 3,
+        "1년 2월": 2,
+        "6월": 1,
+        "9월": 1,
+        "1년 3월": 1,
+      },
+      선고유예: {},
+    },
+    금고_실형: { "2년": 1, "1년": 1 },
+    벌금: {
+      "300만원": 581,
+      "500만원": 529,
+      "100만원": 502,
+      "50만원": 450,
+      "200만원": 380,
+      "30만원": 217,
+      "400만원": 187,
+      "150만원": 169,
+      "700만원": 155,
+      "70만원": 114,
+      "600만원": 70,
+      "800만원": 61,
+      "1000만원": 61,
+      "250만원": 34,
+      "1200만원": 27,
+      "80만원": 18,
+      "1500만원": 16,
+      "20만원": 14,
+      "40만원": 8,
+      "1300만원": 8,
+      "2000만원": 8,
+      "120만원": 6,
+      "900만원": 6,
+      "1400만원": 4,
+      "10만원": 3,
+      "15만원": 2,
+      "350만원": 2,
+      "60만원": 2,
+      "140만원": 1,
+      "130만원": 1,
+      "1100만원": 1,
+      "220만원": 1,
+      "1700만원": 1,
+      "750만원": 1,
+      "1800만원": 1,
+      "180만원": 1,
+    },
+    보호관찰: { 전체: 602 },
+    사회봉사: {
+      "80시간": 666,
+      "120시간": 372,
+      "40시간": 173,
+      "160시간": 141,
+      "200시간": 41,
+      "90시간": 14,
+      "240시간": 11,
+      "180시간": 6,
+      "60시간": 6,
+      "100시간": 6,
+      "320시간": 4,
+      "300시간": 2,
+      "150시간": 1,
+      "280시간": 1,
+      "140시간": 1,
+      "270시간": 1,
+    },
+    성폭력_치료프로그램: {
+      "40시간": 1279,
+      "80시간": 66,
+      "16시간": 6,
+      "120시간": 2,
+      "24시간": 1,
+    },
+    피고인_정보공개: { "1년": 7, "2년": 6, "3년": 3, "5년": 1 },
+    아동_청소년_장애인복지시설_취업제한: {
+      "2년": 178,
+      "3년": 138,
+      "1년": 106,
+      "5년": 21,
+    },
+    준법운전강의: { "40시간": 826, "80시간": 7, "20시간": 2, "24시간": 1 },
     results: "",
   });
 
   // 그래프 활성화/비활성화 부분
-  const [isGraphActive, setIsGraphActive] = useState(false);
+  const [isGraphActive, setIsGraphActive] = useState(true);
   const clickGraph = () => {
     setIsGraphActive(!isGraphActive);
   };
@@ -239,9 +422,9 @@ function Dashboard() {
               className="moon"
               fill="none"
               stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
               width="24"
               height="24"
               viewBox="0 0 24 24"
@@ -259,9 +442,9 @@ function Dashboard() {
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              stroke-width="3"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeWidth="3"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             >
               <line x1="12" y1="5" x2="12" y2="19" />
               <line x1="5" y1="12" x2="19" y2="12" />
@@ -275,9 +458,9 @@ function Dashboard() {
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
               className="feather feather-bell"
             >
               <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
@@ -287,11 +470,11 @@ function Dashboard() {
           <button className="profile-btn">
             <img
               className="profile-image"
-              src={process.env.PUBLIC_URL + "images/현우프로필.jpg"}
+              src={process.env.PUBLIC_URL + "images/user.png"}
               alt="프로필이미지"
             />
             {/* 이 버튼은 오른쪽 상단의 로그인한 사람 이미지 버튼입니다. */}
-            <span>김현우</span>
+            <span>User</span>
           </button>
         </div>
       </div>
@@ -320,9 +503,9 @@ function Dashboard() {
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   className="feather feather-home"
                 >
                   <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
@@ -337,9 +520,9 @@ function Dashboard() {
                   height="24"
                   fill="none"
                   stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                   viewBox="0 0 24 24"
                 >
                   <defs />
@@ -354,9 +537,9 @@ function Dashboard() {
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   className="feather feather-calendar"
                 >
                   <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
@@ -373,9 +556,9 @@ function Dashboard() {
                   height="24"
                   fill="none"
                   stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                   viewBox="0 0 24 24"
                 >
                   <defs />
@@ -392,38 +575,41 @@ function Dashboard() {
             >
               {isDetailGraph ? (
                 <div className="detail_graph">
+                  <div className="detail_graph_header">
+                    <p>Analytics Page</p>
+                  </div>
                   {/* 상세페이지 영역 */}
                   {/* 징역 */}
-                  {graphdata["징역"] &&
-                    Object.keys(graphdata["징역"]).length > 0 && (
+                  {graphdata["징역_실형"] &&
+                    Object.keys(graphdata["징역_실형"]).length > 0 && (
                       <div className="graph">
                         <div className="graph_title">
-                          <span>징역</span>
+                          <span>징역 실형</span>
                         </div>
                         <div className="realgraph_container">
                           <div className="bar_style">
-                            <Graph1 graphdata={graphdata["징역"]} />
+                            <Graph1 graphdata={graphdata["징역_실형"]} />
                           </div>
                           <div className="pie_style">
-                            <Graph2 graphdata={graphdata["징역"]} />
+                            <Graph2 graphdata={graphdata["징역_실형"]} />
                           </div>
                         </div>
                       </div>
                     )}
                   <div className="dashed-line"></div>
-                  {/* 금고 */}
-                  {graphdata["금고"] &&
-                    Object.keys(graphdata["금고"]).length > 0 && (
+                  {/* 금고 실형 */}
+                  {graphdata["금고_실형"] &&
+                    Object.keys(graphdata["금고_실형"]).length > 0 && (
                       <div className="graph">
                         <div className="graph_title">
-                          <span>금고</span>
+                          <span>금고 실형</span>
                         </div>
                         <div className="realgraph_container">
                           <div className="bar_style">
-                            <Graph1 graphdata={graphdata["금고"]} />
+                            <Graph1 graphdata={graphdata["금고_실형"]} />
                           </div>
                           <div className="pie_style">
-                            <Graph2 graphdata={graphdata["금고"]} />
+                            <Graph2 graphdata={graphdata["금고_실형"]} />
                           </div>
                         </div>
                       </div>
@@ -447,23 +633,23 @@ function Dashboard() {
                       </div>
                     )}
                   <div className="dashed-line"></div>
-                  {/* 집행유예 */}
-                  {graphdata["집행유예"] &&
-                    Object.keys(graphdata["집행유예"]).length > 0 && (
+                  {/* 보호관찰 */}
+                  {/* {graphdata["보호관찰"] &&
+                    Object.keys(graphdata["보호관찰"]).length > 0 && (
                       <div className="graph">
                         <div className="graph_title">
-                          <span>집행유예</span>
+                          <span>보호관찰</span>
                         </div>
                         <div className="realgraph_container">
                           <div className="bar_style">
-                            <Graph1 graphdata={graphdata["집행유예"]} />
+                            <Graph1 graphdata={graphdata["보호관찰"]} />
                           </div>
                           <div className="pie_style">
-                            <Graph2 graphdata={graphdata["집행유예"]} />
+                            <Graph2 graphdata={graphdata["보호관찰"]} />
                           </div>
                         </div>
                       </div>
-                    )}
+                    )} */}
                   <div className="dashed-line"></div>
                   {/* 사회봉사 */}
                   {graphdata["사회봉사"] &&
@@ -575,7 +761,7 @@ function Dashboard() {
                 <div>
                   {/* 대쉬보드 안쪽 상단 영역입니다. */}
                   <div className="projects-section-left-header">
-                    <span className="title">It's our tasks for you</span>
+                    <span className="title">Judi Talk</span>
                     {/* 현재 날짜 표시 */}
                     <span className="time">
                       <Clock today={today} />
@@ -630,9 +816,20 @@ function Dashboard() {
                           <></>
                         )}
                         {isFianl ? (
-                          <div className={"bubble lawyer"}>
-                            <button onClick={clickGraph}> 클릭 </button>
-                          </div>
+                          <button className="graph_button">
+                            <img
+                              className="left"
+                              src="/images/graph.png"
+                              alt="그래프 버튼"
+                              onClick={clickGraph}
+                              style={{
+                                width: "40px",
+                                height: "40px",
+                                cursor: "pointer",
+                              }}
+                            />
+                            <span className="right">통계 확인하기</span>
+                          </button>
                         ) : (
                           <></>
                         )}
@@ -674,6 +871,21 @@ function Dashboard() {
                             onClick={submitResponse}
                             className="voice-control-button"
                           />
+                          {/* 그래프 버튼 */}
+                          {/* <button className="graph_button">
+                            <img
+                              className="left"
+                              src="/images/bar-chart.png"
+                              alt="그래프 버튼"
+                              onClick={clickGraph}
+                              style={{
+                                width: "50px",
+                                height: "50px",
+                                cursor: "pointer",
+                              }}
+                            />
+                            <span className="right">통계 확인하기</span>
+                          </button> */}
                         </div>
                       </div>
                     </div>
@@ -719,166 +931,44 @@ function Dashboard() {
                 </div>
 
                 <div className="graph_content_container">
-                  {graphdata["징역"] &&
-                    Object.keys(graphdata["징역"]).length > 0 && (
+                  {graphdata["전체"] &&
+                    Object.keys(graphdata["전체"]).length > 0 && (
                       <div className="graph">
                         <div className="dashtest">
                           <div className="graph-dashed-line"></div>
-                          <span className="graph_title">징역</span>
+                          <span className="graph_title">전체</span>
                         </div>
                         <div className="bar_style">
-                          <Graph1
-                            graphdata={graphdata["징역"]}
-                            graphType="징역"
-                          />
-                        </div>
-                        <div className="pie_style">
-                          <Graph2
-                            graphdata={graphdata["징역"]}
-                            graphType="징역"
-                          />
+                          <Graph1 graphdata={graphdata["전체"]} />
                         </div>
                       </div>
                     )}
-                  {graphdata["금고"] &&
-                    Object.keys(graphdata["금고"]).length > 0 && (
-                      <div className="graph">
-                        <div className="dashtest">
-                          <div className="graph-dashed-line"></div>
-                          <span className="graph_title">금고</span>
+                  {graphdata["전체_징역"] && (
+                    <div className="graph">
+                      <div className="dashtest">
+                        <div className="graph-dashed-line"></div>
+                        <span className="graph_title">징역</span>
+                      </div>
+                      <div className="realgraph_container">
+                        <div className="bar_style">
+                          <Graph1 graphdata={graphdata["징역"]} />
                         </div>
+                      </div>
+                    </div>
+                  )}
+                  {graphdata["전체_금고"] && (
+                    <div className="graph">
+                      <div className="dashtest">
+                        <div className="graph-dashed-line"></div>
+                        <span className="graph_title">금고</span>
+                      </div>
+                      <div className="realgraph_container">
                         <div className="bar_style">
                           <Graph1 graphdata={graphdata["금고"]} />
                         </div>
-                        <div className="pie_style">
-                          <Graph2 graphdata={graphdata["금고"]} />
-                        </div>
                       </div>
-                    )}
-                  {graphdata["벌금"] &&
-                    Object.keys(graphdata["벌금"]).length > 0 && (
-                      <div className="graph">
-                        <div className="dashtest">
-                          <div className="graph-dashed-line"></div>
-                          <span className="graph_title">벌금</span>
-                        </div>
-                        <div className="bar_style">
-                          <Graph1 graphdata={graphdata["벌금"]} />
-                        </div>
-                        <div className="pie_style">
-                          <Graph2 graphdata={graphdata["벌금"]} />
-                        </div>
-                      </div>
-                    )}
-                  {graphdata["집행유예"] &&
-                    Object.keys(graphdata["집행유예"]).length > 0 && (
-                      <div className="graph">
-                        <div className="dashtest">
-                          <div className="graph-dashed-line"></div>
-                          <span className="graph_title">집행유예</span>
-                        </div>
-                        <div className="bar_style">
-                          <Graph1 graphdata={graphdata["집행유예"]} />
-                        </div>
-                        <div className="pie_style">
-                          <Graph2 graphdata={graphdata["집행유예"]} />
-                        </div>
-                      </div>
-                    )}
-                  {graphdata["사회봉사"] &&
-                    Object.keys(graphdata["사회봉사"]).length > 0 && (
-                      <div className="graph">
-                        <div className="dashtest">
-                          <div className="graph-dashed-line"></div>
-                          <span className="graph_title">사회봉사</span>
-                        </div>
-                        <div className="bar_style">
-                          <Graph1 graphdata={graphdata["사회봉사"]} />
-                        </div>
-                        <div className="pie_style">
-                          <Graph2 graphdata={graphdata["사회봉사"]} />
-                        </div>
-                      </div>
-                    )}
-                  {graphdata["성폭력_치료프로그램"] &&
-                    Object.keys(graphdata["성폭력_치료프로그램"]).length >
-                      0 && (
-                      <div className="graph">
-                        <div className="dashtest">
-                          <div className="graph-dashed-line"></div>
-                          <span className="graph_title">
-                            성폭력 치료프로그램
-                          </span>
-                        </div>
-                        <div className="bar_style">
-                          <Graph1
-                            graphdata={graphdata["성폭력_치료프로그램"]}
-                          />
-                        </div>
-                        <div className="pie_style">
-                          <Graph2
-                            graphdata={graphdata["성폭력_치료프로그램"]}
-                          />
-                        </div>
-                      </div>
-                    )}
-                  {graphdata["피고인_정보공개"] &&
-                    Object.keys(graphdata["피고인_정보공개"]).length > 0 && (
-                      <div className="graph">
-                        <div className="dashtest">
-                          <div className="graph-dashed-line"></div>
-                          <span className="graph_title">피고인 정보공개</span>
-                        </div>
-                        <div className="bar_style">
-                          <Graph1 graphdata={graphdata["피고인_정보공개"]} />
-                        </div>
-                        <div className="pie_style">
-                          <Graph2 graphdata={graphdata["피고인_정보공개"]} />
-                        </div>
-                      </div>
-                    )}
-                  {graphdata["아동_청소년_장애인복지시설_취업제한"] &&
-                    Object.keys(
-                      graphdata["아동_청소년_장애인복지시설_취업제한"]
-                    ).length > 0 && (
-                      <div className="graph">
-                        <div className="dashtest">
-                          <div className="graph-dashed-line"></div>
-                          <span className="graph_title">
-                            아동 청소년 장애인복지시설_취업제한
-                          </span>
-                        </div>
-                        <div className="bar_style">
-                          <Graph1
-                            graphdata={
-                              graphdata["아동_청소년_장애인복지시설_취업제한"]
-                            }
-                          />
-                        </div>
-                        <div className="pie_style">
-                          <Graph2
-                            graphdata={
-                              graphdata["아동_청소년_장애인복지시설_취업제한"]
-                            }
-                          />
-                        </div>
-                      </div>
-                    )}
-                  {graphdata["준법운전강의"] &&
-                    Object.keys(graphdata["준법운전강의"]).length > 0 && (
-                      <div className="graph">
-                        <div className="dashtest">
-                          <div className="graph-dashed-line"></div>
-                          <span className="graph_title">준법운전강의</span>
-                        </div>
-                        <div className="bar_style">
-                          <Graph1 graphdata={graphdata["준법운전강의"]} />
-                        </div>
-                        <div className="pie_style">
-                          <Graph2 graphdata={graphdata["준법운전강의"]} />
-                        </div>
-                      </div>
-                    )}
+                    </div>
+                  )}
                 </div>
               </div>
             ) : (
@@ -908,9 +998,9 @@ function Dashboard() {
                               viewBox="0 0 24 24"
                               fill="none"
                               stroke="currentColor"
-                              stroke-width="2"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
                               className="feather feather-star"
                             >
                               <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
@@ -942,9 +1032,9 @@ function Dashboard() {
                               viewBox="0 0 24 24"
                               fill="none"
                               stroke="currentColor"
-                              stroke-width="2"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
                               className="feather feather-star"
                             >
                               <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
@@ -976,9 +1066,9 @@ function Dashboard() {
                               viewBox="0 0 24 24"
                               fill="none"
                               stroke="currentColor"
-                              stroke-width="2"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
                               className="feather feather-star"
                             >
                               <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
@@ -1010,9 +1100,9 @@ function Dashboard() {
                               viewBox="0 0 24 24"
                               fill="none"
                               stroke="currentColor"
-                              stroke-width="2"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
                               className="feather feather-star"
                             >
                               <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
@@ -1044,9 +1134,9 @@ function Dashboard() {
                               viewBox="0 0 24 24"
                               fill="none"
                               stroke="currentColor"
-                              stroke-width="2"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
                               className="feather feather-star"
                             >
                               <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
@@ -1078,9 +1168,9 @@ function Dashboard() {
                               viewBox="0 0 24 24"
                               fill="none"
                               stroke="currentColor"
-                              stroke-width="2"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
                               className="feather feather-star"
                             >
                               <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
@@ -1112,9 +1202,9 @@ function Dashboard() {
                               viewBox="0 0 24 24"
                               fill="none"
                               stroke="currentColor"
-                              stroke-width="2"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
                               className="feather feather-star"
                             >
                               <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />

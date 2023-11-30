@@ -86,7 +86,8 @@ a {
   height: 32px;
   object-fit: cover;
   border-radius: 50%;
-  margin-right: 4px;
+  border: 2px solid black;
+  margin-right: 10px;
 }
 
 .profile-btn span {
@@ -289,6 +290,7 @@ a {
 .projects-section-left-header {
   padding: 0 24px 20px 24px;
   font-family: "SUITE-Regular";
+  font-weight: bold;
   display: flex;
   align-items: center;
 }
