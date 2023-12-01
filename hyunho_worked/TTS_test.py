@@ -18,7 +18,7 @@ def google_tts(text, filename):
     audio_config = texttospeech.AudioConfig(
         audio_encoding=texttospeech.AudioEncoding.MP3,
         pitch=0.4,
-        speaking_rate=1
+        speaking_rate=1.1
     )
 
     response = client.synthesize_speech(
@@ -32,6 +32,7 @@ def google_tts(text, filename):
         out.write(response.audio_content)
         print(f'Audio content written to file {filename}')
 
-input_text = "안녕하세요, 어떤 도움이 필요하신가요?"
+# input_text = "안녕하세요, 어떤 도움이 필요하신가요?"
+input_text = "간편한 법률 상담, Judi와 함께!"
 google_tts(input_text, "answer.mp3")
 # playsound("answer.mp3")

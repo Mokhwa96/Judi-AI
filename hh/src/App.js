@@ -48,7 +48,6 @@ function Home() {
           <span className="content-left">
             <p>당신의 법률 문제</p>
             <p>JudiAI와 함께</p>
-            <p>해결하세요</p>
             <button
               className="Try_JudiAI"
               onClick={() => navigate("/try-judiai")}
