@@ -31,7 +31,6 @@ ul {
 li {
   display: inline-block;
   margin-left: 0; /* 목록 항목 간의 간격을 조정할 수 있습니다. */
-  /* margin-right: 30px; */
   cursor: pointer;
   font-size: 120%;
   color: #000000ac; /* 텍스트 색상 */
@@ -45,7 +44,6 @@ li {
 li:hover {
   background-color: rgba(194, 194, 194, 0.314); /* 호버시 배경 색상 변경 */
   color: #000000; /* 호버시 텍스트 색상 변경 */
-  /* font-weight: bold; 글꼴 굵기 */
 }
 
 .menu-toggle-background {

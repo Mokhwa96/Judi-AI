@@ -43,7 +43,6 @@
 
 /* 대쉬보드 판 */
 body {
-  /* font-family: "DM Sans", sans-serif; */
   display: flex;
   justify-content: center;
   background-color: var(--app-container);
@@ -56,7 +55,6 @@ a {
 }
 .app-content {
   float: left; /* 원하는 배치 설정을 적용하세요 */
-  /* 추가적인 스타일 설정 가능 */
   position: relative;
 }
 
@@ -110,11 +108,8 @@ a {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  /* background-color: #ffffff;
-  padding: 16px 24px; */
   position: relative;
   border-radius: 15px;
-  /* width: 300px; */
 
   &-left,
   &-right {
@@ -131,8 +126,6 @@ a {
   }
 }
 .app-header-right {
-  /* background-color: #ffffff; */
-  /* padding: 16px 20px 16px 1375px; */
   padding: 0 40px 0 0;
   border-radius: 15px;
   display: flex;
@@ -269,10 +262,8 @@ a {
   justify-content: end;
 }
 .detail_graph_button {
-  /* background-color: rgb(216, 216, 216); */
   border-radius: 10px;
   margin-right: 40px;
-  /* float: right; */
   border: none;
   padding: 5px;
 }
@@ -329,9 +320,7 @@ a {
 }
 .message-box img {
   margin: 5px;
-  /* border-radius: 50%; */
   object-fit: cover;
-  /* background-color: #fce6cf; */
   width: 40px;
   height: 40px;
 }
@@ -364,13 +353,6 @@ label {
   align-items: center;
   cursor: pointer;
 }
-
-/* 별모양 체크박스 클릭할 때 검은 색으로 색 변함 */
-input:checked + label svg {
-  fill: var(--star);
-  transition: 0.2s;
-}
-
 .message-line {
   font-size: 15px;
   line-height: 20px;
@@ -504,21 +486,6 @@ input:checked + label svg {
   background-color: transparent;
   border: none;
   flex-shrink: 0;
-
-  /*&:after, &:before {
-    content: '';
-    position: absolute;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background-color: var(--main-color);
-    opacity: .8;
-    left: 50%;
-    transform: translatex(-50%);
-  }
-  
-  &:before { top: 0;}
-  &:after { bottom: 0; }*/
 }
 
 .more-wrapper {
@@ -854,5 +821,3 @@ input:checked + label svg {
   justify-content: center;
   align-items: center;
 }
-
-/*  */

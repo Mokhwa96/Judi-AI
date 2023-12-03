@@ -31,7 +31,6 @@ const Graph1 = ({ graphdata }) => {
     }
   }
   // 기타 포함 내림차순으로 정렬
-  // finalData = finalData.sort((a, b) => a.value - b.value);
   finalData.reverse();
   // 상위 5개만 출력
   const fivekeys = Object.values(dataArray).map((item) => item.id);
@@ -92,7 +91,6 @@ const Graph1 = ({ graphdata }) => {
         tickPadding: 5,
         tickRotation: 0,
 
-        /*legend: xAxisLabel,*/
         legend: "",
         legendPosition: "middle",
         legendOffset: 32,
@@ -117,30 +115,6 @@ const Graph1 = ({ graphdata }) => {
         modifiers: [["darker", 1.6]],
       }}
       borderRadius={10}
-      // legends={[
-      //   {
-      //     dataFrom: "keys",
-      //     anchor: "bottom-right",
-      //     direction: "column",
-      //     justify: false,
-      //     translateX: 110,
-      //     translateY: -15,
-      //     itemsSpacing: 2,
-      //     itemWidth: 100,
-      //     itemHeight: 20,
-      //     itemDirection: "left-to-right",
-      //     itemOpacity: 0.85,
-      //     symbolSize: 10,
-      //     effects: [
-      //       {
-      //         on: "hover",
-      //         style: {
-      //           itemOpacity: 1,
-      //         },
-      //       },
-      //     ],
-      //   },
-      // ]}
 
       role="application"
       ariaLabel="Nivo bar chart demo"

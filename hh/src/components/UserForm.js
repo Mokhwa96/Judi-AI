@@ -54,43 +54,6 @@ function UserForm() {
           ></textarea>
         </div>
       </div>
-      {/* 이메일 */}
-      {/* <div className="input_container">
-        <p>Email</p>
-        <input
-          placeholder="e-Mail"
-          onChange={(e) => setEmail(e.target.value)}
-        />
-      </div>
-      <div className="input_container">
-        <p>Email</p>
-        <input
-          placeholder="e-Mail"
-          onChange={(e) => setEmail(e.target.value)}
-        />
-      </div>
-      <div className="input_container">
-        <p>Email</p>
-        <input
-          placeholder="e-Mail"
-          onChange={(e) => setEmail(e.target.value)}
-        />
-      </div>
-
-      <div className="input_container">
-        <p>Subject</p>
-        <input
-          placeholder="Subject"
-          onChange={(e) => setSubject(e.target.value)}
-        />
-      </div>
-      <div className="input_message">
-        <p>Content</p>
-        <input
-          placeholder="Message"
-          onChange={(e) => setMessage(e.target.value)}
-        />
-      </div> */}
 
       <div className="button_container">
         <div className="contact_dashed_line"></div>

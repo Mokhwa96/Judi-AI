@@ -1,12 +1,5 @@
-// install (please try to align the version of installed @nivo packages)
-// yarn add @nivo/pie
 import { ResponsivePie } from "@nivo/pie";
 
-// make sure parent container have a defined height when using
-// responsive component, otherwise height will be 0 and
-// no chart will be rendered.
-// website examples showcase many properties,
-// you'll often use just a few of them.
 const Graph2 = ({ graphdata }) => {
   // 데이터의 키 배열 추출 (results를 제외하고 추출)
   const dataKeys = Object.keys(graphdata).filter((key) => key !== "results");

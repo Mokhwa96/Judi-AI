@@ -3,10 +3,6 @@ import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition"; //음성 입력용
 import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Link,
   useNavigate,
 } from "react-router-dom";
 import "../css/reset.css";
@@ -16,7 +12,6 @@ import "../css/center.css";
 import "../css/judi_chat.css";
 import "../css/dashboard.css";
 import LookAhead from "../gifs/judi_animation_eye_blink.gif"; // 애니매이션 gif(정면보기)
-import Talking from "../gifs/judi_talking.gif"; // 애니매이션 gif(말하기)
 import Loading from "../gifs/loading.gif"; // 애니매이션 gif(채팅 로딩)
 import { Howl } from "howler";
 import Graph1 from "../graph1";
@@ -24,7 +19,6 @@ import Graph2 from "../graph2";
 import Clock from "./Clock";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMicrophone } from "@fortawesome/free-solid-svg-icons";
-import { faSquarePollVertical } from "@fortawesome/free-solid-svg-icons";
 
 // 솔빈 작업 구역
 // 대화 저장을 위한 구역
@@ -284,7 +278,6 @@ function Dashboard() {
         <div className="app-header">
           <div className="app-header-left">
             <span className="app-icon"></span>
-            {/* <p className="app-name">Portfolio</p> */}
           </div>
         </div>
 
@@ -431,24 +424,6 @@ function Dashboard() {
                         </div>
                       </div>
                     )}
-                  <div className="dashed-line"></div>
-                  {/* 보호관찰 */}
-                  {/* {graphdata["보호관찰"] &&
-                    Object.keys(graphdata["보호관찰"]).length > 0 && (
-                      <div className="graph">
-                        <div className="graph_title">
-                          <span>보호관찰</span>
-                        </div>
-                        <div className="realgraph_container">
-                          <div className="bar_style">
-                            <Graph1 graphdata={graphdata["보호관찰"]} />
-                          </div>
-                          <div className="pie_style">
-                            <Graph2 graphdata={graphdata["보호관찰"]} />
-                          </div>
-                        </div>
-                      </div>
-                    )} */}
                   <div className="dashed-line"></div>
                   {/* 사회봉사 */}
                   {graphdata["사회봉사"] &&
@@ -670,21 +645,6 @@ function Dashboard() {
                             onClick={submitResponse}
                             className="voice-control-button"
                           />
-                          {/* 그래프 버튼 */}
-                          {/* <button className="graph_button">
-                            <img
-                              className="left"
-                              src="/images/bar-chart.png"
-                              alt="그래프 버튼"
-                              onClick={clickGraph}
-                              style={{
-                                width: "50px",
-                                height: "50px",
-                                cursor: "pointer",
-                              }}
-                            />
-                            <span className="right">통계 확인하기</span>
-                          </button> */}
                         </div>
                       </div>
                     </div>

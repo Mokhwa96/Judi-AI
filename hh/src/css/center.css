@@ -161,7 +161,7 @@
     #000836,
     #ffffff
   ); /* 그라데이션의 시작 색상과 끝 색상을 지정합니다. */
-  -webkit-background-clip: text; /* 텍스트에만 그라데이션을 적용합니다. */
+  background-clip: text; /* 텍스트에만 그라데이션을 적용합니다. */
   color: transparent; /* 텍스트의 색상을 투명으로 설정하여 그라데이션을 표시합니다. */
 }
 
@@ -187,7 +187,6 @@
 .judiexplain img {
   width: 300px;
   margin: 0 auto;
-  /* margin-top:50px; */
   padding-top: 25px;
   display: block;
 }
@@ -234,11 +233,8 @@
 
 .chat_send {
   background-color: white;
-  /* padding: 15px 10px 15px 90px; */
-  /* margin-top: 90px; */
   margin-left: 20px;
   margin-right: 20px;
-  /* padding-right: 10px; */
   text-align: right;
   position: absolute;
   width: 90%;
@@ -270,9 +266,6 @@
   margin-left: 400px;
   padding: 30px;
   padding-left: 10em;
-  /* border-radius: 15px; */
-  /* background-color: #f7f7f5; */
-  /* box-shadow: 10px 10px 30px rgba(156, 156, 156, 0.5); 그림자 추가 */
   box-sizing: border-box; /* 내부 패딩을 너비에 포함시킵니다. */
 }
 

@@ -1,11 +1,8 @@
 import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
   Link,
   useNavigate,
 } from "react-router-dom";
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 function Navigation({ project_ref, contact_ref }) {
   const navigate = useNavigate();
   // 토글 메뉴
