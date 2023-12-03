@@ -47,207 +47,7 @@ function Dashboard() {
   const [userInput, setUserInput] = useState("");
   const [answerState, setAnswerState] = useState(false);
   const navigate = useNavigate();
-  const [graphdata, setGraphdata] = useState({
-    // 전체: {},
-    // 징역: {
-    //   "2년": 10,
-    //   "5년": 20,
-    //   "3년": 10,
-    //   "4년": 20,
-    //   "6년": 22,
-    // },
-    // 전체_징역_전체: {},
-    // 금고: { "2년": 10, "5년": 20 },
-    // 벌금: { "2년": 10, "5년": 20 },
-    // 집행유예: { "2년": 10, "5년": 20 },
-    // 사회봉사: { "2년": 10, "5년": 20 },
-    // 성폭력_치료프로그램: { "2년": 10, "5년": 20 },
-    // 피고인_정보공개: { "2년": 10, "5년": 20 },
-    // 아동_청소년_장애인복지시설_취업제한: { "2년": 10, "5년": 20 },
-    // 준법운전강의: { "2년": 10, "5년": 20 },
-    전체: {
-      징역: 4281,
-      벌금: 3642,
-      사회봉사: 1446,
-      성폭력_치료프로그램: 1354,
-      준법운전강의: 836,
-      보호관찰: 602,
-      아동_청소년_장애인복지시설_취업제한: 443,
-      금고: 78,
-      피고인_정보공개: 17,
-    },
-    전체_징역: 4281,
-    전체_금고: 78,
-    징역: {
-      실형: {
-        "6월": 261,
-        "8월": 145,
-        "1년": 132,
-        "4월": 131,
-        "10월": 78,
-        "1년 6월": 49,
-        "2월": 35,
-        "3월": 29,
-        "5월": 20,
-        "1년 2월": 18,
-        "2년": 17,
-        "1년 4월": 5,
-        "3년": 5,
-        "3년 6월": 4,
-        "9월": 3,
-        "1월": 3,
-        "2년 6월": 3,
-        "1년 3월": 2,
-        "5년": 1,
-        "1년 10월": 1,
-        "1년 8월": 1,
-        "2년 4월": 1,
-        "1년 5월": 1,
-        "7월": 1,
-      },
-      집행유예: {
-        "6월": 1230,
-        "1년": 834,
-        "8월": 420,
-        "4월": 356,
-        "10월": 167,
-        "1년 6월": 88,
-        "1년 2월": 75,
-        "2년": 52,
-        "5월": 34,
-        "3월": 25,
-        "1년 4월": 25,
-        "1년 8월": 7,
-        "1년 3월": 6,
-        "2월": 4,
-        "2년 6월": 4,
-        "9월": 2,
-        "7월": 2,
-        "1년2월": 1,
-        "2년6월": 1,
-        "1년 5월": 1,
-        "1년 10월": 1,
-      },
-      선고유예: {},
-    },
-    징역_실형: {
-      "6월": 261,
-      "8월": 145,
-      "1년": 132,
-      "4월": 131,
-      "10월": 78,
-      "1년 6월": 49,
-      "2월": 35,
-      "3월": 29,
-      "5월": 20,
-      "1년 2월": 18,
-      "2년": 17,
-      "1년 4월": 5,
-      "3년": 5,
-      "3년 6월": 4,
-      "9월": 3,
-      "1월": 3,
-      "2년 6월": 3,
-      "1년 3월": 2,
-      "5년": 1,
-      "1년 10월": 1,
-      "1년 8월": 1,
-      "2년 4월": 1,
-      "1년 5월": 1,
-      "7월": 1,
-    },
-    금고: {
-      실형: { "2년": 1, "1년": 1 },
-      집행유예: {
-        "1년": 43,
-        "5월": 7,
-        "10월": 5,
-        "8월": 5,
-        "1년 6월": 5,
-        "4월": 3,
-        "3월": 3,
-        "1년 2월": 2,
-        "6월": 1,
-        "9월": 1,
-        "1년 3월": 1,
-      },
-      선고유예: {},
-    },
-    금고_실형: { "2년": 1, "1년": 1 },
-    벌금: {
-      "300만원": 581,
-      "500만원": 529,
-      "100만원": 502,
-      "50만원": 450,
-      "200만원": 380,
-      "30만원": 217,
-      "400만원": 187,
-      "150만원": 169,
-      "700만원": 155,
-      "70만원": 114,
-      "600만원": 70,
-      "800만원": 61,
-      "1000만원": 61,
-      "250만원": 34,
-      "1200만원": 27,
-      "80만원": 18,
-      "1500만원": 16,
-      "20만원": 14,
-      "40만원": 8,
-      "1300만원": 8,
-      "2000만원": 8,
-      "120만원": 6,
-      "900만원": 6,
-      "1400만원": 4,
-      "10만원": 3,
-      "15만원": 2,
-      "350만원": 2,
-      "60만원": 2,
-      "140만원": 1,
-      "130만원": 1,
-      "1100만원": 1,
-      "220만원": 1,
-      "1700만원": 1,
-      "750만원": 1,
-      "1800만원": 1,
-      "180만원": 1,
-    },
-    보호관찰: { 전체: 602 },
-    사회봉사: {
-      "80시간": 666,
-      "120시간": 372,
-      "40시간": 173,
-      "160시간": 141,
-      "200시간": 41,
-      "90시간": 14,
-      "240시간": 11,
-      "180시간": 6,
-      "60시간": 6,
-      "100시간": 6,
-      "320시간": 4,
-      "300시간": 2,
-      "150시간": 1,
-      "280시간": 1,
-      "140시간": 1,
-      "270시간": 1,
-    },
-    성폭력_치료프로그램: {
-      "40시간": 1279,
-      "80시간": 66,
-      "16시간": 6,
-      "120시간": 2,
-      "24시간": 1,
-    },
-    피고인_정보공개: { "1년": 7, "2년": 6, "3년": 3, "5년": 1 },
-    아동_청소년_장애인복지시설_취업제한: {
-      "2년": 178,
-      "3년": 138,
-      "1년": 106,
-      "5년": 21,
-    },
-    준법운전강의: { "40시간": 826, "80시간": 7, "20시간": 2, "24시간": 1 },
-    results: "",
-  });
+  const [graphdata, setGraphdata] = useState();
 
   // 그래프 활성화/비활성화 부분
   const [isGraphActive, setIsGraphActive] = useState(false);
@@ -261,7 +61,6 @@ function Dashboard() {
   };
   // 현재 시간 표시
   const today = new Date();
-
   const messagesEndRef = useRef(null); // 새로운 ref. 채팅창 스크롤 자동 최신화 위함.
   const [isLoading, setIsLoading] = useState(false); // 로딩 상태 추가
   const [isFianl, setIsFianl] = useState(false); // 마지막 대답 여부
@@ -311,14 +110,6 @@ function Dashboard() {
     } catch (error) {
       console.error(error);
       setIsLoading(false); // (주의) 로딩 표시 관련 기능, 에러 시 로딩 종료
-    }
-  };
-
-  const clear = async () => {
-    try {
-      const resp = await fetch("/clear");
-    } catch (error) {
-      console.error(error);
     }
   };
 
@@ -864,10 +655,7 @@ function Dashboard() {
                           <img
                             src="/images/reset_icon.png"
                             alt="리셋"
-                            onClick={() => {
-                              resetMessages();
-                              clear();
-                            }}
+                            onClick={resetMessages}
                             className="voice-control-button"
                           />
                           <img
@@ -996,245 +784,210 @@ function Dashboard() {
                 {/* 변호사 소개 페이지 */}
 
                 <div className="projects-section-header">
-                  <p>Lawyer</p>
+                  <p>Category</p>
                 </div>
 
                 <div className="messages">
                   <div className="message-box">
-                    <img
-                      src={process.env.PUBLIC_URL + "/images/lawyer1.png"}
-                      alt="profile image"
-                    />
+                    <div className="lawyer_icon">
+                      <img
+                        src={process.env.PUBLIC_URL + "/images/palm.png"}
+                        alt="성범죄 이미지"
+                      />
+                    </div>
                     <div className="message-content">
                       <div className="message-header">
-                        <div className="name">이현호 변호사</div>
-                        <div className="star-checkbox">
-                          <input type="checkbox" id="star-1" />
-                          <label for="star-1">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="20"
-                              height="20"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              className="feather feather-star"
-                            >
-                              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                            </svg>
-                          </label>
-                        </div>
+                        <div className="name">성범죄</div>
                       </div>
                       <p className="message-line">
-                        법률의 미묘한 공간에서 창의적인 아이디어로 고객의 문제를
-                        해결하는 변호사입니다.
+                        성매매, 성폭력/강제추행, 디지털 성범죄, 폭행/협박/상해,
+                        사이버 명예훼손/모욕, 마약/도박, 소년범죄
                       </p>
                     </div>
                   </div>
                   <div className="message-box">
-                    <img
-                      src={process.env.PUBLIC_URL + "/images/lawyer2.png"}
-                      alt="profile image"
-                    />
+                    <div className="lawyer_icon">
+                      <img
+                        src={process.env.PUBLIC_URL + "/images/won.png"}
+                        alt="재산범죄 이미지"
+                      />
+                    </div>
                     <div className="message-content">
                       <div className="message-header">
-                        <div className="name">강솔빈 변호사</div>
-                        <div className="star-checkbox">
-                          <input type="checkbox" id="star-2" />
-                          <label for="star-2">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="20"
-                              height="20"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              className="feather feather-star"
-                            >
-                              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                            </svg>
-                          </label>
-                        </div>
+                        <div className="name">재산범죄</div>
                       </div>
                       <p className="message-line">
-                        법정에서의 경험으로 뒷받침된, 탁월한 수사&재판 전문
-                        변호사입니다.
+                        횡령/배임, 사기/공갈, 기타 재산범죄
                       </p>
                     </div>
                   </div>
                   <div className="message-box">
-                    <img
-                      src={process.env.PUBLIC_URL + "/images/lawyer3.png"}
-                      alt="profile image"
-                    />
+                    <div className="lawyer_icon">
+                      <img
+                        src={process.env.PUBLIC_URL + "/images/car.png"}
+                        alt="교통사고 이미지"
+                      />
+                    </div>
                     <div className="message-content">
                       <div className="message-header">
-                        <div className="name">김설 변호사</div>
-                        <div className="star-checkbox">
-                          <input type="checkbox" id="star-3" />
-                          <label for="star-3">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="20"
-                              height="20"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              className="feather feather-star"
-                            >
-                              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                            </svg>
-                          </label>
-                        </div>
+                        <div className="name">교통사고</div>
+                      </div>
+                      <p className="message-line">교통사고/도주, 음주/무면허</p>
+                    </div>
+                  </div>
+                  <div className="message-box">
+                    <div className="lawyer_icon">
+                      <img
+                        src={process.env.PUBLIC_URL + "/images/arrest.png"}
+                        alt="형사절차 이미지"
+                      />
+                    </div>
+                    <div className="message-content">
+                      <div className="message-header">
+                        <div className="name">형사절차</div>
                       </div>
                       <p className="message-line">
-                        당신의 이익을 최우선으로 고려하는 변호사. 언제나 당신의
-                        편에서 싸웁니다.
+                        고소/소송절차, 수사/체포/구속
                       </p>
                     </div>
                   </div>
                   <div className="message-box">
-                    <img
-                      src={process.env.PUBLIC_URL + "/images/lawyer4.png"}
-                      alt="profile image"
-                    />
+                    <div className="lawyer_icon">
+                      <img
+                        src={process.env.PUBLIC_URL + "/images/punch.png"}
+                        alt="폭행/협박 이미지"
+                      />
+                    </div>
                     <div className="message-content">
                       <div className="message-header">
-                        <div className="name">최연주 변호사</div>
-                        <div className="star-checkbox">
-                          <input type="checkbox" id="star-4" />
-                          <label for="star-4">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="20"
-                              height="20"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              className="feather feather-star"
-                            >
-                              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                            </svg>
-                          </label>
-                        </div>
+                        <div className="name">폭행/협박</div>
+                      </div>
+                      <p className="message-line">폭행/협박/상해 일반</p>
+                    </div>
+                  </div>
+                  <div className="message-box">
+                    <div className="lawyer_icon">
+                      <img
+                        src={process.env.PUBLIC_URL + "/images/insult.png"}
+                        alt="명예훼손/모욕 이미지"
+                      />
+                    </div>
+                    <div className="message-content">
+                      <div className="message-header">
+                        <div className="name">명예훼손/모욕</div>
                       </div>
                       <p className="message-line">
-                        당신의 선택에 후회가 없도록 형사와 이혼 분야에서 강력한
-                        전문 지식을 가진 변호사.
+                        명예훼손/모욕, 사이버 명예훼손/모욕
                       </p>
                     </div>
                   </div>
                   <div className="message-box">
-                    <img
-                      src={process.env.PUBLIC_URL + "/images/lawyer5.png"}
-                      alt="profile image"
-                    />
+                    <div className="lawyer_icon">
+                      <img
+                        src={process.env.PUBLIC_URL + "/images/key.png"}
+                        alt="부동산/임대차 이미지"
+                      />
+                    </div>
                     <div className="message-content">
                       <div className="message-header">
-                        <div className="name">박성연 변호사</div>
-                        <div className="star-checkbox">
-                          <input type="checkbox" id="star-5" />
-                          <label for="star-5">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="20"
-                              height="20"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              className="feather feather-star"
-                            >
-                              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                            </svg>
-                          </label>
-                        </div>
+                        <div className="name">부동산/임대차</div>
                       </div>
                       <p className="message-line">
-                        사람 중심의 변호사로, 투명하고 신뢰성 있는 법률 서비스를
-                        제공합니다.
+                        건축/부동산, 재개발/재건축, 매매/소유권, 임대차
                       </p>
                     </div>
                   </div>
                   <div className="message-box">
-                    <img
-                      src={process.env.PUBLIC_URL + "/images/lawyer6.png"}
-                      alt="profile image"
-                    />
+                    <div className="lawyer_icon">
+                      <img
+                        src={process.env.PUBLIC_URL + "/images/stamp.png"}
+                        alt="금전/계약 이미지"
+                      />
+                    </div>
                     <div className="message-content">
                       <div className="message-header">
-                        <div className="name">노건국 변호사</div>
-                        <div className="star-checkbox">
-                          <input type="checkbox" id="star-6" />
-                          <label for="star-6">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="20"
-                              height="20"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              className="feather feather-star"
-                            >
-                              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                            </svg>
-                          </label>
-                        </div>
+                        <div className="name">금전/계약</div>
                       </div>
                       <p className="message-line">
-                        법과 인간의 이해관계를 높이 살펴보는 변호사로, 따뜻한
-                        소통으로 신뢰를 쌓습니다.
+                        손해배상, 대여금/채권추심, 계약일반/매매
                       </p>
                     </div>
                   </div>
                   <div className="message-box">
-                    <img
-                      src={process.env.PUBLIC_URL + "/images/lawyer7.png"}
-                      alt="profile image"
-                    />
+                    <div className="lawyer_icon">
+                      <img
+                        src={process.env.PUBLIC_URL + "/images/scales.png"}
+                        alt="민사절차 이미지"
+                      />
+                    </div>
                     <div className="message-content">
                       <div className="message-header">
-                        <div className="name">강철리 변호사</div>
-                        <div className="star-checkbox">
-                          <input type="checkbox" id="star-7" />
-                          <label for="star-7">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="20"
-                              height="20"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              className="feather feather-star"
-                            >
-                              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                            </svg>
-                          </label>
-                        </div>
+                        <div className="name">민사절차</div>
                       </div>
                       <p className="message-line">
-                        [경력 10년차/이혼, 상속, 성범죄 전문] 고객의 어려움을
-                        이해하며 최상의 해결책을 제시합니다.
+                        소송/집행절차, 가압류/가처분, 회생/파산
+                      </p>
+                    </div>
+                  </div>
+                  <div className="message-box">
+                    <div className="lawyer_icon">
+                      <img
+                        src={
+                          process.env.PUBLIC_URL + "/images/broken-heart.png"
+                        }
+                        alt="가족 이미지"
+                      />
+                    </div>
+                    <div className="message-content">
+                      <div className="message-header">
+                        <div className="name">가족</div>
+                      </div>
+                      <p className="message-line">이혼, 상속, 가사</p>
+                    </div>
+                  </div>
+                  <div className="message-box">
+                    <div className="lawyer_icon">
+                      <img
+                        src={process.env.PUBLIC_URL + "/images/id-card.png"}
+                        alt="회사 이미지"
+                      />
+                    </div>
+                    <div className="message-content">
+                      <div className="message-header">
+                        <div className="name">회사</div>
+                      </div>
+                      <p className="message-line">기업법무, 노동/인사</p>
+                    </div>
+                  </div>
+                  <div className="message-box">
+                    <div className="lawyer_icon">
+                      <img
+                        src={process.env.PUBLIC_URL + "/images/copy.png"}
+                        alt="의료/세금/행정 이미지"
+                      />
+                    </div>
+                    <div className="message-content">
+                      <div className="message-header">
+                        <div className="name">의료/세금/행정</div>
+                      </div>
+                      <p className="message-line">
+                        세금/행정/헌법, 의료/식품의약, 병역/군형법
+                      </p>
+                    </div>
+                  </div>
+                  <div className="message-box">
+                    <div className="lawyer_icon">
+                      <img
+                        src={process.env.PUBLIC_URL + "/images/idea.png"}
+                        alt="IT/지식재산/금융 이미지"
+                      />
+                    </div>
+                    <div className="message-content">
+                      <div className="message-header">
+                        <div className="name">IT/지식재산/금융</div>
+                      </div>
+                      <p className="message-line">
+                        소비자/공정거래, IT/개인정보, 지식재산권/엔터, 금융/보험
                       </p>
                     </div>
                   </div>

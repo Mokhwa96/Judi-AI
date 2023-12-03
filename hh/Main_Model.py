@@ -36,7 +36,7 @@ def casename_find(sentence):
     return casename
 
 
-def get_similar_sentences(api_key, file_path, input_sentence, threshold=0.898, engine='text-embedding-ada-002'):
+def get_similar_sentences(api_key, file_path, input_sentence, threshold=0.90, engine='text-embedding-ada-002'):
     # API 키 설정
     client = OpenAI(api_key=api_key)
 

@@ -307,7 +307,7 @@ a {
   border-top: 1px solid var(--message-box-border);
   padding: 16px;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
 
   &:hover {
     background-color: var(--message-box-hover);
@@ -318,10 +318,20 @@ a {
     }
   }
 }
-
-.message-box img {
+.message-content {
+  width: 100%;
+  cursor: pointer;
+}
+.lawyer_icon {
+  padding: 5px;
+  background-color: rgba(255, 229, 211, 0.566);
   border-radius: 50%;
+}
+.message-box img {
+  margin: 5px;
+  /* border-radius: 50%; */
   object-fit: cover;
+  /* background-color: #fce6cf; */
   width: 40px;
   height: 40px;
 }
@@ -329,9 +339,10 @@ a {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: 100%;
 }
 .message-header .name {
-  font-size: 16px;
+  font-size: 19px;
   line-height: 24px;
   font-weight: 700;
   color: var(--main-color);
@@ -361,7 +372,7 @@ input:checked + label svg {
 }
 
 .message-line {
-  font-size: 14px;
+  font-size: 15px;
   line-height: 20px;
   margin: 4px 0;
   color: var(--secondary-color);

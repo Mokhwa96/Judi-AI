@@ -84,7 +84,7 @@ const Graph1 = ({ graphdata }) => {
       margin={{ top: 10, right: 50, bottom: 40, left: 130 }}
       padding={0.3}
       layout="horizontal"
-      colors={{ scheme: "purple_blue" }}
+      colors={{ scheme: "pastel1" }}
       axisTop={null}
       axisRight={null}
       axisBottom={{
@@ -103,6 +103,7 @@ const Graph1 = ({ graphdata }) => {
         tickSize: 5,
         tickPadding: 10,
         tickRotation: 0,
+
         style: {
           whiteSpace: "pre-line", // 텍스트 줄바꿈 활성화
         },
